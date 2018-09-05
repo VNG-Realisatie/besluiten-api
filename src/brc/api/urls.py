@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
 from .schema import schema_view
+
 # from .viewsets import BesluitViewSet
 
 router = DefaultRouter(trailing_slash=False)
