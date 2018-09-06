@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from django.test import override_settings
 from django.utils import timezone
 
 from freezegun import freeze_time
@@ -14,6 +15,7 @@ from brc.datamodel.tests.factories import (
 )
 
 
+@override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_200')
 class BesluitCreateTests(TypeCheckMixin, APITestCase):
 
     @freeze_time('2018-09-06T12:08+0200')

@@ -116,6 +116,7 @@ paths:
         gegenereerd.
 
         Er wordt gevalideerd op:
+        - uniciteit van verantwoorlijke organisatie + identificatie
         - RSIN verantwoorlijke organisatie
         - geldigheid besluittype URL
         - geldigheid zaak URL
@@ -259,6 +260,7 @@ paths:
         Werk een BESLUIT bij.
 
         Er wordt gevalideerd op:
+        - uniciteit van verantwoorlijke organisatie + identificatie
         - RSIN verantwoorlijke organisatie
         - geldigheid besluittype URL
         - geldigheid zaak URL
@@ -340,6 +342,7 @@ paths:
         Werk een BESLUIT bij.
 
         Er wordt gevalideerd op:
+        - uniciteit van verantwoorlijke organisatie + identificatie
         - RSIN verantwoorlijke organisatie
         - geldigheid besluittype URL
         - geldigheid zaak URL
@@ -919,7 +922,6 @@ components:
             Identificatie van het besluit binnen de organisatie die het besluit
             heeft vastgesteld.
           type: string
-          default: 34a07e43-a8ee-4c53-a462-2d64fdf0c4da
           maxLength: 50
           minLength: 1
         verantwoordelijkeOrganisatie:

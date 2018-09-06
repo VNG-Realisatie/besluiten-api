@@ -11,4 +11,4 @@ django-axes
 django-choices
 
 djangorestframework
-zds-schema==0.0.33
+zds-schema==0.1.0

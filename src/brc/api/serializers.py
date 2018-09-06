@@ -2,7 +2,7 @@
 Serializers of the Besluit Registratie Component REST API
 """
 from rest_framework import serializers
-from zds_schema.validators import URLValidator
+from zds_schema.validators import UniekeIdentificatieValidator, URLValidator
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
@@ -30,7 +30,14 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
             'url': {
                 'lookup_field': 'uuid',
             },
+            'zaak': {
+                'validators': [URLValidator()],
+            },
+            'besluittype': {
+                'validators': [URLValidator()],
+            },
         }
+        validators = [UniekeIdentificatieValidator('verantwoordelijke_organisatie')]
 
 
 class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
@@ -47,5 +54,8 @@ class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             },
             'besluit': {
                 'lookup_field': 'uuid',
-            }
+            },
+            'informatieobject': {
+                'validators': [URLValidator()],
+            },
         }

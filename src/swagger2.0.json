@@ -131,7 +131,7 @@
             },
             "post": {
                 "operationId": "besluit_create",
-                "description": "Registreer een besluit.\n\nIndien geen identificatie gegeven is, dan wordt deze automatisch\ngegenereerd.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Registreer een besluit.\n\nIndien geen identificatie gegeven is, dan wordt deze automatisch\ngegenereerd.\n\nEr wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -283,7 +283,7 @@
             },
             "put": {
                 "operationId": "besluit_update",
-                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -368,7 +368,7 @@
             },
             "patch": {
                 "operationId": "besluit_partial_update",
-                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -966,7 +966,6 @@
                     "title": "Identificatie",
                     "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.",
                     "type": "string",
-                    "default": "34a07e43-a8ee-4c53-a462-2d64fdf0c4da",
                     "maxLength": 50,
                     "minLength": 1
                 },

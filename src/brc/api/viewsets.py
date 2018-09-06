@@ -21,6 +21,7 @@ class BesluitViewSet(mixins.CreateModelMixin,
     gegenereerd.
 
     Er wordt gevalideerd op:
+    - uniciteit van verantwoorlijke organisatie + identificatie
     - RSIN verantwoorlijke organisatie
     - geldigheid besluittype URL
     - geldigheid zaak URL
@@ -36,6 +37,7 @@ class BesluitViewSet(mixins.CreateModelMixin,
     Werk een BESLUIT bij.
 
     Er wordt gevalideerd op:
+    - uniciteit van verantwoorlijke organisatie + identificatie
     - RSIN verantwoorlijke organisatie
     - geldigheid besluittype URL
     - geldigheid zaak URL
@@ -45,6 +47,7 @@ class BesluitViewSet(mixins.CreateModelMixin,
     Werk een BESLUIT bij.
 
     Er wordt gevalideerd op:
+    - uniciteit van verantwoorlijke organisatie + identificatie
     - RSIN verantwoorlijke organisatie
     - geldigheid besluittype URL
     - geldigheid zaak URL
