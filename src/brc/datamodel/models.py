@@ -7,12 +7,14 @@ from zds_schema.validators import (
     UntilNowValidator, alphanumeric_excluding_diacritic
 )
 
+from .constants import VervalRedenen
+
 
 class Besluit(models.Model):
     uuid = models.UUIDField(default=_uuid.uuid4)
 
     identificatie = models.CharField(
-        'identificatie', max_length=50,
+        'identificatie', max_length=50, default=_uuid.uuid4,
         validators=[alphanumeric_excluding_diacritic],
         help_text="Identificatie van het besluit binnen de organisatie die "
                   "het besluit heeft vastgesteld."
@@ -68,6 +70,10 @@ class Besluit(models.Model):
     vervaldatum = models.DateField(
         'vervaldatum', null=True, blank=True,
         help_text="Datum waarop de werkingsperiode van het besluit eindigt."
+    )
+    vervalreden = models.CharField(
+        'vervalreden', max_length=30, blank=True,
+        choices=VervalRedenen.choices
     )
     publicatiedatum = models.DateField(
         'publicatiedatum', null=True, blank=True,

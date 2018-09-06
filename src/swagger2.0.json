@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Documentregistratiecomponent (drc) API",
-        "description": "Een API om een documentregistratiecomponent te benaderen",
+        "title": "Besluitregistratiecomponent (brc) API",
+        "description": "Een API om een besluitregistratiecomponent te benaderen",
         "contact": {
             "url": "https://github.com/VNG-Realisatie/gemma-zaken",
             "email": "support@maykinmedia.nl"
@@ -30,18 +30,49 @@
         }
     ],
     "paths": {
-        "/enkelvoudiginformatieobjecten": {
+        "/besluiten": {
             "get": {
-                "operationId": "enkelvoudiginformatieobject_list",
-                "description": "EnkelvoudigInformatieObject resource.",
-                "parameters": [],
+                "operationId": "besluit_list",
+                "description": "Geef een lijst van BESLUITen, waarin gefiltered kan worden.",
+                "parameters": [
+                    {
+                        "name": "identificatie",
+                        "in": "query",
+                        "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "verantwoordelijkeOrganisatie",
+                        "in": "query",
+                        "description": "Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die het besluit heeft vastgesteld.",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "besluittype",
+                        "in": "query",
+                        "description": "Aanduiding van de aard van het BESLUIT. Referentie naar het BESLUITTYPE in de zaaktypecatalogus.",
+                        "required": false,
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    {
+                        "name": "zaak",
+                        "in": "query",
+                        "description": "Referentie naar de ZAAK waarvan dit besluit uitkomst is",
+                        "required": false,
+                        "type": "string",
+                        "format": "uri"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/EnkelvoudigInformatieObject"
+                                "$ref": "#/definitions/Besluit"
                             }
                         }
                     },
@@ -95,19 +126,19 @@
                     }
                 },
                 "tags": [
-                    "enkelvoudiginformatieobjecten"
+                    "besluiten"
                 ]
             },
             "post": {
-                "operationId": "enkelvoudiginformatieobject_create",
-                "description": "Registreer een EnkelvoudigInformatieObject.\n\nDe URL naar het informatieobjecttype wordt gevalideerd op geldigheid.",
+                "operationId": "besluit_create",
+                "description": "Registreer een besluit.\n\nIndien geen identificatie gegeven is, dan wordt deze automatisch\ngegenereerd.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/EnkelvoudigInformatieObject"
+                            "$ref": "#/definitions/Besluit"
                         }
                     }
                 ],
@@ -115,7 +146,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/EnkelvoudigInformatieObject"
+                            "$ref": "#/definitions/Besluit"
                         }
                     },
                     "400": {
@@ -174,21 +205,21 @@
                     }
                 },
                 "tags": [
-                    "enkelvoudiginformatieobjecten"
+                    "besluiten"
                 ]
             },
             "parameters": []
         },
-        "/enkelvoudiginformatieobjecten/{uuid}": {
+        "/besluiten/{uuid}": {
             "get": {
-                "operationId": "enkelvoudiginformatieobject_read",
-                "description": "Geef de details van een EnkelvoudigInformatieObject.",
+                "operationId": "besluit_read",
+                "description": "Geef de details van 1 enkel BESLUIT.",
                 "parameters": [],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/EnkelvoudigInformatieObject"
+                            "$ref": "#/definitions/Besluit"
                         }
                     },
                     "401": {
@@ -247,29 +278,198 @@
                     }
                 },
                 "tags": [
-                    "enkelvoudiginformatieobjecten"
+                    "besluiten"
+                ]
+            },
+            "put": {
+                "operationId": "besluit_update",
+                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Besluit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Besluit"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "patch": {
+                "operationId": "besluit_partial_update",
+                "description": "Werk een BESLUIT bij.\n\nEr wordt gevalideerd op:\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Besluit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Besluit"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
                 ]
             },
             "parameters": [
                 {
                     "name": "uuid",
                     "in": "path",
-                    "description": "Unieke resource identifier (UUID4)",
                     "required": true,
                     "type": "string",
                     "format": "uuid"
                 }
             ]
         },
-        "/zaakinformatieobjecten": {
+        "/besluitinformatieobjecten": {
             "get": {
-                "operationId": "zaakinformatieobject_list",
-                "description": "Beheer relatie tussen InformatieObject en ZAAK.",
+                "operationId": "besluitinformatieobject_list",
+                "description": "Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.\n\nDoor te filteren op besluit en/of informatieobject kan je opvragen in welke\ninformatieobjecten een besluit is vastgelegd, of welke besluiten in een\ninformatieobject vastgelegd zijn.",
                 "parameters": [
                     {
-                        "name": "zaak",
+                        "name": "besluit",
                         "in": "query",
-                        "description": "URL naar de ZAAK in het ZRC.",
+                        "description": "URL to the related resource",
                         "required": false,
                         "type": "string",
                         "format": "uri"
@@ -277,7 +477,7 @@
                     {
                         "name": "informatieobject",
                         "in": "query",
-                        "description": "URL to the related resource",
+                        "description": "URL-referentie naar het informatieobject waarin (een deel van) het besluit beschreven is.",
                         "required": false,
                         "type": "string",
                         "format": "uri"
@@ -289,7 +489,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ZaakInformatieObject"
+                                "$ref": "#/definitions/BesluitInformatieObject"
                             }
                         }
                     },
@@ -343,19 +543,19 @@
                     }
                 },
                 "tags": [
-                    "zaakinformatieobjecten"
+                    "besluitinformatieobjecten"
                 ]
             },
             "post": {
-                "operationId": "zaakinformatieobject_create",
-                "description": "Registreer een INFORMATIEOBJECT bij een ZAAK.",
+                "operationId": "besluitinformatieobject_create",
+                "description": "Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
                 "parameters": [
                     {
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ZaakInformatieObject"
+                            "$ref": "#/definitions/BesluitInformatieObject"
                         }
                     }
                 ],
@@ -363,7 +563,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/ZaakInformatieObject"
+                            "$ref": "#/definitions/BesluitInformatieObject"
                         }
                     },
                     "400": {
@@ -422,21 +622,21 @@
                     }
                 },
                 "tags": [
-                    "zaakinformatieobjecten"
+                    "besluitinformatieobjecten"
                 ]
             },
             "parameters": []
         },
-        "/zaakinformatieobjecten/{uuid}": {
+        "/besluitinformatieobjecten/{uuid}": {
             "get": {
-                "operationId": "zaakinformatieobject_read",
-                "description": "Geef de details van een ZAAKINFORMATIEOBJECT relatie.",
+                "operationId": "besluitinformatieobject_read",
+                "description": "Opvragen en bwerken van Besluit-Informatieobject relaties.",
                 "parameters": [],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/ZaakInformatieObject"
+                            "$ref": "#/definitions/BesluitInformatieObject"
                         }
                     },
                     "401": {
@@ -495,14 +695,250 @@
                     }
                 },
                 "tags": [
-                    "zaakinformatieobjecten"
+                    "besluitinformatieobjecten"
+                ]
+            },
+            "put": {
+                "operationId": "besluitinformatieobject_update",
+                "description": "Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluitinformatieobjecten"
+                ]
+            },
+            "patch": {
+                "operationId": "besluitinformatieobject_partial_update",
+                "description": "Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluitinformatieobjecten"
+                ]
+            },
+            "delete": {
+                "operationId": "besluitinformatieobject_delete",
+                "description": "Ontkoppel een ZAAK en INFORMATIEOBJECT-relatie.",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluitinformatieobjecten"
                 ]
             },
             "parameters": [
                 {
                     "name": "uuid",
                     "in": "path",
-                    "description": "Unieke resource identifier (UUID4)",
                     "required": true,
                     "type": "string",
                     "format": "uuid"
@@ -511,13 +947,12 @@
         }
     },
     "definitions": {
-        "EnkelvoudigInformatieObject": {
+        "Besluit": {
             "required": [
-                "creatiedatum",
-                "titel",
-                "auteur",
-                "taal",
-                "informatieobjecttype"
+                "verantwoordelijkeOrganisatie",
+                "besluittype",
+                "datum",
+                "ingangsdatum"
             ],
             "type": "object",
             "properties": {
@@ -529,576 +964,90 @@
                 },
                 "identificatie": {
                     "title": "Identificatie",
-                    "description": "Een binnen een gegeven context ondubbelzinnige referentie naar het INFORMATIEOBJECT.",
+                    "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.",
                     "type": "string",
-                    "maxLength": 40,
+                    "default": "34a07e43-a8ee-4c53-a462-2d64fdf0c4da",
+                    "maxLength": 50,
                     "minLength": 1
                 },
-                "bronorganisatie": {
-                    "title": "Bronorganisatie",
-                    "description": "Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die het informatieobject heeft gecre\u00eberd of heeft ontvangen en als eerste in een samenwerkingsketen heeft vastgelegd.",
+                "verantwoordelijkeOrganisatie": {
+                    "title": "Verantwoordelijke organisatie",
+                    "description": "Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die het besluit heeft vastgesteld.",
                     "type": "string",
-                    "maxLength": 9
+                    "maxLength": 9,
+                    "minLength": 1
                 },
-                "creatiedatum": {
-                    "title": "Creatiedatum",
-                    "description": "Een datum of een gebeurtenis in de levenscyclus van het INFORMATIEOBJECT.",
+                "besluittype": {
+                    "title": "Besluittype",
+                    "description": "Aanduiding van de aard van het BESLUIT. Referentie naar het BESLUITTYPE in de zaaktypecatalogus.",
                     "type": "string",
-                    "format": "date"
-                },
-                "titel": {
-                    "title": "Titel",
-                    "description": "De naam waaronder het INFORMATIEOBJECT formeel bekend is.",
-                    "type": "string",
+                    "format": "uri",
                     "maxLength": 200,
                     "minLength": 1
                 },
-                "vertrouwelijkaanduiding": {
-                    "title": "Vertrouwelijkaanduiding",
-                    "description": "Aanduiding van de mate waarin het INFORMATIEOBJECT voor de openbaarheid bestemd is.",
-                    "type": "string",
-                    "enum": [
-                        "openbaar",
-                        "beperkt openbaar",
-                        "intern",
-                        "zaakvertrouwelijk",
-                        "vertrouwelijk",
-                        "confidentieel",
-                        "geheim",
-                        "zeer geheim"
-                    ]
-                },
-                "auteur": {
-                    "title": "Auteur",
-                    "description": "De persoon of organisatie die in de eerste plaats verantwoordelijk is voor het cre\u00ebren van de inhoud van het INFORMATIEOBJECT.",
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
-                },
-                "formaat": {
-                    "title": "Formaat",
-                    "description": "De code voor de wijze waarop de inhoud van het ENKELVOUDIG INFORMATIEOBJECT is vastgelegd in een computerbestand.",
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "taal": {
-                    "title": "Taal",
-                    "description": "Een taal van de intellectuele inhoud van het ENKELVOUDIG INFORMATIEOBJECT. De waardes komen uit ISO 639-2/B",
-                    "type": "string",
-                    "enum": [
-                        "aar",
-                        "abk",
-                        "ace",
-                        "ach",
-                        "ada",
-                        "ady",
-                        "afh",
-                        "afr",
-                        "ain",
-                        "aka",
-                        "akk",
-                        "ale",
-                        "alt",
-                        "amh",
-                        "ang",
-                        "anp",
-                        "ara",
-                        "arc",
-                        "arg",
-                        "arn",
-                        "arp",
-                        "arw",
-                        "asm",
-                        "ast",
-                        "ava",
-                        "ave",
-                        "awa",
-                        "aym",
-                        "aze",
-                        "bak",
-                        "bal",
-                        "bam",
-                        "ban",
-                        "bas",
-                        "bej",
-                        "bel",
-                        "bem",
-                        "ben",
-                        "bho",
-                        "bik",
-                        "bin",
-                        "bis",
-                        "bla",
-                        "tib",
-                        "bos",
-                        "bra",
-                        "bre",
-                        "bua",
-                        "bug",
-                        "bul",
-                        "byn",
-                        "cad",
-                        "car",
-                        "cat",
-                        "ceb",
-                        "cze",
-                        "cha",
-                        "chb",
-                        "che",
-                        "chg",
-                        "chk",
-                        "chm",
-                        "chn",
-                        "cho",
-                        "chp",
-                        "chr",
-                        "chu",
-                        "chv",
-                        "chy",
-                        "cop",
-                        "cor",
-                        "cos",
-                        "cre",
-                        "crh",
-                        "csb",
-                        "wel",
-                        "dak",
-                        "dan",
-                        "dar",
-                        "del",
-                        "den",
-                        "ger",
-                        "dgr",
-                        "din",
-                        "div",
-                        "doi",
-                        "dsb",
-                        "dua",
-                        "dum",
-                        "dyu",
-                        "dzo",
-                        "efi",
-                        "egy",
-                        "eka",
-                        "gre",
-                        "elx",
-                        "eng",
-                        "enm",
-                        "epo",
-                        "est",
-                        "baq",
-                        "ewe",
-                        "ewo",
-                        "fan",
-                        "fao",
-                        "per",
-                        "fat",
-                        "fij",
-                        "fil",
-                        "fin",
-                        "fon",
-                        "fre",
-                        "frm",
-                        "fro",
-                        "frr",
-                        "frs",
-                        "fry",
-                        "ful",
-                        "fur",
-                        "gaa",
-                        "gay",
-                        "gba",
-                        "gez",
-                        "gil",
-                        "gla",
-                        "gle",
-                        "glg",
-                        "glv",
-                        "gmh",
-                        "goh",
-                        "gon",
-                        "gor",
-                        "got",
-                        "grb",
-                        "grc",
-                        "grn",
-                        "gsw",
-                        "guj",
-                        "gwi",
-                        "hai",
-                        "hat",
-                        "hau",
-                        "haw",
-                        "heb",
-                        "her",
-                        "hil",
-                        "hin",
-                        "hit",
-                        "hmn",
-                        "hmo",
-                        "hrv",
-                        "hsb",
-                        "hun",
-                        "hup",
-                        "arm",
-                        "iba",
-                        "ibo",
-                        "ido",
-                        "iii",
-                        "iku",
-                        "ile",
-                        "ilo",
-                        "ina",
-                        "ind",
-                        "inh",
-                        "ipk",
-                        "ice",
-                        "ita",
-                        "jav",
-                        "jbo",
-                        "jpn",
-                        "jpr",
-                        "jrb",
-                        "kaa",
-                        "kab",
-                        "kac",
-                        "kal",
-                        "kam",
-                        "kan",
-                        "kas",
-                        "geo",
-                        "kau",
-                        "kaw",
-                        "kaz",
-                        "kbd",
-                        "kha",
-                        "khm",
-                        "kho",
-                        "kik",
-                        "kin",
-                        "kir",
-                        "kmb",
-                        "kok",
-                        "kom",
-                        "kon",
-                        "kor",
-                        "kos",
-                        "kpe",
-                        "krc",
-                        "krl",
-                        "kru",
-                        "kua",
-                        "kum",
-                        "kur",
-                        "kut",
-                        "lad",
-                        "lah",
-                        "lam",
-                        "lao",
-                        "lat",
-                        "lav",
-                        "lez",
-                        "lim",
-                        "lin",
-                        "lit",
-                        "lol",
-                        "loz",
-                        "ltz",
-                        "lua",
-                        "lub",
-                        "lug",
-                        "lui",
-                        "lun",
-                        "luo",
-                        "lus",
-                        "mad",
-                        "mag",
-                        "mah",
-                        "mai",
-                        "mak",
-                        "mal",
-                        "man",
-                        "mar",
-                        "mas",
-                        "mdf",
-                        "mdr",
-                        "men",
-                        "mga",
-                        "mic",
-                        "min",
-                        "mis",
-                        "mac",
-                        "mlg",
-                        "mlt",
-                        "mnc",
-                        "mni",
-                        "moh",
-                        "mon",
-                        "mos",
-                        "mao",
-                        "may",
-                        "mul",
-                        "mus",
-                        "mwl",
-                        "mwr",
-                        "bur",
-                        "myv",
-                        "nap",
-                        "nau",
-                        "nav",
-                        "nbl",
-                        "nde",
-                        "ndo",
-                        "nds",
-                        "nep",
-                        "new",
-                        "nia",
-                        "niu",
-                        "dut",
-                        "nno",
-                        "nob",
-                        "nog",
-                        "non",
-                        "nor",
-                        "nqo",
-                        "nso",
-                        "nwc",
-                        "nya",
-                        "nym",
-                        "nyn",
-                        "nyo",
-                        "nzi",
-                        "oci",
-                        "oji",
-                        "ori",
-                        "orm",
-                        "osa",
-                        "oss",
-                        "ota",
-                        "pag",
-                        "pal",
-                        "pam",
-                        "pan",
-                        "pap",
-                        "pau",
-                        "peo",
-                        "phn",
-                        "pli",
-                        "pol",
-                        "pon",
-                        "por",
-                        "pro",
-                        "pus",
-                        "que",
-                        "raj",
-                        "rap",
-                        "rar",
-                        "roh",
-                        "rom",
-                        "rum",
-                        "run",
-                        "rup",
-                        "rus",
-                        "sad",
-                        "sag",
-                        "sah",
-                        "sam",
-                        "san",
-                        "sas",
-                        "sat",
-                        "scn",
-                        "sco",
-                        "sel",
-                        "sga",
-                        "shn",
-                        "sid",
-                        "sin",
-                        "slo",
-                        "slv",
-                        "sma",
-                        "sme",
-                        "smj",
-                        "smn",
-                        "smo",
-                        "sms",
-                        "sna",
-                        "snd",
-                        "snk",
-                        "sog",
-                        "som",
-                        "sot",
-                        "spa",
-                        "alb",
-                        "srd",
-                        "srn",
-                        "srp",
-                        "srr",
-                        "ssw",
-                        "suk",
-                        "sun",
-                        "sus",
-                        "sux",
-                        "swa",
-                        "swe",
-                        "syc",
-                        "syr",
-                        "tah",
-                        "tam",
-                        "tat",
-                        "tel",
-                        "tem",
-                        "ter",
-                        "tet",
-                        "tgk",
-                        "tgl",
-                        "tha",
-                        "tig",
-                        "tir",
-                        "tiv",
-                        "tkl",
-                        "tlh",
-                        "tli",
-                        "tmh",
-                        "tog",
-                        "ton",
-                        "tpi",
-                        "tsi",
-                        "tsn",
-                        "tso",
-                        "tuk",
-                        "tum",
-                        "tur",
-                        "tvl",
-                        "twi",
-                        "tyv",
-                        "udm",
-                        "uga",
-                        "uig",
-                        "ukr",
-                        "umb",
-                        "und",
-                        "urd",
-                        "uzb",
-                        "vai",
-                        "ven",
-                        "vie",
-                        "vol",
-                        "vot",
-                        "wal",
-                        "war",
-                        "was",
-                        "wln",
-                        "wol",
-                        "xal",
-                        "xho",
-                        "yao",
-                        "yap",
-                        "yid",
-                        "yor",
-                        "zap",
-                        "zbl",
-                        "zen",
-                        "zgh",
-                        "zha",
-                        "chi",
-                        "zul",
-                        "zun",
-                        "zxx",
-                        "zza",
-                        "afa",
-                        "alg",
-                        "apa",
-                        "art",
-                        "ath",
-                        "aus",
-                        "bad",
-                        "bai",
-                        "bat",
-                        "ber",
-                        "bih",
-                        "bnt",
-                        "btk",
-                        "cai",
-                        "cau",
-                        "cel",
-                        "cmc",
-                        "cpe",
-                        "cpf",
-                        "cpp",
-                        "crp",
-                        "cus",
-                        "day",
-                        "dra",
-                        "fiu",
-                        "gem",
-                        "ijo",
-                        "inc",
-                        "ine",
-                        "ira",
-                        "iro",
-                        "kar",
-                        "khi",
-                        "kro",
-                        "map",
-                        "mkh",
-                        "mno",
-                        "mun",
-                        "myn",
-                        "nah",
-                        "nai",
-                        "nic",
-                        "nub",
-                        "oto",
-                        "paa",
-                        "phi",
-                        "pra",
-                        "roa",
-                        "sai",
-                        "sal",
-                        "sem",
-                        "sgn",
-                        "sio",
-                        "sit",
-                        "sla",
-                        "smi",
-                        "son",
-                        "ssa",
-                        "tai",
-                        "tup",
-                        "tut",
-                        "wak",
-                        "wen",
-                        "ypk",
-                        "znd",
-                        "him"
-                    ]
-                },
-                "inhoud": {
-                    "title": "Inhoud",
-                    "type": "string",
-                    "readOnly": true,
-                    "format": "uri"
-                },
-                "link": {
-                    "title": "Link",
-                    "description": "De URL waarmee de inhoud van het INFORMATIEOBJECT op te vragen is.",
+                "zaak": {
+                    "title": "Zaak",
+                    "description": "Referentie naar de ZAAK waarvan dit besluit uitkomst is",
                     "type": "string",
                     "format": "uri",
                     "maxLength": 200
                 },
-                "beschrijving": {
-                    "title": "Beschrijving",
-                    "description": "Een generieke beschrijving van de inhoud van het INFORMATIEOBJECT.",
+                "datum": {
+                    "title": "Datum",
+                    "description": "De beslisdatum (AWB) van het besluit.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "toelichting": {
+                    "title": "Toelichting",
+                    "description": "Toelichting bij het besluit.",
                     "type": "string",
                     "maxLength": 1000
                 },
-                "informatieobjecttype": {
-                    "title": "Informatieobjecttype",
-                    "description": "URL naar de INFORMATIEOBJECTTYPE in het ZTC.",
+                "bestuursorgaan": {
+                    "title": "Bestuursorgaan",
+                    "description": "Een orgaan van een rechtspersoon krachtens publiekrecht ingesteld of een persoon of college, met enig openbaar gezag bekleed onder wiens verantwoordelijkheid het besluit vastgesteld is.",
                     "type": "string",
-                    "format": "uri",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "maxLength": 50
+                },
+                "ingangsdatum": {
+                    "title": "Ingangsdatum",
+                    "description": "Ingangsdatum van de werkingsperiode van het besluit.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "vervaldatum": {
+                    "title": "Vervaldatum",
+                    "description": "Datum waarop de werkingsperiode van het besluit eindigt.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "vervalreden": {
+                    "title": "Vervalreden",
+                    "type": "string",
+                    "enum": [
+                        "tijdelijk",
+                        "ingetrokken_overheid",
+                        "ingetrokken_belanghebbende"
+                    ]
+                },
+                "publicatiedatum": {
+                    "title": "Publicatiedatum",
+                    "description": "Datum waarop het besluit gepubliceerd wordt.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "verzenddatum": {
+                    "title": "Verzenddatum",
+                    "description": "Datum waarop het besluit verzonden is.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "uiterlijkeReactiedatum": {
+                    "title": "Uiterlijke reactiedatum",
+                    "description": "De datum tot wanneer verweer tegen het besluit mogelijk is.",
+                    "type": "string",
+                    "format": "date"
                 }
             }
         },
@@ -1229,9 +1178,9 @@
                 }
             }
         },
-        "ZaakInformatieObject": {
+        "BesluitInformatieObject": {
             "required": [
-                "zaak",
+                "besluit",
                 "informatieobject"
             ],
             "type": "object",
@@ -1242,18 +1191,19 @@
                     "format": "uri",
                     "readOnly": true
                 },
-                "zaak": {
-                    "title": "Zaak",
-                    "description": "URL naar de ZAAK in het ZRC.",
+                "besluit": {
+                    "title": "Besluit",
+                    "description": "URL-referentie naar het BESLUIT.",
+                    "type": "string",
+                    "format": "uri"
+                },
+                "informatieobject": {
+                    "title": "Informatieobject",
+                    "description": "URL-referentie naar het informatieobject waarin (een deel van) het besluit beschreven is.",
                     "type": "string",
                     "format": "uri",
                     "maxLength": 200,
                     "minLength": 1
-                },
-                "informatieobject": {
-                    "title": "Informatieobject",
-                    "type": "string",
-                    "format": "uri"
                 }
             }
         }

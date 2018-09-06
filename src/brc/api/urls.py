@@ -3,11 +3,11 @@ from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
 from .schema import schema_view
-
-# from .viewsets import BesluitViewSet
+from .viewsets import BesluitInformatieObjectViewSet, BesluitViewSet
 
 router = DefaultRouter(trailing_slash=False)
-# router.register('besluiten', BesluitViewSet)
+router.register('besluiten', BesluitViewSet)
+router.register('besluitinformatieobjecten', BesluitInformatieObjectViewSet)
 
 # TODO: the EndpointEnumerator seems to choke on path and re_path
 
