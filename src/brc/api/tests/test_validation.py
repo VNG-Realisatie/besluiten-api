@@ -41,11 +41,11 @@ class BesluitValidationTests(APITestCase):
         for rsin, error_code in cases:
             with self.subTest(rsin=rsin, error_code=error_code):
                 response = self.client.post(self.url, {
-                    'verantwoordelijke_organisatie': rsin,
+                    'verantwoordelijkeOrganisatie': rsin,
                 })
 
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-                error = get_validation_errors(response, 'verantwoordelijke_organisatie')
+                error = get_validation_errors(response, 'verantwoordelijkeOrganisatie')
                 self.assertEqual(error['code'], error_code)
 
     @freeze_time('2018-09-06T12:08+0200')
@@ -63,7 +63,7 @@ class BesluitValidationTests(APITestCase):
         besluit = BesluitFactory.create(identificatie='123456')
 
         response = self.client.post(self.url, {
-            'verantwoordelijke_organisatie': besluit.verantwoordelijke_organisatie,
+            'verantwoordelijkeOrganisatie': besluit.verantwoordelijke_organisatie,
             'identificatie': '123456',
 
             'besluittype': 'https://example.com/ztc/besluittype/abcd',
