@@ -4,7 +4,7 @@
 #
 #    pip-compile --no-index --output-file requirements/jenkins.txt requirements/base.txt requirements/testing.in requirements/jenkins.in
 #
-astroid==2.0.4            # via pylint
+astroid==1.6.5            # via pylint
 beautifulsoup4==4.6.3     # via webtest
 certifi==2018.8.24
 chardet==3.0.4
@@ -48,7 +48,7 @@ pep8==1.7.1
 pillow==5.2.0
 pip-tools==2.0.2
 psycopg2-binary==2.7.5
-pylint==2.1.1
+pylint==1.9.3
 pyquery==1.4.0
 python-dateutil==2.7.3
 python-dotenv==0.9.1
@@ -60,7 +60,6 @@ ruamel.yaml==0.15.64
 six==1.11.0
 tblib==1.3.2
 text-unidecode==1.2       # via faker
-typed-ast==1.1.0          # via astroid
 unidecode==1.0.22
 uritemplate==3.0.0
 urllib3==1.23
