@@ -31,7 +31,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                 'lookup_field': 'uuid',
             },
             'zaak': {
-                'validators': [URLValidator()],
+                'validators': [URLValidator(headers={'Accept-Crs': 'EPSG:4326'})],
             },
             'besluittype': {
                 'validators': [URLValidator()],
