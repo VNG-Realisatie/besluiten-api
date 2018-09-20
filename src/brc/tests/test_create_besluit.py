@@ -15,7 +15,10 @@ from brc.datamodel.tests.factories import (
 )
 
 
-@override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_200')
+@override_settings(
+    LINK_FETCHER='zds_schema.mocks.link_fetcher_200',
+    ZDS_CLIENT_CLASS='zds_schema.mocks.ObjectInformatieObjectClient'
+)
 class BesluitCreateTests(TypeCheckMixin, APITestCase):
 
     @freeze_time('2018-09-06T12:08+0200')

@@ -213,7 +213,7 @@
         "/besluiten/{besluit_uuid}/informatieobjecten": {
             "get": {
                 "operationId": "besluitinformatieobject_list",
-                "description": "Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.\n\nDoor te filteren op besluit en/of informatieobject kan je opvragen in welke\ninformatieobjecten een besluit is vastgelegd, of welke besluiten in een\ninformatieobject vastgelegd zijn.",
+                "description": "Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -280,7 +280,7 @@
             },
             "post": {
                 "operationId": "besluitinformatieobject_create",
-                "description": "Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "description": "Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL\n- uniek zijn van relatie BESLUIT-INFORMATIEOBJECT\n- bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het\n  informatieobject leeft",
                 "parameters": [
                     {
                         "name": "data",
@@ -441,7 +441,7 @@
             },
             "put": {
                 "operationId": "besluitinformatieobject_update",
-                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL\n- uniek zijn van relatie BESLUIT-INFORMATIEOBJECT\n- bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het\n  informatieobject leeft",
                 "parameters": [
                     {
                         "name": "data",
@@ -526,7 +526,7 @@
             },
             "patch": {
                 "operationId": "besluitinformatieobject_partial_update",
-                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL\n- uniek zijn van relatie BESLUIT-INFORMATIEOBJECT\n- bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het\n  informatieobject leeft",
                 "parameters": [
                     {
                         "name": "data",

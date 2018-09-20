@@ -1,12 +1,12 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
-from django.shortcuts import get_object_or_404
-
 from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
-from zds_schema.utils import lookup_kwargs_to_filters
-from zds_schema.validators import UniekeIdentificatieValidator, URLValidator
+from zds_schema.validators import (
+    InformatieObjectUniqueValidator, ObjectInformatieObjectValidator,
+    UniekeIdentificatieValidator, URLValidator
+)
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
@@ -48,20 +48,22 @@ class BesluitInformatieObjectSerializer(NestedHyperlinkedModelSerializer):
     parent_lookup_kwargs = {
         'besluit_uuid': 'besluit__uuid'
     }
-    parent_retrieve_kwargs = {
-        'besluit_uuid': 'uuid',
-    }
 
     class Meta:
         model = BesluitInformatieObject
         fields = ('url', 'informatieobject')
         extra_kwargs = {
             'url': {'lookup_field': 'uuid'},
-            'informatieobject': {'validators': [URLValidator()]},
+            'informatieobject': {
+                'validators': [
+                    URLValidator(),
+                    InformatieObjectUniqueValidator('besluit', 'informatieobject'),
+                    ObjectInformatieObjectValidator(),
+                ]
+            },
         }
 
     def create(self, validated_data):
-        view_kwargs = self.context['view'].kwargs
-        filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, view_kwargs)
-        validated_data['besluit'] = get_object_or_404(Besluit, **filters)
+        besluit = self.context['parent_object']
+        validated_data['besluit'] = besluit
         return super().create(validated_data)
