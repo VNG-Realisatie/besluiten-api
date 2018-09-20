@@ -210,6 +210,490 @@
             },
             "parameters": []
         },
+        "/besluiten/{besluit_uuid}/informatieobjecten": {
+            "get": {
+                "operationId": "besluitinformatieobject_list",
+                "description": "Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.\n\nDoor te filteren op besluit en/of informatieobject kan je opvragen in welke\ninformatieobjecten een besluit is vastgelegd, of welke besluiten in een\ninformatieobject vastgelegd zijn.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/BesluitInformatieObject"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "post": {
+                "operationId": "besluitinformatieobject_create",
+                "description": "Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "besluit_uuid",
+                    "in": "path",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unieke resource identifier (UUID4)"
+                }
+            ]
+        },
+        "/besluiten/{besluit_uuid}/informatieobjecten/{uuid}": {
+            "get": {
+                "operationId": "besluitinformatieobject_read",
+                "description": "Opvragen en bwerken van Besluit-Informatieobject relaties.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "put": {
+                "operationId": "besluitinformatieobject_update",
+                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "patch": {
+                "operationId": "besluitinformatieobject_partial_update",
+                "description": "Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid informatieobject URL",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/BesluitInformatieObject"
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ValidatieFout"
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "delete": {
+                "operationId": "besluitinformatieobject_delete",
+                "description": "Ontkoppel een BESLUIT en INFORMATIEOBJECT-relatie.",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "406": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "410": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "415": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Fout"
+                        }
+                    }
+                },
+                "tags": [
+                    "besluiten"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "besluit_uuid",
+                    "in": "path",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unieke resource identifier (UUID4)"
+                },
+                {
+                    "name": "uuid",
+                    "in": "path",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
         "/besluiten/{uuid}": {
             "get": {
                 "operationId": "besluit_read",
@@ -460,490 +944,6 @@
                     "format": "uuid"
                 }
             ]
-        },
-        "/besluitinformatieobjecten": {
-            "get": {
-                "operationId": "besluitinformatieobject_list",
-                "description": "Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.\n\nDoor te filteren op besluit en/of informatieobject kan je opvragen in welke\ninformatieobjecten een besluit is vastgelegd, of welke besluiten in een\ninformatieobject vastgelegd zijn.",
-                "parameters": [
-                    {
-                        "name": "besluit",
-                        "in": "query",
-                        "description": "URL to the related resource",
-                        "required": false,
-                        "type": "string",
-                        "format": "uri"
-                    },
-                    {
-                        "name": "informatieobject",
-                        "in": "query",
-                        "description": "URL-referentie naar het informatieobject waarin (een deel van) het besluit beschreven is.",
-                        "required": false,
-                        "type": "string",
-                        "format": "uri"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/BesluitInformatieObject"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "post": {
-                "operationId": "besluitinformatieobject_create",
-                "description": "Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
-                "parameters": [
-                    {
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    "400": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/ValidatieFout"
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "parameters": []
-        },
-        "/besluitinformatieobjecten/{uuid}": {
-            "get": {
-                "operationId": "besluitinformatieobject_read",
-                "description": "Opvragen en bwerken van Besluit-Informatieobject relaties.",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "404": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "put": {
-                "operationId": "besluitinformatieobject_update",
-                "description": "Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
-                "parameters": [
-                    {
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    "400": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/ValidatieFout"
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "404": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "patch": {
-                "operationId": "besluitinformatieobject_partial_update",
-                "description": "Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.\n\nEr wordt gevalideerd op:\n- geldigheid besluit URL\n- geldigheid informatieobject URL",
-                "parameters": [
-                    {
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    "400": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/ValidatieFout"
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "404": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "delete": {
-                "operationId": "besluitinformatieobject_delete",
-                "description": "Ontkoppel een ZAAK en INFORMATIEOBJECT-relatie.",
-                "parameters": [],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    },
-                    "401": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "403": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "404": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "406": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "409": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "410": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "415": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "429": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    },
-                    "500": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ]
-            },
-            "parameters": [
-                {
-                    "name": "uuid",
-                    "in": "path",
-                    "required": true,
-                    "type": "string",
-                    "format": "uuid"
-                }
-            ]
         }
     },
     "definitions": {
@@ -1179,7 +1179,6 @@
         },
         "BesluitInformatieObject": {
             "required": [
-                "besluit",
                 "informatieobject"
             ],
             "type": "object",
@@ -1189,12 +1188,6 @@
                     "type": "string",
                     "format": "uri",
                     "readOnly": true
-                },
-                "besluit": {
-                    "title": "Besluit",
-                    "description": "URL-referentie naar het BESLUIT.",
-                    "type": "string",
-                    "format": "uri"
                 },
                 "informatieobject": {
                     "title": "Informatieobject",

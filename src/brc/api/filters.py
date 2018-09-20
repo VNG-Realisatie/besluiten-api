@@ -1,6 +1,6 @@
 from zds_schema.filtersets import FilterSet
 
-from brc.datamodel.models import Besluit, BesluitInformatieObject
+from brc.datamodel.models import Besluit
 
 
 class BesluitFilter(FilterSet):
@@ -12,9 +12,3 @@ class BesluitFilter(FilterSet):
             'besluittype',
             'zaak',
         )
-
-
-class BesluitInformatieObjectFilter(FilterSet):
-    class Meta:
-        model = BesluitInformatieObject
-        fields = ('besluit', 'informatieobject')

@@ -1,6 +1,8 @@
 from django.test import override_settings
 
 from freezegun import freeze_time
+import uuid
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 from zds_schema.tests import get_validation_errors
@@ -78,7 +80,10 @@ class BesluitValidationTests(APITestCase):
 
 
 class BesluitInformatieObjectTests(APITestCase):
-    url = reverse_lazy('besluitinformatieobject-list')
+    url = reverse_lazy(
+        'besluitinformatieobject-list',
+        kwargs={'besluit_uuid': str(uuid.uuid4())}
+    )
 
     @override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_404')
     def test_validate_informatieobject_invalid(self):

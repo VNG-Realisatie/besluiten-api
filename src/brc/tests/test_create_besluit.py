@@ -52,7 +52,6 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
                 ('verzenddatum', type(None)),
                 ('uiterlijke_reactiedatum', type(None)),
             ))
-            besluit_url = response.data['url']
 
             self.assertEqual(Besluit.objects.count(), 1)
 
@@ -70,17 +69,18 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
             self.assertEqual(besluit.vervalreden, VervalRedenen.tijdelijk)
 
         with self.subTest(part='besluitinformatieobject_create'):
-            url = get_operation_url('besluitinformatieobject_create')
+            url = get_operation_url(
+                'besluitinformatieobject_create',
+                besluit_uuid=besluit.uuid
+            )
 
             response = self.client.post(url, {
-                'besluit': besluit_url,
                 'informatieobject': 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234',
             })
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
             self.assertResponseTypes(response.data, (
                 ('url', str),
-                ('besluit', str),
                 ('informatieobject', str),
             ))
 
@@ -95,22 +95,10 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
         bio1_1, bio1_2, bio1_3 = BesluitInformatieObjectFactory.create_batch(3, besluit=besluit1)
         bio2_1, bio2_2 = BesluitInformatieObjectFactory.create_batch(2, besluit=besluit2)
 
-        besluit1_url = get_operation_url('besluit_read', uuid=besluit1.uuid)
-        besluit2_url = get_operation_url('besluit_read', uuid=besluit2.uuid)
-
-        url = get_operation_url('besluitinformatieobject_list')
-
-        response1 = self.client.get(url, {'besluit': besluit1_url})
-        response2 = self.client.get(url, {'besluit': besluit2_url})
-
+        url1 = get_operation_url('besluitinformatieobject_list', besluit_uuid=besluit1.uuid)
+        response1 = self.client.get(url1)
         self.assertEqual(len(response1.data), 3)
-        self.assertEqual(
-            {entry['besluit'] for entry in response1.data},
-            {f"http://testserver{besluit1_url}"}
-        )
 
+        url2 = get_operation_url('besluitinformatieobject_list', besluit_uuid=besluit2.uuid)
+        response2 = self.client.get(url2)
         self.assertEqual(len(response2.data), 2)
-        self.assertEqual(
-            {entry['besluit'] for entry in response2.data},
-            {f"http://testserver{besluit2_url}"}
-        )

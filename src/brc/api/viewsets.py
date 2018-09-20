@@ -1,8 +1,9 @@
 from rest_framework import mixins, viewsets
+from zds_schema.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
-from .filters import BesluitFilter, BesluitInformatieObjectFilter
+from .filters import BesluitFilter
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
@@ -59,7 +60,7 @@ class BesluitViewSet(mixins.CreateModelMixin,
     lookup_field = 'uuid'
 
 
-class BesluitInformatieObjectViewSet(viewsets.ModelViewSet):
+class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.
 
@@ -67,7 +68,6 @@ class BesluitInformatieObjectViewSet(viewsets.ModelViewSet):
     Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
 
     list:
@@ -78,23 +78,20 @@ class BesluitInformatieObjectViewSet(viewsets.ModelViewSet):
     informatieobject vastgelegd zijn.
 
     update:
-    Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.
+    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
 
     partial_update:
-    Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.
+    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
 
     destroy:
-    Ontkoppel een ZAAK en INFORMATIEOBJECT-relatie.
+    Ontkoppel een BESLUIT en INFORMATIEOBJECT-relatie.
     """
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
-    filter_class = BesluitInformatieObjectFilter
     lookup_field = 'uuid'
