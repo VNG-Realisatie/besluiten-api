@@ -3,6 +3,7 @@ import uuid as _uuid
 from django.db import models
 
 from zds_schema.fields import RSINField
+from zds_schema.models import APIMixin
 from zds_schema.validators import (
     UntilNowValidator, alphanumeric_excluding_diacritic
 )
@@ -10,7 +11,7 @@ from zds_schema.validators import (
 from .constants import VervalRedenen
 
 
-class Besluit(models.Model):
+class Besluit(APIMixin, models.Model):
     uuid = models.UUIDField(default=_uuid.uuid4)
 
     identificatie = models.CharField(

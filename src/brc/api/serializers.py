@@ -2,7 +2,11 @@
 Serializers of the Besluit Registratie Component REST API
 """
 from rest_framework import serializers
-from zds_schema.validators import UniekeIdentificatieValidator, URLValidator
+from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
+from zds_schema.validators import (
+    InformatieObjectUniqueValidator, ObjectInformatieObjectValidator,
+    UniekeIdentificatieValidator, URLValidator
+)
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
@@ -40,22 +44,26 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
         validators = [UniekeIdentificatieValidator('verantwoordelijke_organisatie')]
 
 
-class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
+class BesluitInformatieObjectSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'besluit_uuid': 'besluit__uuid'
+    }
+
     class Meta:
         model = BesluitInformatieObject
-        fields = (
-            'url',
-            'besluit',
-            'informatieobject',
-        )
+        fields = ('url', 'informatieobject')
         extra_kwargs = {
-            'url': {
-                'lookup_field': 'uuid',
-            },
-            'besluit': {
-                'lookup_field': 'uuid',
-            },
+            'url': {'lookup_field': 'uuid'},
             'informatieobject': {
-                'validators': [URLValidator()],
+                'validators': [
+                    URLValidator(),
+                    InformatieObjectUniqueValidator('besluit', 'informatieobject'),
+                    ObjectInformatieObjectValidator(),
+                ]
             },
         }
+
+    def create(self, validated_data):
+        besluit = self.context['parent_object']
+        validated_data['besluit'] = besluit
+        return super().create(validated_data)

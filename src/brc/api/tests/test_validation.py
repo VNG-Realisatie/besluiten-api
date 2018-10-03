@@ -10,7 +10,7 @@ from zds_schema.validators import (
 
 from brc.datamodel.tests.factories import BesluitFactory
 
-from .utils import reverse_lazy
+from .utils import reverse, reverse_lazy
 
 
 class BesluitValidationTests(APITestCase):
@@ -78,11 +78,16 @@ class BesluitValidationTests(APITestCase):
 
 
 class BesluitInformatieObjectTests(APITestCase):
-    url = reverse_lazy('besluitinformatieobject-list')
 
-    @override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_404')
+    @override_settings(
+        LINK_FETCHER='zds_schema.mocks.link_fetcher_404',
+        ZDS_CLIENT_CLASS='zds_schema.mocks.ObjectInformatieObjectClient'
+    )
     def test_validate_informatieobject_invalid(self):
-        response = self.client.post(self.url, {
+        besluit = BesluitFactory.create()
+        url = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit.uuid})
+
+        response = self.client.post(url, {
             'informatieobject': 'https://foo.bar/123',
         })
 
