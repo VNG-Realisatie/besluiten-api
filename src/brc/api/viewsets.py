@@ -1,8 +1,12 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import mixins, viewsets
+from zds_schema.utils import lookup_kwargs_to_filters
+from zds_schema.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
-from .filters import BesluitFilter, BesluitInformatieObjectFilter
+from .filters import BesluitFilter
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
@@ -59,7 +63,7 @@ class BesluitViewSet(mixins.CreateModelMixin,
     lookup_field = 'uuid'
 
 
-class BesluitInformatieObjectViewSet(viewsets.ModelViewSet):
+class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.
 
@@ -67,34 +71,48 @@ class BesluitInformatieObjectViewSet(viewsets.ModelViewSet):
     Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
+    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
+    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
+      informatieobject leeft
 
     list:
     Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.
 
-    Door te filteren op besluit en/of informatieobject kan je opvragen in welke
-    informatieobjecten een besluit is vastgelegd, of welke besluiten in een
-    informatieobject vastgelegd zijn.
-
     update:
-    Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.
+    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
+    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
+    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
+      informatieobject leeft
 
     partial_update:
-    Werk de relatie tussen een ZAAK en INFORMATIEOBJECT bij.
+    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
 
     Er wordt gevalideerd op:
-    - geldigheid besluit URL
     - geldigheid informatieobject URL
+    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
+    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
+      informatieobject leeft
 
     destroy:
-    Ontkoppel een ZAAK en INFORMATIEOBJECT-relatie.
+    Ontkoppel een BESLUIT en INFORMATIEOBJECT-relatie.
     """
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
-    filter_class = BesluitInformatieObjectFilter
     lookup_field = 'uuid'
+
+    parent_retrieve_kwargs = {
+        'besluit_uuid': 'uuid',
+    }
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        # DRF introspection
+        if not self.kwargs:
+            return context
+        filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
+        context['parent_object'] = get_object_or_404(Besluit, **filters)
+        return context

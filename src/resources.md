@@ -32,7 +32,6 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_2.0/doc/o
 | Attribuut | Omschrijving | Type | Verplicht | CRUD* |
 | --- | --- | --- | --- | --- |
 | url |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
-| besluit | URL-referentie naar het BESLUIT. | string | ja | C​R​U​D |
 | informatieobject | URL-referentie naar het informatieobject waarin (een deel van) het besluit beschreven is. | string | ja | C​R​U​D |
 
 
