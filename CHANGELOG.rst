@@ -2,6 +2,13 @@
 Wijzigingen
 ===========
 
+0.2.1 (2018-10-25)
+==================
+
+Bugfix in infrastructuur
+
+* nodejs deps toegevoegd (swagger2openapi)
+
 0.2.0 (2018-10-02)
 ==================
 
