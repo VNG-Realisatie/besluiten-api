@@ -5,7 +5,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from zds_schema.tests import get_validation_errors
 from zds_schema.validators import (
-    UniekeIdentificatieValidator, UntilTodayValidator, URLValidator
+    IsImmutableValidator, UniekeIdentificatieValidator, UntilTodayValidator,
+    URLValidator
 )
 
 from brc.datamodel.tests.factories import BesluitFactory
@@ -75,6 +76,25 @@ class BesluitValidationTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         error = get_validation_errors(response, 'identificatie')
         self.assertEqual(error['code'], UniekeIdentificatieValidator.code)
+
+    def test_change_immutable_fields(self):
+        besluit = BesluitFactory.create(identificatie='123456')
+        besluit2 = BesluitFactory.create(identificatie='123456')
+
+        url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
+
+        response = self.client.patch(url, {
+            'verantwoordelijkeOrganisatie': besluit2.verantwoordelijke_organisatie,
+            'identificatie': '123456789',
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        identificatie_error = get_validation_errors(response, 'identificatie')
+        self.assertEqual(identificatie_error['code'], IsImmutableValidator.code)
+
+        verantwoordelijke_organisatie_error = get_validation_errors(response, 'verantwoordelijkeOrganisatie')
+        self.assertEqual(verantwoordelijke_organisatie_error['code'], IsImmutableValidator.code)
 
 
 class BesluitInformatieObjectTests(APITestCase):

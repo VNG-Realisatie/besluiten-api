@@ -6,8 +6,9 @@ from django.utils.encoding import force_text
 from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from zds_schema.validators import (
-    InformatieObjectUniqueValidator, ObjectInformatieObjectValidator,
-    UniekeIdentificatieValidator, URLValidator, IsImmutableValidator
+    InformatieObjectUniqueValidator, IsImmutableValidator,
+    ObjectInformatieObjectValidator, UniekeIdentificatieValidator,
+    URLValidator, validate_rsin
 )
 
 from brc.datamodel.constants import VervalRedenen
@@ -48,7 +49,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                 'validators': [IsImmutableValidator()],
             },
             'verantwoordelijke_organisatie': {
-                'validators': [IsImmutableValidator()],
+                'validators': [IsImmutableValidator(), validate_rsin],
             },
             'zaak': {
                 'validators': [URLValidator(headers={'Accept-Crs': 'EPSG:4326'})],
