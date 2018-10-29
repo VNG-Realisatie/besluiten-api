@@ -1000,8 +1000,7 @@
                 "toelichting": {
                     "title": "Toelichting",
                     "description": "Toelichting bij het besluit.",
-                    "type": "string",
-                    "maxLength": 1000
+                    "type": "string"
                 },
                 "bestuursorgaan": {
                     "title": "Bestuursorgaan",

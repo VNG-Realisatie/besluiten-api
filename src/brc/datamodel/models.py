@@ -41,7 +41,7 @@ class Besluit(APIMixin, models.Model):
         help_text="De beslisdatum (AWB) van het besluit."
     )
     toelichting = models.TextField(
-        'toelichting', blank=True, max_length=1000,
+        'toelichting', blank=True,
         help_text="Toelichting bij het besluit."
     )
 
