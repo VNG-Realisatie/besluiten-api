@@ -995,7 +995,7 @@
                     "title": "Datum",
                     "description": "De beslisdatum (AWB) van het besluit.",
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date"
                 },
                 "toelichting": {
                     "title": "Toelichting",

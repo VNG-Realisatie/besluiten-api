@@ -5,7 +5,7 @@ from django.db import models
 from zds_schema.fields import RSINField
 from zds_schema.models import APIMixin
 from zds_schema.validators import (
-    UntilNowValidator, alphanumeric_excluding_diacritic
+    UntilTodayValidator, alphanumeric_excluding_diacritic
 )
 
 from .constants import VervalRedenen
@@ -36,8 +36,8 @@ class Besluit(APIMixin, models.Model):
         help_text="Referentie naar de ZAAK waarvan dit besluit uitkomst is"
     )
 
-    datum = models.DateTimeField(
-        'datum', validators=[UntilNowValidator()],
+    datum = models.DateField(
+        'datum', validators=[UntilTodayValidator()],
         help_text="De beslisdatum (AWB) van het besluit."
     )
     toelichting = models.TextField(

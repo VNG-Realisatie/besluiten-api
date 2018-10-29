@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from zds_schema.tests import get_validation_errors
 from zds_schema.validators import (
-    UniekeIdentificatieValidator, UntilNowValidator, URLValidator
+    UniekeIdentificatieValidator, UntilTodayValidator, URLValidator
 )
 
 from brc.datamodel.tests.factories import BesluitFactory
@@ -51,12 +51,12 @@ class BesluitValidationTests(APITestCase):
     @freeze_time('2018-09-06T12:08+0200')
     def test_future_datum(self):
         response = self.client.post(self.url, {
-            'datum': '2018-09-06T12:08:01+0200',
+            'datum': '2018-09-07',
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         error = get_validation_errors(response, 'datum')
-        self.assertEqual(error['code'], UntilNowValidator.code)
+        self.assertEqual(error['code'], UntilTodayValidator.code)
 
     @override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_200')
     def test_duplicate_rsin_identificatie(self):
@@ -68,7 +68,7 @@ class BesluitValidationTests(APITestCase):
 
             'besluittype': 'https://example.com/ztc/besluittype/abcd',
             'zaak': 'https://example.com/zrc/zaken/1234',
-            'datum': '2018-09-06T11:00:00+0200',
+            'datum': '2018-09-06',
             'ingangsdatum': '2018-10-01',
         })
 

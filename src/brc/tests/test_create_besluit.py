@@ -1,7 +1,6 @@
-from datetime import date, datetime
+from datetime import date
 
 from django.test import override_settings
-from django.utils import timezone
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -31,7 +30,7 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
                 'verantwoordelijke_organisatie': '517439943',  # RSIN
                 'besluittype': 'https://example.com/ztc/besluittype/abcd',
                 'zaak': 'https://example.com/zrc/zaken/1234',
-                'datum': '2018-09-06T11:00:00+0200',
+                'datum': '2018-09-06',
                 'toelichting': "Vergunning verleend.",
                 'ingangsdatum': '2018-10-01',
                 'vervaldatum': '2018-11-01',
@@ -64,7 +63,7 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
             self.assertEqual(besluit.zaak, 'https://example.com/zrc/zaken/1234')
             self.assertEqual(
                 besluit.datum,
-                datetime(2018, 9, 6, 9, 0, 0).replace(tzinfo=timezone.utc)
+                date(2018, 9, 6)
             )
             self.assertEqual(besluit.toelichting, "Vergunning verleend.")
             self.assertEqual(besluit.ingangsdatum, date(2018, 10, 1))
