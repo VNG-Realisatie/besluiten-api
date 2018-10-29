@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from zds_schema.validators import (
     InformatieObjectUniqueValidator, ObjectInformatieObjectValidator,
-    UniekeIdentificatieValidator, URLValidator
+    UniekeIdentificatieValidator, URLValidator, IsImmutableValidator
 )
 
 from brc.datamodel.constants import VervalRedenen
@@ -43,6 +43,12 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'url': {
                 'lookup_field': 'uuid',
+            },
+            'identificatie': {
+                'validators': [IsImmutableValidator()],
+            },
+            'verantwoordelijke_organisatie': {
+                'validators': [IsImmutableValidator()],
             },
             'zaak': {
                 'validators': [URLValidator(headers={'Accept-Crs': 'EPSG:4326'})],
