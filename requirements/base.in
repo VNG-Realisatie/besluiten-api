@@ -9,6 +9,7 @@ raven
 Django<2.1
 django-axes
 django-choices
+django-cors-middleware
 
 djangorestframework
 zds-schema==0.9.0
