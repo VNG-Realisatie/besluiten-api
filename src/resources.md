@@ -20,7 +20,13 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_2.0/doc/o
 | bestuursorgaan | Een orgaan van een rechtspersoon krachtens publiekrecht ingesteld of een persoon of college, met enig openbaar gezag bekleed onder wiens verantwoordelijkheid het besluit vastgesteld is. | string | nee | C​R​U​D |
 | ingangsdatum | Ingangsdatum van de werkingsperiode van het besluit. | string | ja | C​R​U​D |
 | vervaldatum | Datum waarop de werkingsperiode van het besluit eindigt. | string | nee | C​R​U​D |
-| vervalreden |  | string | nee | C​R​U​D |
+| vervalreden | De omschrijving die aangeeft op grond waarvan het besluit is of komt te vervallen.
+
+De mapping van waarden naar weergave is als volgt:
+
+* `tijdelijk` - Besluit met tijdelijke werking
+* `ingetrokken_overheid` - Besluit ingetrokken door overheid
+* `ingetrokken_belanghebbende` - Besluit ingetrokken o.v.v. belanghebbende | string | nee | C​R​U​D |
 | vervalredenWeergave |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
 | publicatiedatum | Datum waarop het besluit gepubliceerd wordt. | string | nee | C​R​U​D |
 | verzenddatum | Datum waarop het besluit verzonden is. | string | nee | C​R​U​D |

@@ -1,6 +1,7 @@
 import uuid as _uuid
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from zds_schema.fields import RSINField
 from zds_schema.models import APIMixin
@@ -74,7 +75,8 @@ class Besluit(APIMixin, models.Model):
     )
     vervalreden = models.CharField(
         'vervalreden', max_length=30, blank=True,
-        choices=VervalRedenen.choices
+        choices=VervalRedenen.choices,
+        help_text=_("De omschrijving die aangeeft op grond waarvan het besluit is of komt te vervallen.")
     )
     publicatiedatum = models.DateField(
         'publicatiedatum', null=True, blank=True,

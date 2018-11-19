@@ -1,10 +1,9 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
-from django.utils.encoding import force_text
-
 from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
+from zds_schema.serializers import add_choice_values_help_text
 from zds_schema.validators import (
     InformatieObjectUniqueValidator, IsImmutableValidator,
     ObjectInformatieObjectValidator, UniekeIdentificatieValidator,
@@ -16,11 +15,7 @@ from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
-    vervalreden_weergave = serializers.ChoiceField(
-        source='get_vervalreden_display',
-        choices=[(force_text(value), key) for key, value in VervalRedenen.choices],
-        read_only=True
-    )
+    vervalreden_weergave = serializers.CharField(source='get_vervalreden_display', read_only=True)
 
     class Meta:
         model = Besluit
@@ -59,6 +54,12 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
         validators = [UniekeIdentificatieValidator('verantwoordelijke_organisatie')]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(VervalRedenen)
+        self.fields['vervalreden'].help_text += f"\n\n{value_display_mapping}"
 
 
 class BesluitInformatieObjectSerializer(NestedHyperlinkedModelSerializer):
