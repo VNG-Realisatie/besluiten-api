@@ -2,6 +2,26 @@
 Wijzigingen
 ===========
 
+0.3.0 (2018-11-19)
+==================
+
+Aanpassingen na RGBZ-toetsing
+
+Features
+--------
+
+* ``CORS``-support toegevoegd
+
+Breaking changes
+----------------
+
+* ``Besluit.datum`` als datum in plaats van datetime
+* Geen limitatie op lengte van ``Besluit.toelichting``
+* ``identificatie`` en ``verantwoorelijkeOrganisatie`` zijn immutable
+* ``vervalredenWeergave`` is niet langer een enum - de mapping staat in de
+  beschrijving van ``vervalreden``.
+
+
 0.2.1 (2018-10-25)
 ==================
 
