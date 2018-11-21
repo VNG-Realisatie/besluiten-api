@@ -2,6 +2,14 @@
 Wijzigingen
 ===========
 
+0.4.0 (2018-11-21)
+==================
+
+Autorisatie-feature release
+
+* Voeg JWT client/secret management toe
+* Opzet credentialstore om URLs te kunnen valideren met auth/autz
+
 0.3.0 (2018-11-19)
 ==================
 
