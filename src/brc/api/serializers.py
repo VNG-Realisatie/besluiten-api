@@ -13,6 +13,8 @@ from zds_schema.validators import (
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
+from .auth import get_zrc_auth, get_ztc_auth
+
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
     vervalreden_weergave = serializers.CharField(source='get_vervalreden_display', read_only=True)
@@ -47,10 +49,10 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                 'validators': [IsImmutableValidator(), validate_rsin],
             },
             'zaak': {
-                'validators': [URLValidator(headers={'Accept-Crs': 'EPSG:4326'})],
+                'validators': [URLValidator(get_auth=get_zrc_auth, headers={'Accept-Crs': 'EPSG:4326'})],
             },
             'besluittype': {
-                'validators': [URLValidator()],
+                'validators': [URLValidator(get_auth=get_ztc_auth)],
             },
         }
         validators = [UniekeIdentificatieValidator('verantwoordelijke_organisatie')]

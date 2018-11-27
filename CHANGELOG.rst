@@ -2,6 +2,14 @@
 Wijzigingen
 ===========
 
+0.4.4 (2018-11-27)
+==================
+
+Autorisatie: bugfix
+
+Bij het aanroepen van ZTC en ZRC werd er geen gebruik gemaakt van de autorisatie
+headers.
+
 0.4.3 (2018-11-26)
 ==================
 
