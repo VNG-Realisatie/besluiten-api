@@ -2,6 +2,21 @@
 Wijzigingen
 ===========
 
+0.5.0 (2018-11-27)
+==================
+
+Stap naar volwassenere API
+
+* HTTP 400 errors op onbekende/invalide filter-parameters
+* Docker container beter te customizen via environment variables
+
+Breaking change
+---------------
+
+De ``Authorization`` headers is veranderd van formaat. In plaats van ``<jwt>``
+is het nu ``Bearer <jwt>`` geworden.
+
+
 0.4.4 (2018-11-27)
 ==================
 
