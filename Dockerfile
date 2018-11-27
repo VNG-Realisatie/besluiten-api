@@ -92,5 +92,12 @@ COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
 COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
 COPY ./src /app/src
 
+ENV DJANGO_SETTINGS_MODULE=brc.conf.docker
+
+ARG SECRET_KEY=dummy
+
+# Run collectstatic, so the result is already included in the image
+RUN python src/manage.py collectstatic --noinput
+
 EXPOSE 8000
 CMD ["/start.sh"]
