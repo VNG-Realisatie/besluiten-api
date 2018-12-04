@@ -12,4 +12,4 @@ django-choices
 django-cors-middleware
 
 djangorestframework
-zds-schema==0.16.1
+zds-schema==0.17.3
