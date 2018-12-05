@@ -279,6 +279,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+SESSION_COOKIE_NAME = 'brc_sessionid'
+
 #
 # Custom settings
 #
