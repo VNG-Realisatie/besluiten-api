@@ -2,6 +2,14 @@
 Wijzigingen
 ===========
 
+0.5.5 (2018-12-13)
+==================
+
+Bump Django and urllib
+
+* urllib3<=1.22 has a CVE
+* use latest patch release of Django 2.0
+
 0.5.4 (2018-12-11)
 ==================
 
