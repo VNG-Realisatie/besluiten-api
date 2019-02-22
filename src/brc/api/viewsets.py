@@ -1,20 +1,17 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import mixins, viewsets
+from rest_framework import viewsets
 from zds_schema.utils import lookup_kwargs_to_filters
 from zds_schema.viewsets import NestedViewSetMixin
 
+from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 from .filters import BesluitFilter
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(mixins.CreateModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
-                     viewsets.GenericViewSet):
+class BesluitViewSet(viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -56,11 +53,17 @@ class BesluitViewSet(mixins.CreateModelMixin,
     - geldigheid besluittype URL
     - geldigheid zaak URL
     - datum in het verleden of nu
+
+    delete:
+    Verwijdert een BESLUIT, samen met alle gerelateerde resources binnen deze API.
     """
     queryset = Besluit.objects.all()
     serializer_class = BesluitSerializer
     filter_class = BesluitFilter
     lookup_field = 'uuid'
+    required_scopes = {
+        'delete': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
+    }
 
 
 class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
