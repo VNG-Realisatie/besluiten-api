@@ -5,6 +5,8 @@ python-dotenv
 python-dateutil
 pytz
 raven
+Sphinx
+sphinx-rtd-theme
 
 Django<2.1
 django-axes
@@ -12,4 +14,5 @@ django-choices
 django-cors-middleware
 
 djangorestframework
-zds-schema==0.17.8
+zds-schema==0.21.0
+gemma-zds-client==0.9.2
