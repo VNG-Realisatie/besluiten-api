@@ -2,6 +2,14 @@
 Wijzigingen
 ===========
 
+0.6.0 (2019-02-27)
+==================
+
+Archiving feature release
+
+* added support for ``DELETE`` requests to ``Besluit`` resource
+* added support for ``DELETE`` requests to ``BesluitInformatieObjectViewSet`` resource
+
 0.5.5 (2018-12-13)
 ==================
 
