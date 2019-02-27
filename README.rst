@@ -2,7 +2,7 @@
 besluitregistratiecomponent
 ============================
 
-:Version: 0.5.5
+:Version: 0.6.0
 :Source: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
 :PythonVersion: 3.6
