@@ -54,15 +54,19 @@ class BesluitViewSet(viewsets.ModelViewSet):
     - geldigheid zaak URL
     - datum in het verleden of nu
 
-    delete:
+    destroy:
     Verwijdert een BESLUIT, samen met alle gerelateerde resources binnen deze API.
+
+    **De gerelateerde resources zijn**
+    - `BesluitInformatieObject` - de relaties van het Besluit naar de
+      informatieobjecten
     """
     queryset = Besluit.objects.all()
     serializer_class = BesluitSerializer
     filter_class = BesluitFilter
     lookup_field = 'uuid'
     required_scopes = {
-        'delete': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
+        'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
     }
 
 
