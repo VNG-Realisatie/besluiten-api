@@ -14,5 +14,4 @@ django-choices
 django-cors-middleware
 
 djangorestframework
-zds-schema==0.21.4
-gemma-zds-client==0.9.2
+zds-schema==0.21.5
