@@ -2,6 +2,13 @@
 Wijzigingen
 ===========
 
+0.6.2 (2019-03-05)
+==================
+
+Bugfix release
+
+* Bump zds-client via zds-schema
+
 0.6.1 (2019-02-28)
 ==================
 
