@@ -8,7 +8,7 @@ raven
 Sphinx
 sphinx-rtd-theme
 
-Django<2.1
+Django==2.0.13
 django-axes
 django-choices
 django-cors-middleware
