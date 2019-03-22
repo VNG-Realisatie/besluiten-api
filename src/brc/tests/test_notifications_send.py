@@ -52,14 +52,13 @@ class SendNotifTestCase(JWTScopesMixin, APITestCase):
         """
         besluit = BesluitFactory.create()
         bio = BesluitInformatieObjectFactory.create(besluit=besluit)
-        bio_url = get_operation_url('besluiten_informatieobjecten_delete', uuid=bio.uuid, besluit_uuid=besluit.uuid)
+        bio_url = get_operation_url('besluitinformatieobject_delete', uuid=bio.uuid, besluit_uuid=besluit.uuid)
 
         response = self.client.delete(bio_url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, response.data)
 
         notif_args, notif_kwargs = mock_client.call_args_list[0]
-        print(notif_args, notif_kwargs)
         msg = json.loads(notif_kwargs['data'])
 
         self.assertEqual(notif_args[0], settings.NOTIFICATIES_URL)
