@@ -73,7 +73,12 @@ class BesluitViewSet(NotificationViewSetMixin,
     }
 
     def get_kenmerken(self, data):
-        return [{k: data.get(k, '')} for k in settings.NOTIFICATIES_KENMERKEN_NAMES]
+        kenmerken = list()
+        for kenmerk in settings.NOTIFICATIES_KENMERKEN_NAMES:
+            # convert camelCase to shake_case
+            kenmerken_snake = re.sub('([A-Z]+)', r'_\1', kenmerk).lower()
+            kenmerken.append({kenmerk: data[kenmerken_snake]})
+        return kenmerken
 
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
