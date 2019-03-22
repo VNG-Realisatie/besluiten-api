@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
-
+import re
 from rest_framework import viewsets
 from vng_api_common.utils import lookup_kwargs_to_filters
 from vng_api_common.viewsets import NestedViewSetMixin
+from vng_api_common.notifications.publish.viewsets import NotificationViewSetMixin
 
 from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
@@ -11,7 +13,8 @@ from .filters import BesluitFilter
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(viewsets.ModelViewSet):
+class BesluitViewSet(NotificationViewSetMixin,
+                     viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -69,8 +72,13 @@ class BesluitViewSet(viewsets.ModelViewSet):
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
     }
 
+    def get_kenmerken(self, data):
+        return [{k: data.get(k, '')} for k in settings.NOTIFICATIES_KENMERKEN_NAMES]
 
-class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+
+class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
+                                     NestedViewSetMixin,
+                                     viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.
 
@@ -123,3 +131,12 @@ class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
         context['parent_object'] = get_object_or_404(Besluit, **filters)
         return context
+
+    def get_kenmerken(self, data):
+        besluit = self.get_serializer_context()['parent_object']
+        kenmerken = list()
+        for kenmerk in settings.NOTIFICATIES_KENMERKEN_NAMES: \
+            # since model attributes are snake_case convert camelCase to shake_case
+            kenmerken_snake = re.sub('([A-Z]+)', r'_\1', kenmerk).lower()
+            kenmerken.append({kenmerk: getattr(besluit, kenmerken_snake)})
+        return kenmerken

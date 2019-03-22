@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'vng_api_common',  # before drf_yasg to override the management command
+    'vng_api_common.notifications',
+    'vng_api_common.notifications.publish',
+    # 'zds_schema',  # TODO: remove once all environents have migrated
     'drf_yasg',
     'rest_framework',
 
@@ -335,3 +338,10 @@ if SENTRY_DSN:
             'dsn': RAVEN_CONFIG['dsn']
         },
     })
+
+# settings for sending notifications
+NOTIFICATIES_URL = 'http://127.0.0.1:8001/api/v1/notificaties'
+NOTIFICATIES_KANAAL = 'besluiten'
+NOTIFICATIES_KANAAL_URL = 'http://127.0.0.1:8001/api/v1/kanaal'
+NOTIFICATIES_HOOFD_RESOURCE = 'besluit'
+NOTIFICATIES_KENMERKEN_NAMES = ['verantwoordelijkeOrganisatie', 'besluittype']
