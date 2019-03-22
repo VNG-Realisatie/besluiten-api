@@ -3,9 +3,9 @@ import uuid as _uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from zds_schema.fields import RSINField
-from zds_schema.models import APIMixin
-from zds_schema.validators import (
+from vng_api_common.fields import RSINField
+from vng_api_common.models import APIMixin
+from vng_api_common.validators import (
     UntilTodayValidator, alphanumeric_excluding_diacritic
 )
 

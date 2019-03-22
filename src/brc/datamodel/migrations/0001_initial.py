@@ -3,8 +3,8 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import uuid
-import zds_schema.fields
-import zds_schema.validators
+import vng_api_common.fields
+import vng_api_common.validators
 
 
 class Migration(migrations.Migration):
@@ -20,11 +20,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(default=uuid.uuid4)),
-                ('identificatie', models.CharField(help_text='Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.', max_length=50, validators=[zds_schema.validators.AlphanumericExcludingDiacritic()], verbose_name='identificatie')),
-                ('verantwoordelijke_organisatie', zds_schema.fields.RSINField(help_text='Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die het besluit heeft vastgesteld.', max_length=9, verbose_name='verantwoordelijke organisatie')),
+                ('identificatie', models.CharField(help_text='Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.', max_length=50, validators=[vng_api_common.validators.AlphanumericExcludingDiacritic()], verbose_name='identificatie')),
+                ('verantwoordelijke_organisatie', vng_api_common.fields.RSINField(help_text='Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die het besluit heeft vastgesteld.', max_length=9, verbose_name='verantwoordelijke organisatie')),
                 ('besluittype', models.URLField(help_text='Aanduiding van de aard van het BESLUIT. Referentie naar het BESLUITTYPE in de zaaktypecatalogus.', verbose_name='besluittype')),
                 ('zaak', models.URLField(blank=True, help_text='Referentie naar de ZAAK waarvan dit besluit uitkomst is', verbose_name='zaak')),
-                ('datum', models.DateTimeField(help_text='De beslisdatum (AWB) van het besluit.', validators=[zds_schema.validators.UntilNowValidator()], verbose_name='datum')),
+                ('datum', models.DateTimeField(help_text='De beslisdatum (AWB) van het besluit.', validators=[vng_api_common.validators.UntilNowValidator()], verbose_name='datum')),
                 ('toelichting', models.TextField(blank=True, help_text='Toelichting bij het besluit.', max_length=1000, verbose_name='toelichting')),
                 ('bestuursorgaan', models.CharField(blank=True, help_text='Een orgaan van een rechtspersoon krachtens publiekrecht ingesteld of een persoon of college, met enig openbaar gezag bekleed onder wiens verantwoordelijkheid het besluit vastgesteld is.', max_length=50, verbose_name='bestuursorgaan')),
                 ('ingangsdatum', models.DateField(help_text='Ingangsdatum van de werkingsperiode van het besluit.', verbose_name='ingangsdatum')),

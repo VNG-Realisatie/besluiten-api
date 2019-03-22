@@ -14,4 +14,7 @@ django-choices
 django-cors-middleware
 
 djangorestframework
+vng-api-common[notifications]==0.32.1
+
+# data migration - keep it around for a while
 zds-schema==0.21.5

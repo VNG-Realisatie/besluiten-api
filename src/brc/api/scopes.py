@@ -2,7 +2,7 @@
 Defines the scopes used in the BRC component.
 """
 
-from zds_schema.scopes import Scope
+from vng_api_common.scopes import Scope
 
 
 SCOPE_BESLUITEN_ALLES_VERWIJDEREN = Scope(

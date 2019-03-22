@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
-from zds_schema.utils import lookup_kwargs_to_filters
-from zds_schema.viewsets import NestedViewSetMixin
+from vng_api_common.utils import lookup_kwargs_to_filters
+from vng_api_common.viewsets import NestedViewSetMixin
 
 from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
