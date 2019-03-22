@@ -7,7 +7,9 @@ from vng_api_common.tests import JWTScopesMixin, get_operation_url
 
 from brc.api.scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
-from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
+from brc.datamodel.tests.factories import (
+    BesluitFactory, BesluitInformatieObjectFactory
+)
 
 
 class US349TestCase(JWTScopesMixin, APITestCase):

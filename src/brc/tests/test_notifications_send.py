@@ -1,15 +1,18 @@
 import json
+from unittest.mock import patch
 
 from django.conf import settings
 from django.test import override_settings
 
-from unittest.mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTScopesMixin, get_operation_url
 
 from brc.datamodel.constants import VervalRedenen
-from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
+from brc.datamodel.tests.factories import (
+    BesluitFactory, BesluitInformatieObjectFactory
+)
+
 
 @patch('zds_client.Client.request')
 @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')

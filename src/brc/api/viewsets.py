@@ -1,15 +1,19 @@
+import re
+
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-import re
+
 from rest_framework import viewsets
+from vng_api_common.notifications.publish.viewsets import (
+    NotificationViewSetMixin
+)
 from vng_api_common.utils import lookup_kwargs_to_filters
 from vng_api_common.viewsets import NestedViewSetMixin
-from vng_api_common.notifications.publish.viewsets import NotificationViewSetMixin
 
-from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 from .filters import BesluitFilter
+from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
