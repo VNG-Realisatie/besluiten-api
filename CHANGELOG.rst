@@ -2,6 +2,11 @@
 Wijzigingen
 ===========
 
+0.7.1 (2019-04-04)
+==================
+
+Added missing markup/markdown dependencies
+
 0.7.0 (2019-04-04)
 ==================
 
