@@ -1,17 +1,21 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
-from zds_schema.utils import lookup_kwargs_to_filters
-from zds_schema.viewsets import NestedViewSetMixin
+from rest_framework.reverse import reverse
+from vng_api_common.notifications.kanalen import Kanaal
+from vng_api_common.notifications.viewsets import NotificationViewSetMixin
+from vng_api_common.utils import lookup_kwargs_to_filters
+from vng_api_common.viewsets import NestedViewSetMixin
 
-from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 from .filters import BesluitFilter
+from .kanalen import KANAAL_BESLUITEN
+from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(viewsets.ModelViewSet):
+class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -68,9 +72,12 @@ class BesluitViewSet(viewsets.ModelViewSet):
     required_scopes = {
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
     }
+    notifications_kanaal = KANAAL_BESLUITEN
 
 
-class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
+                                     NestedViewSetMixin,
+                                     viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.
 
@@ -110,16 +117,26 @@ class BesluitInformatieObjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
     lookup_field = 'uuid'
+    notifications_kanaal = KANAAL_BESLUITEN
 
     parent_retrieve_kwargs = {
         'besluit_uuid': 'uuid',
     }
+
+    def _get_parent_object(self):
+        if not hasattr(self, '_parent_object'):
+            filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
+            self._parent_object = get_object_or_404(Besluit, **filters)
+        return self._parent_object
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         # DRF introspection
         if not self.kwargs:
             return context
-        filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
-        context['parent_object'] = get_object_or_404(Besluit, **filters)
+        context['parent_object'] = self._get_parent_object()
         return context
+
+    def get_notification_main_object_url(self, data: dict, kanaal: Kanaal) -> str:
+        besluit = self._get_parent_object()
+        return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)

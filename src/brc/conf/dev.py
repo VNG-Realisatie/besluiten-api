@@ -1,4 +1,5 @@
 import os
+import sys
 
 os.environ.setdefault('SECRET_KEY', '8@-p#w1n7unfvt5)90wzooqsc_@am^^h)c6=il66b#d+wl293k')
 os.environ.setdefault('DB_NAME', 'brc')
@@ -92,6 +93,9 @@ AXES_CACHE = 'axes_cache'
 REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
     'rest_framework.renderers.BrowsableAPIRenderer',
 )
+
+if 'test' in sys.argv:
+    NOTIFICATIONS_DISABLED = True
 
 # Override settings with local settings.
 try:

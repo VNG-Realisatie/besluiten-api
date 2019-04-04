@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     'axes',
     'django_filters',
     'corsheaders',
-    'zds_schema',  # before drf_yasg to override the management command
+    'vng_api_common',  # before drf_yasg to override the management command
+    'vng_api_common.notifications',
+    'brc.zds_schema.ZDSSchemaConfig',  # TODO: remove once all environents have migrated
     'drf_yasg',
     'rest_framework',
 
@@ -73,12 +75,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'zds_schema.middleware.AuthMiddleware',
+    'vng_api_common.middleware.AuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
-    'zds_schema.middleware.APIVersionHeaderMiddleware',
+    'vng_api_common.middleware.APIVersionHeaderMiddleware',
 ]
 
 ROOT_URLCONF = 'brc.urls'
@@ -335,3 +337,11 @@ if SENTRY_DSN:
             'dsn': RAVEN_CONFIG['dsn']
         },
     })
+
+#
+# SSL or not?
+#
+IS_HTTPS = os.getenv('IS_HTTPS', '1').lower() in ['true', '1', 'yes']
+
+# settings for sending notifications
+NOTIFICATIONS_KANAAL = 'besluiten'
