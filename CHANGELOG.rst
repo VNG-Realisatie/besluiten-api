@@ -2,6 +2,11 @@
 Wijzigingen
 ===========
 
+0.7.2 (2019-04-04)
+==================
+
+Added missing application to INSTALLED_APPS
+
 0.7.1 (2019-04-04)
 ==================
 
