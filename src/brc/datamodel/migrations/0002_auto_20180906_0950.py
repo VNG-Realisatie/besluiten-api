@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import uuid
-import zds_schema.validators
+import vng_api_common.validators
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='besluit',
             name='identificatie',
-            field=models.CharField(default=uuid.uuid4, help_text='Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.', max_length=50, validators=[zds_schema.validators.AlphanumericExcludingDiacritic()], verbose_name='identificatie'),
+            field=models.CharField(default=uuid.uuid4, help_text='Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.', max_length=50, validators=[vng_api_common.validators.AlphanumericExcludingDiacritic()], verbose_name='identificatie'),
         ),
     ]

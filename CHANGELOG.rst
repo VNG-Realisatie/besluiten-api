@@ -2,6 +2,24 @@
 Wijzigingen
 ===========
 
+0.7.0 (2019-04-04)
+==================
+
+Feature release: notifications support
+
+* Included URL to EUPL 1.2 license in API spec
+* added notifications machinery. Configure the NC to use in the admin and then
+  run ``python src/manage.py register_kanaal`` to register the notifications
+  exchange and be able to publish events.
+* added notifications documentation.
+
+Breaking changes
+----------------
+
+* replaced zds-schema with vng-api-common. Run
+  ``python src/manage.py migrate_from_zds_schema`` on existing installs to
+  complete the migration.
+
 0.6.2 (2019-03-05)
 ==================
 

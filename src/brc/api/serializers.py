@@ -3,8 +3,8 @@ Serializers of the Besluit Registratie Component REST API
 """
 from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
-from zds_schema.serializers import add_choice_values_help_text
-from zds_schema.validators import (
+from vng_api_common.serializers import add_choice_values_help_text
+from vng_api_common.validators import (
     InformatieObjectUniqueValidator, IsImmutableValidator,
     ObjectInformatieObjectValidator, UniekeIdentificatieValidator,
     URLValidator, validate_rsin

@@ -3,8 +3,8 @@ from django.test import override_settings
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from zds_schema.tests import get_validation_errors
-from zds_schema.validators import (
+from vng_api_common.tests import get_validation_errors
+from vng_api_common.validators import (
     IsImmutableValidator, UniekeIdentificatieValidator, UntilTodayValidator,
     URLValidator
 )
@@ -17,7 +17,7 @@ from .utils import reverse, reverse_lazy
 class BesluitValidationTests(APITestCase):
     url = reverse_lazy('besluit-list')
 
-    @override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_404')
+    @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_404')
     def test_validate_urls_invalid(self):
         response = self.client.post(self.url, {
             'besluittype': 'https://example.com',
@@ -59,7 +59,7 @@ class BesluitValidationTests(APITestCase):
         error = get_validation_errors(response, 'datum')
         self.assertEqual(error['code'], UntilTodayValidator.code)
 
-    @override_settings(LINK_FETCHER='zds_schema.mocks.link_fetcher_200')
+    @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
     def test_duplicate_rsin_identificatie(self):
         besluit = BesluitFactory.create(identificatie='123456')
 
@@ -100,8 +100,8 @@ class BesluitValidationTests(APITestCase):
 class BesluitInformatieObjectTests(APITestCase):
 
     @override_settings(
-        LINK_FETCHER='zds_schema.mocks.link_fetcher_404',
-        ZDS_CLIENT_CLASS='zds_schema.mocks.ObjectInformatieObjectClient'
+        LINK_FETCHER='vng_api_common.mocks.link_fetcher_404',
+        ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
     )
     def test_validate_informatieobject_invalid(self):
         besluit = BesluitFactory.create()

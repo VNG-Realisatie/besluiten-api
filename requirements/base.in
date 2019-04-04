@@ -8,10 +8,13 @@ raven
 Sphinx
 sphinx-rtd-theme
 
-Django<2.1
+Django==2.0.13
 django-axes
 django-choices
 django-cors-middleware
 
 djangorestframework
+vng-api-common[notifications]==0.35.10
+
+# data migration - keep it around for a while
 zds-schema==0.21.5

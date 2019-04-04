@@ -5,7 +5,7 @@ from django.test import override_settings
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from zds_schema.tests import TypeCheckMixin, get_operation_url
+from vng_api_common.tests import TypeCheckMixin, get_operation_url
 
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit
@@ -15,8 +15,8 @@ from brc.datamodel.tests.factories import (
 
 
 @override_settings(
-    LINK_FETCHER='zds_schema.mocks.link_fetcher_200',
-    ZDS_CLIENT_CLASS='zds_schema.mocks.ObjectInformatieObjectClient'
+    LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
+    ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
 class BesluitCreateTests(TypeCheckMixin, APITestCase):
 
