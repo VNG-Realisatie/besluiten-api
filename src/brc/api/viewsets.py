@@ -1,24 +1,21 @@
-import re
-
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
-from vng_api_common.notifications.publish.viewsets import (
-    NotificationViewSetMixin
-)
+from rest_framework.reverse import reverse
+from vng_api_common.notifications.kanalen import Kanaal
+from vng_api_common.notifications.viewsets import NotificationViewSetMixin
 from vng_api_common.utils import lookup_kwargs_to_filters
 from vng_api_common.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 from .filters import BesluitFilter
+from .kanalen import KANAAL_BESLUITEN
 from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(NotificationViewSetMixin,
-                     viewsets.ModelViewSet):
+class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -75,14 +72,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     required_scopes = {
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
     }
-
-    def get_kenmerken(self, data):
-        kenmerken = list()
-        for kenmerk in settings.NOTIFICATIES_KENMERKEN_NAMES:
-            # convert camelCase to shake_case
-            kenmerken_snake = re.sub('([A-Z]+)', r'_\1', kenmerk).lower()
-            kenmerken.append({kenmerk: data[kenmerken_snake]})
-        return kenmerken
+    notifications_kanaal = KANAAL_BESLUITEN
 
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
@@ -127,25 +117,26 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
     lookup_field = 'uuid'
+    notifications_kanaal = KANAAL_BESLUITEN
 
     parent_retrieve_kwargs = {
         'besluit_uuid': 'uuid',
     }
+
+    def _get_parent_object(self):
+        if not hasattr(self, '_parent_object'):
+            filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
+            self._parent_object = get_object_or_404(Besluit, **filters)
+        return self._parent_object
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         # DRF introspection
         if not self.kwargs:
             return context
-        filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
-        context['parent_object'] = get_object_or_404(Besluit, **filters)
+        context['parent_object'] = self._get_parent_object()
         return context
 
-    def get_kenmerken(self, data):
-        besluit = self.get_serializer_context()['parent_object']
-        kenmerken = list()
-        for kenmerk in settings.NOTIFICATIES_KENMERKEN_NAMES: \
-            # since model attributes are snake_case convert camelCase to shake_case
-            kenmerken_snake = re.sub('([A-Z]+)', r'_\1', kenmerk).lower()
-            kenmerken.append({kenmerk: getattr(besluit, kenmerken_snake)})
-        return kenmerken
+    def get_notification_main_object_url(self, data: dict, kanaal: Kanaal) -> str:
+        besluit = self._get_parent_object()
+        return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
