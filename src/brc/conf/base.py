@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'brc.zds_schema.ZDSSchemaConfig',  # TODO: remove once all environents have migrated
     'drf_yasg',
     'rest_framework',
+    'django_markup',
     'solo',
 
     # Project applications.
