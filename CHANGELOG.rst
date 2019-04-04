@@ -2,6 +2,13 @@
 Wijzigingen
 ===========
 
+0.8.0 (2019-04-04)
+==================
+
+Removed zds-schema from the project
+
+* Fixed a bug because of missing entry in INSTALLED_APPS
+
 0.7.2 (2019-04-04)
 ==================
 
