@@ -289,7 +289,9 @@ SESSION_COOKIE_NAME = 'brc_sessionid'
 #
 # Custom settings
 #
-PROJECT_NAME = 'brc'
+PROJECT_NAME = 'Besluiten'
+SITE_TITLE = 'Besluit Registratie Component (BRC)'
+
 ENVIRONMENT = None
 SHOW_ALERT = True
 

@@ -52,10 +52,10 @@ class SendNotifTestCase(JWTScopesMixin, APITestCase):
                 'resourceUrl': data['url'],
                 'actie': 'create',
                 'aanmaakdatum': '2018-09-07T00:00:00Z',
-                'kenmerken': [
-                    {'verantwoordelijkeOrganisatie': '517439943'},
-                    {'besluittype': 'https://example.com/ztc/besluittype/abcd'},
-                ]
+                'kenmerken': {
+                    'verantwoordelijkeOrganisatie': '517439943',
+                    'besluittype': 'https://example.com/ztc/besluittype/abcd',
+                }
             }
         )
 
@@ -82,9 +82,9 @@ class SendNotifTestCase(JWTScopesMixin, APITestCase):
                 'resourceUrl': f'http://testserver{bio_url}',
                 'actie': 'destroy',
                 'aanmaakdatum': '2018-09-07T00:00:00Z',
-                'kenmerken': [
-                    {'verantwoordelijkeOrganisatie': besluit.verantwoordelijke_organisatie},
-                    {'besluittype': besluit.besluittype},
-                ]
+                'kenmerken': {
+                    'verantwoordelijkeOrganisatie': besluit.verantwoordelijke_organisatie,
+                    'besluittype': besluit.besluittype,
+                }
             }
         )

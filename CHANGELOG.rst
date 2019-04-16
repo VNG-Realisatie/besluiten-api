@@ -2,6 +2,43 @@
 Wijzigingen
 ===========
 
+0.9.0 (2019-04-16)
+==================
+
+API-lab release
+
+* Improved homepage layout, using vng-api-common boilerplate
+* Bumped to latest bugfix release of gemma-zds-client
+
+Breaking changes
+----------------
+
+* Flattened the ``kenmerken`` in notifications sent from a list of objects with
+  one key-value to a single object with multiple key-value pairs.
+  Requires the NC to be at version 0.4.0 or higher.
+
+  Old:
+
+  .. code-block:: json
+
+  {
+    "kenmerken": [
+      {"key1": "value1"},
+      {"key2": "value2"},
+    ]
+  }
+
+  New:
+
+  .. code-block:: json
+
+  {
+    "kenmerken": {
+      "key1": "value1",
+      "key2": "value2",
+    }
+  }
+
 0.8.0 (2019-04-04)
 ==================
 
