@@ -2211,7 +2211,7 @@
                 "status",
                 "detail",
                 "instance",
-                "invalid-params"
+                "invalidParams"
             ],
             "type": "object",
             "properties": {
@@ -2249,7 +2249,7 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "invalid-params": {
+                "invalidParams": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/FieldValidationError"
