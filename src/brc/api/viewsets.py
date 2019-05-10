@@ -10,6 +10,7 @@ from vng_api_common.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
+from .data_filtering import ListFilterByAuthorizationsMixin
 from .filters import BesluitFilter
 from .kanalen import KANAAL_BESLUITEN
 from .permissions import BesluitAuthScopesRequired, BesluitBaseAuthRequired
@@ -20,7 +21,9 @@ from .scopes import (
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
+class BesluitViewSet(NotificationViewSetMixin,
+                     ListFilterByAuthorizationsMixin,
+                     viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -88,6 +91,7 @@ class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
                                      NestedViewSetMixin,
+                                     ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.

@@ -10,6 +10,7 @@ from vng_api_common.validators import (
 )
 
 from .constants import VervalRedenen
+from .query import BesluitQuerySet, BesluitRelatedQuerySet
 
 
 class Besluit(APIMixin, models.Model):
@@ -95,6 +96,8 @@ class Besluit(APIMixin, models.Model):
         help_text="De datum tot wanneer verweer tegen het besluit mogelijk is."
     )
 
+    objects = BesluitQuerySet.as_manager()
+
     class Meta:
         verbose_name = 'besluit'
         verbose_name_plural = 'besluiten'
@@ -128,6 +131,8 @@ class BesluitInformatieObject(models.Model):
         help_text="URL-referentie naar het informatieobject waarin (een deel van) "
                   "het besluit beschreven is."
     )
+
+    objects = BesluitRelatedQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'besluitinformatieobject'
