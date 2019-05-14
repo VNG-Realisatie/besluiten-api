@@ -15,8 +15,8 @@ from .filters import BesluitFilter
 from .kanalen import KANAAL_BESLUITEN
 from .permissions import BesluitAuthScopesRequired, BesluitBaseAuthRequired
 from .scopes import (
-    SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
-    SCOPE_BESLUITEN_BIJWERKEN
+    SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN,
+    SCOPE_BESLUITEN_ALLES_VERWIJDEREN, SCOPE_BESLUITEN_BIJWERKEN
 )
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
@@ -81,7 +81,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     required_scopes = {
         'list': SCOPE_BESLUITEN_ALLES_LEZEN,
         'retrieve': SCOPE_BESLUITEN_ALLES_LEZEN,
-        'create': SCOPE_BESLUITEN_BIJWERKEN,
+        'create': SCOPE_BESLUITEN_AANMAKEN,
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
         'update': SCOPE_BESLUITEN_BIJWERKEN,
         'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
@@ -144,7 +144,7 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     required_scopes = {
         'list': SCOPE_BESLUITEN_ALLES_LEZEN,
         'retrieve': SCOPE_BESLUITEN_ALLES_LEZEN,
-        'create': SCOPE_BESLUITEN_BIJWERKEN,
+        'create': SCOPE_BESLUITEN_AANMAKEN,
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
         'update': SCOPE_BESLUITEN_BIJWERKEN,
         'partial_update': SCOPE_BESLUITEN_BIJWERKEN,

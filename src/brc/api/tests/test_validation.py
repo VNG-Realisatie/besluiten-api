@@ -19,13 +19,10 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 
 class BesluitValidationTests(JWTAuthMixin, APITestCase):
     url = reverse_lazy('besluit-list')
-    scopes = [SCOPE_BESLUITEN_BIJWERKEN]
-    besluittype = BESLUITTYPE
+    heeft_alle_autorisaties = True
 
     @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_404')
     def test_validate_urls_invalid(self):
-        self.autorisatie.besluittype = 'https://example.com'
-        self.autorisatie.save()
 
         response = self.client.post(self.url, {
             'besluittype': 'https://example.com',
@@ -107,8 +104,7 @@ class BesluitValidationTests(JWTAuthMixin, APITestCase):
 
 class BesluitInformatieObjectTests(JWTAuthMixin, APITestCase):
 
-    scopes = [SCOPE_BESLUITEN_BIJWERKEN]
-    besluittype = BESLUITTYPE
+    heeft_alle_autorisaties = True
 
     @override_settings(
         LINK_FETCHER='vng_api_common.mocks.link_fetcher_404',

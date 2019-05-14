@@ -31,3 +31,12 @@ SCOPE_BESLUITEN_BIJWERKEN = Scope(
 * attributen van een besluit te wijzingen
 """
 )
+
+SCOPE_BESLUITEN_AANMAKEN = Scope(
+    'besluiten.aanmaken',
+    description="""
+**Laat toe om**:
+
+* besluiten aan te maken
+"""
+)

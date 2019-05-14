@@ -5,15 +5,13 @@ from django.test import override_settings
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import (
-    AuthCheckMixin, JWTAuthMixin, get_operation_url, reverse
-)
+from vng_api_common.tests import AuthCheckMixin, JWTAuthMixin, reverse
 
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
-from ..scopes import SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_BIJWERKEN
+from ..scopes import SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN
 
 
 @override_settings(ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient')
@@ -98,7 +96,7 @@ class BesluitReadCorrectScopeTests(JWTAuthMixin, APITestCase):
 )
 class BioReadTests(JWTAuthMixin, APITestCase):
 
-    scopes = [SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_BIJWERKEN]
+    scopes = [SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_AANMAKEN]
     besluittype = 'https://besluittype.nl/ok'
 
     def test_list_bio_limited_to_authorized_zaken(self):

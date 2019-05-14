@@ -9,9 +9,6 @@ from vng_api_common.tests import (
     JWTAuthMixin, TypeCheckMixin, get_operation_url
 )
 
-from brc.api.scopes import (
-    SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_BIJWERKEN
-)
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit
 from brc.datamodel.tests.factories import (
@@ -27,8 +24,7 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 )
 class BesluitCreateTests(TypeCheckMixin, JWTAuthMixin, APITestCase):
 
-    scopes = [SCOPE_BESLUITEN_BIJWERKEN, SCOPE_BESLUITEN_ALLES_LEZEN]
-    besluittype = BESLUITTYPE
+    heeft_alle_autorisaties = True
 
     @freeze_time('2018-09-06T12:08+0200')
     def test_us162_voeg_besluit_toe_aan_zaak(self):
