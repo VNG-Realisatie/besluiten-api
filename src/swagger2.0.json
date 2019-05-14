@@ -393,7 +393,7 @@
                 "security": [
                     {
                         "JWT-Claims": [
-                            "besluiten.bijwerken"
+                            "besluiten.aanmaken"
                         ]
                     }
                 ]
@@ -715,7 +715,7 @@
                 "security": [
                     {
                         "JWT-Claims": [
-                            "besluiten.bijwerken"
+                            "besluiten.aanmaken"
                         ]
                     }
                 ]
