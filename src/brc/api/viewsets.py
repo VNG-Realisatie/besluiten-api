@@ -4,18 +4,26 @@ from rest_framework import viewsets
 from rest_framework.reverse import reverse
 from vng_api_common.notifications.kanalen import Kanaal
 from vng_api_common.notifications.viewsets import NotificationViewSetMixin
+from vng_api_common.permissions import permission_class_factory
 from vng_api_common.utils import lookup_kwargs_to_filters
 from vng_api_common.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
+from .data_filtering import ListFilterByAuthorizationsMixin
 from .filters import BesluitFilter
 from .kanalen import KANAAL_BESLUITEN
-from .scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
+from .permissions import BesluitAuthScopesRequired, BesluitBaseAuthRequired
+from .scopes import (
+    SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN,
+    SCOPE_BESLUITEN_ALLES_VERWIJDEREN, SCOPE_BESLUITEN_BIJWERKEN
+)
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
-class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
+class BesluitViewSet(NotificationViewSetMixin,
+                     ListFilterByAuthorizationsMixin,
+                     viewsets.ModelViewSet):
     """
     Opvragen en bewerken van BESLUITen
 
@@ -69,14 +77,21 @@ class BesluitViewSet(NotificationViewSetMixin, viewsets.ModelViewSet):
     serializer_class = BesluitSerializer
     filter_class = BesluitFilter
     lookup_field = 'uuid'
+    permission_classes = (BesluitAuthScopesRequired, )
     required_scopes = {
+        'list': SCOPE_BESLUITEN_ALLES_LEZEN,
+        'retrieve': SCOPE_BESLUITEN_ALLES_LEZEN,
+        'create': SCOPE_BESLUITEN_AANMAKEN,
         'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
+        'update': SCOPE_BESLUITEN_BIJWERKEN,
+        'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
     }
     notifications_kanaal = KANAAL_BESLUITEN
 
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
                                      NestedViewSetMixin,
+                                     ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
     Opvragen en bwerken van Besluit-Informatieobject relaties.
@@ -117,26 +132,39 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
     lookup_field = 'uuid'
-    notifications_kanaal = KANAAL_BESLUITEN
-
     parent_retrieve_kwargs = {
         'besluit_uuid': 'uuid',
     }
+    permission_classes = (
+        permission_class_factory(
+            base=BesluitBaseAuthRequired,
+            get_obj='_get_besluit',
+        ),
+    )
+    required_scopes = {
+        'list': SCOPE_BESLUITEN_ALLES_LEZEN,
+        'retrieve': SCOPE_BESLUITEN_ALLES_LEZEN,
+        'create': SCOPE_BESLUITEN_AANMAKEN,
+        'destroy': SCOPE_BESLUITEN_ALLES_VERWIJDEREN,
+        'update': SCOPE_BESLUITEN_BIJWERKEN,
+        'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
+    }
+    notifications_kanaal = KANAAL_BESLUITEN
 
-    def _get_parent_object(self):
-        if not hasattr(self, '_parent_object'):
+    def _get_besluit(self):
+        if not hasattr(self, '_besluit'):
             filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
-            self._parent_object = get_object_or_404(Besluit, **filters)
-        return self._parent_object
+            self._besluit = get_object_or_404(Besluit, **filters)
+        return self._besluit
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         # DRF introspection
         if not self.kwargs:
             return context
-        context['parent_object'] = self._get_parent_object()
+        context['parent_object'] = self._get_besluit()
         return context
 
     def get_notification_main_object_url(self, data: dict, kanaal: Kanaal) -> str:
-        besluit = self._get_parent_object()
+        besluit = self._get_besluit()
         return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
