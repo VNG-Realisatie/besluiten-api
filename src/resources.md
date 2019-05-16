@@ -32,6 +32,25 @@ De mapping van waarden naar weergave is als volgt:
 | verzenddatum | Datum waarop het besluit verzonden is. | string | nee | C​R​U​D |
 | uiterlijkeReactiedatum | De datum tot wanneer verweer tegen het besluit mogelijk is. | string | nee | C​R​U​D |
 
+## AuditTrail
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/audittrail)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| uuid | Unieke resource identifier (UUID4) | string | nee | C​R​U​D |
+| bron |  | string | ja | C​R​U​D |
+| applicatieId | Unieke identificatie van de applicatie, binnen de organisatie | string | nee | C​R​U​D |
+| applicatieWeergave | Vriendelijke naam van de applicatie | string | nee | C​R​U​D |
+| actie |  | string | ja | C​R​U​D |
+| actieWeergave |  | string | nee | C​R​U​D |
+| resultaat |  | integer | ja | C​R​U​D |
+| hoofdObject |  | string | ja | C​R​U​D |
+| resource |  | string | ja | C​R​U​D |
+| resourceUrl |  | string | ja | C​R​U​D |
+| aanmaakdatum |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+| wijzigingen |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+
 ## BesluitInformatieObject
 
 Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/besluitinformatieobject)
