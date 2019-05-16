@@ -13,7 +13,7 @@ from vng_api_common.validators import (
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
-from .auth import get_zrc_auth, get_ztc_auth
+from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
@@ -76,7 +76,7 @@ class BesluitInformatieObjectSerializer(NestedHyperlinkedModelSerializer):
             'url': {'lookup_field': 'uuid'},
             'informatieobject': {
                 'validators': [
-                    URLValidator(),
+                    URLValidator(get_auth=get_drc_auth),
                     InformatieObjectUniqueValidator('besluit', 'informatieobject'),
                     ObjectInformatieObjectValidator(),
                 ]
