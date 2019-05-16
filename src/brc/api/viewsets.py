@@ -2,6 +2,9 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.reverse import reverse
+from vng_api_common.audittrails.viewsets import (
+    AuditTrailViewSet, AuditTrailViewsetMixin
+)
 from vng_api_common.notifications.kanalen import Kanaal
 from vng_api_common.notifications.viewsets import NotificationViewSetMixin
 from vng_api_common.permissions import permission_class_factory
@@ -10,6 +13,7 @@ from vng_api_common.viewsets import NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
+from .audits import AUDIT_BRC
 from .data_filtering import ListFilterByAuthorizationsMixin
 from .filters import BesluitFilter
 from .kanalen import KANAAL_BESLUITEN
@@ -22,6 +26,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 
 class BesluitViewSet(NotificationViewSetMixin,
+                     AuditTrailViewsetMixin,
                      ListFilterByAuthorizationsMixin,
                      viewsets.ModelViewSet):
     """
@@ -87,10 +92,12 @@ class BesluitViewSet(NotificationViewSetMixin,
         'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
     }
     notifications_kanaal = KANAAL_BESLUITEN
+    audit = AUDIT_BRC
 
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
                                      NestedViewSetMixin,
+                                     AuditTrailViewsetMixin,
                                      ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
@@ -150,6 +157,7 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
         'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
     }
     notifications_kanaal = KANAAL_BESLUITEN
+    audit = AUDIT_BRC
 
     def _get_besluit(self):
         if not hasattr(self, '_besluit'):
@@ -168,3 +176,10 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     def get_notification_main_object_url(self, data: dict, kanaal: Kanaal) -> str:
         besluit = self._get_besluit()
         return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
+
+    def get_audittrail_main_object_url(self, data: dict, main_resource: str) -> str:
+        besluit = self._get_besluit()
+        return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
+
+class BesluitAuditTrailViewSet(AuditTrailViewSet):
+    main_resource_lookup_field = 'besluit_uuid'
