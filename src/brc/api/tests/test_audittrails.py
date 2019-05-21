@@ -143,3 +143,16 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
         # Verify that deleting the Besluit deletes all related AuditTrails
         audittrails = AuditTrail.objects.filter(hoofd_object=besluit_data['url'])
         self.assertFalse(audittrails.exists())
+
+    def test_audittrail_applicatie_information(self):
+        besluit_response = self._create_besluit()
+
+        audittrail = AuditTrail.objects.filter(hoofd_object=besluit_response['url']).get()
+
+        # Verify that the application id stored in the AuditTrail matches
+        # the id of the Application used for the request
+        self.assertEqual(audittrail.applicatie_id, str(self.applicatie.uuid))
+
+        # Verify that the application representation stored in the AuditTrail
+        # matches the label of the Application used for the request
+        self.assertEqual(audittrail.applicatie_weergave, self.applicatie.label)
