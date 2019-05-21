@@ -1,23 +1,21 @@
 import logging
 import uuid as _uuid
-from typing import Union
 
-from django.conf import settings
 from django.db import models
-from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
 from vng_api_common.fields import RSINField
 from vng_api_common.models import APICredential, APIMixin
+from vng_api_common.utils import request_object_attribute
 from vng_api_common.validators import (
     UntilTodayValidator, alphanumeric_excluding_diacritic
 )
-from zds_client.client import ClientError
 
 from .constants import VervalRedenen
 from .query import BesluitQuerySet, BesluitRelatedQuerySet
 
 logger = logging.getLogger(__name__)
+
 
 class Besluit(APIMixin, models.Model):
     uuid = models.UUIDField(default=_uuid.uuid4)
@@ -158,15 +156,3 @@ class BesluitInformatieObject(models.Model):
             io_id = request_object_attribute(self.informatieobject, 'identificatie', 'enkelvoudiginformatieobject')
             self._unique_representation = f"({self.besluit.unique_representation()}) - {io_id}"
         return self._unique_representation
-
-
-def request_object_attribute(url: str, attribute: str, resource: Union[str, None] = None) -> str:
-    Client = import_string(settings.ZDS_CLIENT_CLASS)
-    client = Client.from_url(url)
-    client.auth = APICredential.get_auth(url)
-    try:
-        result = client.retrieve(resource, url=url)[attribute]
-    except (ClientError, KeyError) as exc:
-        logger.warning("%s was retrieved from %s with the %s: %s", attribute, url, exc.__class__.__name__, exc)
-        result = ''
-    return result
