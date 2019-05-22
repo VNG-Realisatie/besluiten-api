@@ -5,7 +5,9 @@ from django.test import override_settings
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import TypeCheckMixin, get_operation_url
+from vng_api_common.tests import (
+    JWTAuthMixin, TypeCheckMixin, get_operation_url
+)
 
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit
@@ -13,12 +15,16 @@ from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
+BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
+
 
 @override_settings(
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
-class BesluitCreateTests(TypeCheckMixin, APITestCase):
+class BesluitCreateTests(TypeCheckMixin, JWTAuthMixin, APITestCase):
+
+    heeft_alle_autorisaties = True
 
     @freeze_time('2018-09-06T12:08+0200')
     def test_us162_voeg_besluit_toe_aan_zaak(self):
@@ -28,7 +34,7 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
             # see https://github.com/VNG-Realisatie/gemma-zaken/issues/162#issuecomment-416598476
             response = self.client.post(url, {
                 'verantwoordelijke_organisatie': '517439943',  # RSIN
-                'besluittype': 'https://example.com/ztc/besluittype/abcd',
+                'besluittype': BESLUITTYPE,
                 'zaak': 'https://example.com/zrc/zaken/1234',
                 'datum': '2018-09-06',
                 'toelichting': "Vergunning verleend.",
@@ -93,9 +99,9 @@ class BesluitCreateTests(TypeCheckMixin, APITestCase):
             )
 
     def test_opvragen_informatieobjecten_besluit(self):
-        besluit1, besluit2 = BesluitFactory.create_batch(2)
-        bio1_1, bio1_2, bio1_3 = BesluitInformatieObjectFactory.create_batch(3, besluit=besluit1)
-        bio2_1, bio2_2 = BesluitInformatieObjectFactory.create_batch(2, besluit=besluit2)
+        besluit1, besluit2 = BesluitFactory.create_batch(2, besluittype=BESLUITTYPE)
+        BesluitInformatieObjectFactory.create_batch(3, besluit=besluit1)
+        BesluitInformatieObjectFactory.create_batch(2, besluit=besluit2)
 
         url1 = get_operation_url('besluitinformatieobject_list', besluit_uuid=besluit1.uuid)
         response1 = self.client.get(url1)

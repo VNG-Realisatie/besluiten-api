@@ -1,15 +1,20 @@
+import logging
 import uuid as _uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from vng_api_common.fields import RSINField
-from vng_api_common.models import APIMixin
+from vng_api_common.models import APICredential, APIMixin
+from vng_api_common.utils import request_object_attribute
 from vng_api_common.validators import (
     UntilTodayValidator, alphanumeric_excluding_diacritic
 )
 
 from .constants import VervalRedenen
+from .query import BesluitQuerySet, BesluitRelatedQuerySet
+
+logger = logging.getLogger(__name__)
 
 
 class Besluit(APIMixin, models.Model):
@@ -95,6 +100,8 @@ class Besluit(APIMixin, models.Model):
         help_text="De datum tot wanneer verweer tegen het besluit mogelijk is."
     )
 
+    objects = BesluitQuerySet.as_manager()
+
     class Meta:
         verbose_name = 'besluit'
         verbose_name_plural = 'besluiten'
@@ -104,6 +111,9 @@ class Besluit(APIMixin, models.Model):
 
     def __str__(self):
         return f"{self.verantwoordelijke_organisatie} - {self.identificatie}"
+
+    def unique_representation(self):
+        return f"{self.identificatie}"
 
 
 class BesluitInformatieObject(models.Model):
@@ -129,6 +139,8 @@ class BesluitInformatieObject(models.Model):
                   "het besluit beschreven is."
     )
 
+    objects = BesluitRelatedQuerySet.as_manager()
+
     class Meta:
         verbose_name = 'besluitinformatieobject'
         verbose_name_plural = 'besluitinformatieobjecten'
@@ -138,3 +150,9 @@ class BesluitInformatieObject(models.Model):
 
     def __str__(self):
         return str(self.uuid)
+
+    def unique_representation(self):
+        if not hasattr(self, '_unique_representation'):
+            io_id = request_object_attribute(self.informatieobject, 'identificatie', 'enkelvoudiginformatieobject')
+            self._unique_representation = f"({self.besluit.unique_representation()}) - {io_id}"
+        return self._unique_representation

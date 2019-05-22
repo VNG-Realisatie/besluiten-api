@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'vng_api_common',  # before drf_yasg to override the management command
     'vng_api_common.notifications',
+    'vng_api_common.authorizations',
+    'vng_api_common.audittrails',
     'drf_yasg',
     'rest_framework',
     'django_markup',

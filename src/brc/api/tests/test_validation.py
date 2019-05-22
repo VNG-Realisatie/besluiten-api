@@ -3,7 +3,7 @@ from django.test import override_settings
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import get_validation_errors
+from vng_api_common.tests import JWTAuthMixin, get_validation_errors
 from vng_api_common.validators import (
     IsImmutableValidator, UniekeIdentificatieValidator, UntilTodayValidator,
     URLValidator
@@ -11,14 +11,19 @@ from vng_api_common.validators import (
 
 from brc.datamodel.tests.factories import BesluitFactory
 
+from ..scopes import SCOPE_BESLUITEN_BIJWERKEN
 from .utils import reverse, reverse_lazy
 
+BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 
-class BesluitValidationTests(APITestCase):
+
+class BesluitValidationTests(JWTAuthMixin, APITestCase):
     url = reverse_lazy('besluit-list')
+    heeft_alle_autorisaties = True
 
     @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_404')
     def test_validate_urls_invalid(self):
+
         response = self.client.post(self.url, {
             'besluittype': 'https://example.com',
             'zaak': 'https://example.com',
@@ -78,8 +83,8 @@ class BesluitValidationTests(APITestCase):
         self.assertEqual(error['code'], UniekeIdentificatieValidator.code)
 
     def test_change_immutable_fields(self):
-        besluit = BesluitFactory.create(identificatie='123456')
-        besluit2 = BesluitFactory.create(identificatie='123456')
+        besluit = BesluitFactory.create(identificatie='123456', besluittype=BESLUITTYPE)
+        besluit2 = BesluitFactory.create(identificatie='123456', besluittype=BESLUITTYPE)
 
         url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
 
@@ -97,14 +102,16 @@ class BesluitValidationTests(APITestCase):
         self.assertEqual(verantwoordelijke_organisatie_error['code'], IsImmutableValidator.code)
 
 
-class BesluitInformatieObjectTests(APITestCase):
+class BesluitInformatieObjectTests(JWTAuthMixin, APITestCase):
+
+    heeft_alle_autorisaties = True
 
     @override_settings(
         LINK_FETCHER='vng_api_common.mocks.link_fetcher_404',
         ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
     )
     def test_validate_informatieobject_invalid(self):
-        besluit = BesluitFactory.create()
+        besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
         url = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit.uuid})
 
         response = self.client.post(url, {
