@@ -11,7 +11,7 @@ markdown
 
 Django==2.0.13
 django-axes
-django-choices
+django-choices==1.7.0
 django-cors-middleware
 django-markup==1.3
 
