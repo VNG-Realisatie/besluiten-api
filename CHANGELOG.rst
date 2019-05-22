@@ -2,6 +2,22 @@
 Wijzigingen
 ===========
 
+0.12.0 (2019-05-22)
+===================
+
+Authorizations V2 and audit trail release - breaking changes
+
+* Applied new authorizations mechanism, where authorizations for a
+  ``client_id`` are looked up in the configured authorization component (AC)
+* Authorizations now filter data in collections, limiting it to the
+  ``besluittype``s you're authorized for
+* Scopes apply per-``besluittype`` from the AC now
+* Scopes have been renamed, the ``zds.scopes`` prefix is dropped for
+  consistency and brevity
+* Added scopes on operations that didn't have them yet
+* Audit trail on a ``Besluit`` is added - actions are stored in the audit trail
+  and can be retrieved as a ``Besluit`` sub-resource.
+
 0.9.0 (2019-04-16)
 ==================
 
