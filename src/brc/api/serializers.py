@@ -1,16 +1,15 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
+from django.db import transaction
 from django.utils.encoding import force_text
 
 from rest_framework import serializers
 from rest_framework.settings import api_settings
-from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
-    InformatieObjectUniqueValidator, IsImmutableValidator,
-    ObjectInformatieObjectValidator, UniekeIdentificatieValidator,
-    URLValidator, validate_rsin
+    IsImmutableValidator, UniekeIdentificatieValidator, URLValidator,
+    validate_rsin
 )
 
 from brc.datamodel.constants import RelatieAarden, VervalRedenen
@@ -18,8 +17,6 @@ from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
-from ..sync.signals import SyncError
-from django.db import transaction
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):

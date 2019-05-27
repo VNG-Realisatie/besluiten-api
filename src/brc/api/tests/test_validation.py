@@ -11,13 +11,13 @@ from vng_api_common.validators import (
 
 from brc.datamodel.tests.factories import BesluitFactory
 
-from ..scopes import SCOPE_BESLUITEN_BIJWERKEN
+from .mixins import BesluitSyncMixin
 from .utils import reverse, reverse_lazy
 
 BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 
 
-class BesluitValidationTests(JWTAuthMixin, APITestCase):
+class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
     url = reverse_lazy('besluit-list')
     heeft_alle_autorisaties = True
 
@@ -102,7 +102,7 @@ class BesluitValidationTests(JWTAuthMixin, APITestCase):
         self.assertEqual(verantwoordelijke_organisatie_error['code'], IsImmutableValidator.code)
 
 
-class BesluitInformatieObjectTests(JWTAuthMixin, APITestCase):
+class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 

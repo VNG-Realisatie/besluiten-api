@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
 
-from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
+from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
@@ -22,7 +22,7 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
     NOTIFICATIONS_DISABLED=False
 )
 @patch('zds_client.Client.from_url')
-class SendNotifTestCase(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
+class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 

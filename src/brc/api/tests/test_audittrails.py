@@ -1,4 +1,3 @@
-import unittest
 from copy import deepcopy
 
 from django.test import override_settings
@@ -10,7 +9,7 @@ from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
-from .mixins import BesluitInformatieObjectSyncMixin
+from .mixins import MockSyncMixin
 
 # ZTC
 ZTC_ROOT = 'https://example.com/ztc/api/v1'
@@ -24,7 +23,7 @@ INFORMATIE_OBJECT = f'{DRC_ROOT}/enkelvoudiginformatieobjecten/1234'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
-class AuditTrailTests(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
+class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 

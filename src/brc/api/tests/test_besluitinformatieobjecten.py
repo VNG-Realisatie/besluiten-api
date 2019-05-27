@@ -3,7 +3,6 @@ from datetime import datetime
 
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -18,7 +17,7 @@ from brc.datamodel.tests.factories import (
 )
 from brc.sync.signals import SyncError
 
-from .mixins import BesluitInformatieObjectSyncMixin
+from .mixins import MockSyncMixin
 
 INFORMATIEOBJECT = f'http://example.com/drc/api/v1/enkelvoudiginformatieobjecten/{uuid.uuid4().hex}'
 
@@ -31,7 +30,7 @@ def dt_to_api(dt: datetime):
 
 
 @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
-class BesluitInformatieObjectAPITests(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
+class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     list_url = reverse_lazy('besluitinformatieobject-list', kwargs={'version': '1'})
 
@@ -173,7 +172,7 @@ class BesluitInformatieObjectAPITests(BesluitInformatieObjectSyncMixin, JWTAuthM
                 self.assertEqual(error['code'], IsImmutableValidator.code)
 
     def test_sync_create_fails(self):
-        self.mocked_sync_create.side_effect = SyncError("Sync failed")
+        self.mocked_sync_create_bio.side_effect = SyncError("Sync failed")
 
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
@@ -205,12 +204,12 @@ class BesluitInformatieObjectAPITests(BesluitInformatieObjectSyncMixin, JWTAuthM
             'uuid': bio.uuid,
         })
 
-        self.assertEqual(self.mocked_sync_delete.call_count, 0)
+        self.assertEqual(self.mocked_sync_delete_bio.call_count, 0)
 
         response = self.client.delete(bio_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, response.data)
 
-        self.assertEqual(self.mocked_sync_delete.call_count, 1)
+        self.assertEqual(self.mocked_sync_delete_bio.call_count, 1)
 
         # Relation is gone, besluit still exists.
         self.assertFalse(BesluitInformatieObject.objects.exists())

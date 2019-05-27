@@ -18,7 +18,7 @@ class SyncError(Exception):
     pass
 
 
-def sync_create(relation: BesluitInformatieObject):
+def sync_create_bio(relation: BesluitInformatieObject):
     operation = 'create'
 
     # build the URL of the Besluit
@@ -51,7 +51,7 @@ def sync_create(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
-def sync_delete(relation: BesluitInformatieObject):
+def sync_delete_bio(relation: BesluitInformatieObject):
     operation = 'delete'
 
     # build the URL of the Besluit
@@ -122,19 +122,27 @@ def sync(relation: Besluit, operation: str):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
+def sync_create_besluit(instance: Besluit):
+    return sync(instance, 'create')
+
+
+def sync_delete_besluit(instance: Besluit):
+    return sync(instance, 'delete')
+
+
 @receiver([post_save, post_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
 def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=None, **kwargs):
     signal = kwargs['signal']
     if signal is post_save and kwargs.get('created', False):
-        sync_create(instance)
+        sync_create_bio(instance)
     elif signal is post_delete:
-        sync_delete(instance)
+        sync_delete_bio(instance)
 
 
 @receiver([post_save, post_delete], sender=Besluit)
 def sync_besluit(sender, instance: Besluit = None, **kwargs):
     signal = kwargs['signal']
     if signal is post_save and kwargs.get('created', False):
-        sync(instance, 'create')
+        sync_create_besluit(instance)
     elif signal is post_delete:
-        sync(instance, 'delete')
+        sync_delete_besluit(instance)
