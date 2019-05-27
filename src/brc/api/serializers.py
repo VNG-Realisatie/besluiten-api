@@ -18,6 +18,8 @@ from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
+from ..sync.signals import SyncError
+from django.db import transaction
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,6 +68,17 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
 
         value_display_mapping = add_choice_values_help_text(VervalRedenen)
         self.fields['vervalreden'].help_text += f"\n\n{value_display_mapping}"
+
+    @transaction.atomic()
+    def save(self, **kwargs):
+        try:
+            return super().save(**kwargs)
+        except SyncError as sync_error:
+            # delete the object again
+            raise serializers.ValidationError(
+                {'zaak': sync_error.args[0]},
+                code='sync-with-zrc'
+            )
 
 
 class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):

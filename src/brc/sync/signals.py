@@ -6,12 +6,10 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-import requests
 from vng_api_common.models import APICredential
-from vng_api_common.utils import get_uuid_from_path
 from zds_client import Client, extract_params, get_operation_url
 
-from brc.datamodel.models import BesluitInformatieObject
+from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +88,40 @@ def sync_delete(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
+def sync(relation: Besluit, operation: str):
+    # build the URL of the besluit
+    path = reverse('besluit-detail', kwargs={
+        'version': settings.REST_FRAMEWORK['DEFAULT_VERSION'],
+        'uuid': relation.uuid,
+    })
+    domain = Site.objects.get_current().domain
+    protocol = 'https' if settings.IS_HTTPS else 'http'
+    besluit_url = f'{protocol}://{domain}{path}'
+
+    logger.info("Zaak object: %s", relation.zaak)
+    logger.info("Besluit object: %s", besluit_url)
+
+    # figure out which remote resource we need to interact with
+    client = Client.from_url(relation.zaak)
+    client.auth = APICredential.get_auth(relation.zaak)
+
+    try:
+        pattern = get_operation_url(client.schema, f'zaakbesluit_{operation}', pattern_only=True)
+    except ValueError as exc:
+        raise SyncError("Could not determine remote operation") from exc
+
+    # The real resource URL is extracted from the ``openapi.yaml`` based on
+    # the operation
+    params = extract_params(f"{relation.zaak}/irrelevant", pattern)
+
+    try:
+        operation_function = getattr(client, operation)
+        operation_function('zaakbesluit', {'besluit': besluit_url}, **params)
+    except Exception as exc:
+        logger.error(f"Could not {operation} remote relation", exc_info=1)
+        raise SyncError(f"Could not {operation} remote relation") from exc
+
+
 @receiver([post_save, post_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
 def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=None, **kwargs):
     signal = kwargs['signal']
@@ -97,3 +129,12 @@ def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=Non
         sync_create(instance)
     elif signal is post_delete:
         sync_delete(instance)
+
+
+@receiver([post_save, post_delete], sender=Besluit)
+def sync_besluit(sender, instance: Besluit = None, **kwargs):
+    signal = kwargs['signal']
+    if signal is post_save and kwargs.get('created', False):
+        sync(instance, 'create')
+    elif signal is post_delete:
+        sync(instance, 'delete')
