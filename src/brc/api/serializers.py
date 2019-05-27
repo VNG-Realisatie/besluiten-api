@@ -71,7 +71,6 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
         try:
             return super().save(**kwargs)
         except SyncError as sync_error:
-            # delete the object again
             raise serializers.ValidationError(
                 {'zaak': sync_error.args[0]},
                 code='sync-with-zrc'
