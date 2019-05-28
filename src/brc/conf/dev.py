@@ -94,6 +94,8 @@ REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
     'rest_framework.renderers.BrowsableAPIRenderer',
 )
 
+IS_HTTPS = False
+
 if 'test' in sys.argv:
     NOTIFICATIONS_DISABLED = True
 

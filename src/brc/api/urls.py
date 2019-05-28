@@ -10,9 +10,9 @@ from .viewsets import (
 
 router = routers.DefaultRouter()
 router.register('besluiten', BesluitViewSet, [
-    routers.nested('informatieobjecten', BesluitInformatieObjectViewSet),
     routers.nested('audittrail', BesluitAuditTrailViewSet),
 ])
+router.register('besluitinformatieobjecten', BesluitInformatieObjectViewSet)
 
 # TODO: the EndpointEnumerator seems to choke on path and re_path
 
