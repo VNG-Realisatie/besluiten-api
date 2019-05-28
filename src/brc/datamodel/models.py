@@ -159,6 +159,11 @@ class BesluitInformatieObject(models.Model):
     def __str__(self):
         return str(self.uuid)
 
+    def save(self, *args, **kwargs):
+        # override to set aard_relatie
+        self.aard_relatie = RelatieAarden.from_object_type('besluit')
+        super().save(*args, **kwargs)
+
     def unique_representation(self):
         if not hasattr(self, '_unique_representation'):
             io_id = request_object_attribute(self.informatieobject, 'identificatie', 'enkelvoudiginformatieobject')
