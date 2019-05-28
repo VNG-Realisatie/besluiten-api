@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
 
+from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
@@ -21,7 +22,7 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
     NOTIFICATIONS_DISABLED=False
 )
 @patch('zds_client.Client.from_url')
-class SendNotifTestCase(JWTAuthMixin, APITestCase):
+class SendNotifTestCase(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
@@ -71,7 +72,7 @@ class SendNotifTestCase(JWTAuthMixin, APITestCase):
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
         besluit_url = get_operation_url('besluit_read', uuid=besluit.uuid)
         bio = BesluitInformatieObjectFactory.create(besluit=besluit)
-        bio_url = get_operation_url('besluitinformatieobject_delete', uuid=bio.uuid, besluit_uuid=besluit.uuid)
+        bio_url = get_operation_url('besluitinformatieobject_delete', uuid=bio.uuid)
 
         response = self.client.delete(bio_url)
 
