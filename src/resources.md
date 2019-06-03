@@ -81,6 +81,8 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | --- | --- | --- | --- | --- |
 | url |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
 | informatieobject | URL-referentie naar het informatieobject waarin (een deel van) het besluit beschreven is. | string | ja | C​R​U​D |
+| besluit | URL-referentie naar het BESLUIT. | string | ja | C​R​U​D |
+| aardRelatieWeergave |  | string | nee | ~~C~~​R​~~U~~​~~D~~ |
 
 
 * Create, Read, Update, Delete

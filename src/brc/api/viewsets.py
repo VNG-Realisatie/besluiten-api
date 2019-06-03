@@ -9,15 +9,18 @@ from vng_api_common.notifications.kanalen import Kanaal
 from vng_api_common.notifications.viewsets import NotificationViewSetMixin
 from vng_api_common.permissions import permission_class_factory
 from vng_api_common.utils import lookup_kwargs_to_filters
-from vng_api_common.viewsets import NestedViewSetMixin
+from vng_api_common.viewsets import CheckQueryParamsMixin, NestedViewSetMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 from .audits import AUDIT_BRC
 from .data_filtering import ListFilterByAuthorizationsMixin
-from .filters import BesluitFilter
+from .filters import BesluitFilter, BesluitInformatieObjectFilter
 from .kanalen import KANAAL_BESLUITEN
-from .permissions import BesluitAuthScopesRequired, BesluitBaseAuthRequired
+from .permissions import (
+    BesluitAuthScopesRequired, BesluitBaseAuthRequired,
+    BesluitRelatedAuthScopesRequired
+)
 from .scopes import (
     SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN,
     SCOPE_BESLUITEN_ALLES_VERWIJDEREN, SCOPE_BESLUITEN_BIJWERKEN
@@ -96,58 +99,65 @@ class BesluitViewSet(NotificationViewSetMixin,
 
 
 class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
-                                     NestedViewSetMixin,
                                      AuditTrailViewsetMixin,
+                                     CheckQueryParamsMixin,
                                      ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
-    Opvragen en bwerken van Besluit-Informatieobject relaties.
+    Opvragen en bewerken van Besluit-Informatieobject relaties.
 
     create:
-    Registreer in welk(e) INFORMATIEOBJECT(en) een BESLUIT vastgelegd is.
+    Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van
+    relaties met andere objecten gerealiseerd:
 
-    Er wordt gevalideerd op:
+    **Er wordt gevalideerd op**
+    - geldigheid besluit URL
+    - geldigheid informatieobject URL
+    - de combinatie informatieobject en besluit moet uniek zijn
+
+    **Opmerkingen**
+    - De registratiedatum wordt door het systeem op 'NU' gezet. De `aardRelatie`
+      wordt ook door het systeem gezet.
+    - Bij het aanmaken wordt ook in het DRC de gespiegelde relatie aangemaakt,
+      echter zonder de relatie-informatie.
+
+
+    Registreer welk(e) INFORMATIEOBJECT(en) een BESLUIT kent.
+
+    **Er wordt gevalideerd op**
     - geldigheid informatieobject URL
     - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
-    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
-      informatieobject leeft
 
     list:
-    Geef een lijst van relaties tussen BESLUITen en INFORMATIEOBJECTen.
+    Geef een lijst van relaties tussen INFORMATIEOBJECTen en BESLUITen.
+
+    Deze lijst kan gefilterd wordt met querystringparameters.
+
+    retrieve:
+    Geef de details van een relatie tussen een INFORMATIEOBJECT en een BESLUIT.
 
     update:
-    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
+    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
+    van de relatie bewerken, en niet de relatie zelf aanpassen.
 
-    Er wordt gevalideerd op:
-    - geldigheid informatieobject URL
-    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
-    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
-      informatieobject leeft
+    **Er wordt gevalideerd op**
+    - informatieobject URL en besluit URL mogen niet veranderen
 
     partial_update:
-    Werk de relatie tussen een BESLUIT en INFORMATIEOBJECT bij.
+    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
+    van de relatie bewerken, en niet de relatie zelf aanpassen.
 
-    Er wordt gevalideerd op:
-    - geldigheid informatieobject URL
-    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
-    - bestaan van relatie BESLUIT-INFORMATIEOBJECT in het DRC waar het
-      informatieobject leeft
+    **Er wordt gevalideerd op**
+    - informatieobject URL en besluit URL mogen niet veranderen
 
     destroy:
-    Ontkoppel een BESLUIT en INFORMATIEOBJECT-relatie.
+    Verwijdert de relatie tussen BESLUIT en INFORMATIEOBJECT.
     """
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
+    filterset_class = BesluitInformatieObjectFilter
     lookup_field = 'uuid'
-    parent_retrieve_kwargs = {
-        'besluit_uuid': 'uuid',
-    }
-    permission_classes = (
-        permission_class_factory(
-            base=BesluitBaseAuthRequired,
-            get_obj='_get_besluit',
-        ),
-    )
+    permission_classes = (BesluitRelatedAuthScopesRequired,)
     required_scopes = {
         'list': SCOPE_BESLUITEN_ALLES_LEZEN,
         'retrieve': SCOPE_BESLUITEN_ALLES_LEZEN,
@@ -157,29 +167,9 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
         'partial_update': SCOPE_BESLUITEN_BIJWERKEN,
     }
     notifications_kanaal = KANAAL_BESLUITEN
+    notifications_main_resource_key = 'besluit'
     audit = AUDIT_BRC
 
-    def _get_besluit(self):
-        if not hasattr(self, '_besluit'):
-            filters = lookup_kwargs_to_filters(self.parent_retrieve_kwargs, self.kwargs)
-            self._besluit = get_object_or_404(Besluit, **filters)
-        return self._besluit
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        # DRF introspection
-        if not self.kwargs:
-            return context
-        context['parent_object'] = self._get_besluit()
-        return context
-
-    def get_notification_main_object_url(self, data: dict, kanaal: Kanaal) -> str:
-        besluit = self._get_besluit()
-        return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
-
-    def get_audittrail_main_object_url(self, data: dict, main_resource: str) -> str:
-        besluit = self._get_besluit()
-        return reverse('besluit-detail', kwargs={'uuid': besluit.uuid}, request=self.request)
 
 class BesluitAuditTrailViewSet(AuditTrailViewSet):
     main_resource_lookup_field = 'besluit_uuid'

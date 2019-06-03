@@ -6,9 +6,10 @@ from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import (
-    JWTAuthMixin, TypeCheckMixin, get_operation_url
+    JWTAuthMixin, TypeCheckMixin, get_operation_url, reverse
 )
 
+from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit
 from brc.datamodel.tests.factories import (
@@ -22,7 +23,7 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
-class BesluitCreateTests(TypeCheckMixin, JWTAuthMixin, APITestCase):
+class BesluitCreateTests(BesluitInformatieObjectSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
@@ -78,11 +79,11 @@ class BesluitCreateTests(TypeCheckMixin, JWTAuthMixin, APITestCase):
 
         with self.subTest(part='besluitinformatieobject_create'):
             url = get_operation_url(
-                'besluitinformatieobject_create',
-                besluit_uuid=besluit.uuid
+                'besluitinformatieobject_create'
             )
 
             response = self.client.post(url, {
+                'besluit': reverse(besluit),
                 'informatieobject': 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234',
             })
 
@@ -100,13 +101,19 @@ class BesluitCreateTests(TypeCheckMixin, JWTAuthMixin, APITestCase):
 
     def test_opvragen_informatieobjecten_besluit(self):
         besluit1, besluit2 = BesluitFactory.create_batch(2, besluittype=BESLUITTYPE)
+
+        besluit1_uri = reverse(besluit1)
+        besluit2_uri = reverse(besluit2)
+
         BesluitInformatieObjectFactory.create_batch(3, besluit=besluit1)
         BesluitInformatieObjectFactory.create_batch(2, besluit=besluit2)
 
-        url1 = get_operation_url('besluitinformatieobject_list', besluit_uuid=besluit1.uuid)
+        base_uri = get_operation_url('besluitinformatieobject_list')
+
+        url1 = f'{base_uri}?besluit={besluit1_uri}'
         response1 = self.client.get(url1)
         self.assertEqual(len(response1.data), 3)
 
-        url2 = get_operation_url('besluitinformatieobject_list', besluit_uuid=besluit2.uuid)
+        url2 = f'{base_uri}?besluit={besluit2_uri}'
         response2 = self.client.get(url2)
         self.assertEqual(len(response2.data), 2)

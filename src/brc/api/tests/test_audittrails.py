@@ -10,6 +10,8 @@ from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
+from .mixins import BesluitInformatieObjectSyncMixin
+
 # ZTC
 ZTC_ROOT = 'https://example.com/ztc/api/v1'
 DRC_ROOT = 'https://example.com/drc/api/v1'
@@ -22,7 +24,7 @@ INFORMATIE_OBJECT = f'{DRC_ROOT}/enkelvoudiginformatieobjecten/1234'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
-class AuditTrailTests(JWTAuthMixin, APITestCase):
+class AuditTrailTests(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
@@ -113,10 +115,10 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
     def test_create_besluitinformatieobject_audittrail(self):
         besluit_data = self._create_besluit()
 
-        besluit_uuid = besluit_data['url'].split('/')[-1]
-        url = reverse(BesluitInformatieObject, kwargs={'besluit_uuid': besluit_uuid})
+        url = reverse(BesluitInformatieObject)
 
         response = self.client.post(url, {
+            'besluit': besluit_data['url'],
             'informatieobject': INFORMATIE_OBJECT,
         })
 

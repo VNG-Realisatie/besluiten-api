@@ -112,9 +112,11 @@ class BesluitInformatieObjectTests(JWTAuthMixin, APITestCase):
     )
     def test_validate_informatieobject_invalid(self):
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
-        url = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit.uuid})
+        besluit_url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
+        url = reverse('besluitinformatieobject-list')
 
         response = self.client.post(url, {
+            'besluit': f'http://testserver{besluit_url}',
             'informatieobject': 'https://foo.bar/123',
         })
 

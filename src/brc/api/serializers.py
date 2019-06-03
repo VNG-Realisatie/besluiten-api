@@ -1,7 +1,10 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
+from django.utils.encoding import force_text
+
 from rest_framework import serializers
+from rest_framework.settings import api_settings
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
@@ -10,8 +13,9 @@ from vng_api_common.validators import (
     URLValidator, validate_rsin
 )
 
-from brc.datamodel.constants import VervalRedenen
+from brc.datamodel.constants import RelatieAarden, VervalRedenen
 from brc.datamodel.models import Besluit, BesluitInformatieObject
+from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
 
@@ -64,26 +68,47 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
         self.fields['vervalreden'].help_text += f"\n\n{value_display_mapping}"
 
 
-class BesluitInformatieObjectSerializer(NestedHyperlinkedModelSerializer):
-    parent_lookup_kwargs = {
-        'besluit_uuid': 'besluit__uuid'
-    }
+class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
+    aard_relatie_weergave = serializers.ChoiceField(
+        source='get_aard_relatie_display', read_only=True,
+        choices=[(force_text(value), key) for key, value in RelatieAarden.choices]
+    )
 
     class Meta:
         model = BesluitInformatieObject
-        fields = ('url', 'informatieobject')
+        fields = (
+            'url',
+            'informatieobject',
+            'besluit',
+            'aard_relatie_weergave',
+        )
         extra_kwargs = {
-            'url': {'lookup_field': 'uuid'},
+            'url': {
+                'lookup_field': 'uuid'
+            },
             'informatieobject': {
                 'validators': [
                     URLValidator(get_auth=get_drc_auth),
-                    InformatieObjectUniqueValidator('besluit', 'informatieobject'),
-                    ObjectInformatieObjectValidator(),
+                    IsImmutableValidator(),
                 ]
             },
+            'besluit': {
+                'lookup_field': 'uuid',
+                'validators': [IsImmutableValidator()]
+            }
         }
 
-    def create(self, validated_data):
-        besluit = self.context['parent_object']
-        validated_data['besluit'] = besluit
-        return super().create(validated_data)
+    def save(self, **kwargs):
+        # can't slap a transaction atomic on this, since ZRC/BRC query for the
+        # relation!
+        try:
+            return super().save(**kwargs)
+        except SyncError as sync_error:
+            # delete the object again
+            BesluitInformatieObject.objects.filter(
+                informatieobject=self.validated_data['informatieobject'],
+                besluit=self.validated_data['besluit']
+            )._raw_delete('default')
+            raise serializers.ValidationError({
+                api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]
+            }) from sync_error
