@@ -88,46 +88,57 @@ def sync_delete_bio(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
-def sync(besluit: Besluit, operation: str):
+def sync_create_besluit(besluit: Besluit):
+    if besluit.zaak == '':
+        return
+
     # build the URL of the besluit
     path = reverse('besluit-detail', kwargs={
         'version': settings.REST_FRAMEWORK['DEFAULT_VERSION'],
-        'uuid': relation.uuid,
+        'uuid': besluit.uuid,
     })
     domain = Site.objects.get_current().domain
     protocol = 'https' if settings.IS_HTTPS else 'http'
     besluit_url = f'{protocol}://{domain}{path}'
 
-    logger.info("Zaak object: %s", relation.zaak)
+    logger.info("Zaak object: %s", besluit.zaak)
     logger.info("Besluit object: %s", besluit_url)
 
     # figure out which remote resource we need to interact with
-    client = Client.from_url(relation.zaak)
-    client.auth = APICredential.get_auth(relation.zaak)
+    client = Client.from_url(besluit.zaak)
+    client.auth = APICredential.get_auth(besluit.zaak)
 
     try:
-        pattern = get_operation_url(client.schema, f'zaakbesluit_{operation}', pattern_only=True)
+        pattern = get_operation_url(client.schema, f'zaakbesluit_create', pattern_only=True)
     except ValueError as exc:
         raise SyncError("Could not determine remote operation") from exc
 
     # The real resource URL is extracted from the ``openapi.yaml`` based on
     # the operation
-    params = extract_params(f"{relation.zaak}/irrelevant", pattern)
+    params = extract_params(f"{besluit.zaak}/irrelevant", pattern)
 
     try:
-        operation_function = getattr(client, operation)
-        operation_function('zaakbesluit', {'besluit': besluit_url}, **params)
+        response = client.create('zaakbesluit', {'besluit': besluit_url}, **params)
     except Exception as exc:
-        logger.error(f"Could not {operation} remote relation", exc_info=1)
-        raise SyncError(f"Could not {operation} remote relation") from exc
+        logger.error(f"Could not create zaakbesluit", exc_info=1)
+        raise SyncError(f"Could not create zaakbesluit") from exc
+
+    # save ZaakBesluit url for delete signal
+    besluit._zaakbesluit = response['url']
+    besluit.save()
 
 
-def sync_create_besluit(instance: Besluit):
-    return sync(instance, 'create')
+def sync_delete_besluit(besluit: Besluit):
+    if besluit.zaak == '':
+        return
 
-
-def sync_delete_besluit(instance: Besluit):
-    return sync(instance, 'delete')
+    client = Client.from_url(besluit._zaakbesluit)
+    client.auth = APICredential.get_auth(besluit._zaakbesluit)
+    try:
+        client.delete('zaakbesluit', url=besluit._zaakbesluit)
+    except Exception as exc:
+        logger.error(f"Could not delete ZaakBesluit", exc_info=1)
+        raise SyncError(f"Could not delete ZaakBesluit") from exc
 
 
 @receiver([post_save, post_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
