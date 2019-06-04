@@ -88,7 +88,7 @@ def sync_delete_bio(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
-def sync(relation: Besluit, operation: str):
+def sync(besluit: Besluit, operation: str):
     # build the URL of the besluit
     path = reverse('besluit-detail', kwargs={
         'version': settings.REST_FRAMEWORK['DEFAULT_VERSION'],
