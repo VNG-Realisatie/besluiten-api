@@ -98,7 +98,6 @@ IS_HTTPS = False
 
 if 'test' in sys.argv:
     NOTIFICATIONS_DISABLED = True
-NOTIFICATIONS_DISABLED = True
 
 # Override settings with local settings.
 try:
