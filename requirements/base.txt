@@ -21,7 +21,7 @@ django-markup==1.3
 django-solo==1.1.3        # via vng-api-common
 django==2.2.2
 djangorestframework-camel-case==0.2.0  # via vng-api-common
-djangorestframework==3.8.2
+djangorestframework==3.9.4
 docutils==0.14            # via sphinx
 drf-nested-routers==0.90.2  # via vng-api-common
 drf-yasg==1.10.0          # via vng-api-common
