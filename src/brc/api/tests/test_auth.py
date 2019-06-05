@@ -13,11 +13,11 @@ from brc.datamodel.tests.factories import (
 )
 
 from ..scopes import SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN
-from .mixins import BesluitInformatieObjectSyncMixin
+from .mixins import MockSyncMixin
 
 
 @override_settings(ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient')
-class BesluitScopeForbiddenTests(BesluitInformatieObjectSyncMixin, AuthCheckMixin, APITestCase):
+class BesluitScopeForbiddenTests(MockSyncMixin, AuthCheckMixin, APITestCase):
 
     def test_cannot_create_besluit_without_correct_scope(self):
         url = reverse('besluit-list')
@@ -38,7 +38,7 @@ class BesluitScopeForbiddenTests(BesluitInformatieObjectSyncMixin, AuthCheckMixi
                 self.assertForbidden(url, method='get')
 
 
-class BesluitReadCorrectScopeTests(JWTAuthMixin, APITestCase):
+class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
     scopes = [SCOPE_BESLUITEN_ALLES_LEZEN]
     besluittype = 'https://besluittype.nl/ok'
 
@@ -92,11 +92,12 @@ class BesluitReadCorrectScopeTests(JWTAuthMixin, APITestCase):
         response_data = response.json()
         self.assertEqual(len(response_data), 2)
 
+
 @override_settings(
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
-class BioReadTests(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
+class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     scopes = [SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_AANMAKEN]
     besluittype = 'https://besluittype.nl/ok'
@@ -122,7 +123,6 @@ class BioReadTests(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
 
         besluit_url = reverse(bio1.besluit)
         self.assertEqual(response_data[0]['besluit'], f'http://testserver{besluit_url}')
-
 
     def test_create_bio_limited_to_authorized_besluiten(self):
         informatieobject = 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234'

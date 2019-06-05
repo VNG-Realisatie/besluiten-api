@@ -99,6 +99,10 @@ class Besluit(APIMixin, models.Model):
         'uiterlijke reactiedatum', null=True, blank=True,
         help_text="De datum tot wanneer verweer tegen het besluit mogelijk is."
     )
+    _zaakbesluit = models.URLField(
+        'zaakbesluit', blank=True,
+        help_text="Link to the related object in the ZRC API"
+    )
 
     objects = BesluitQuerySet.as_manager()
 

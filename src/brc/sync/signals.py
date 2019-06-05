@@ -6,12 +6,10 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-import requests
 from vng_api_common.models import APICredential
-from vng_api_common.utils import get_uuid_from_path
 from zds_client import Client, extract_params, get_operation_url
 
-from brc.datamodel.models import BesluitInformatieObject
+from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +18,7 @@ class SyncError(Exception):
     pass
 
 
-def sync_create(relation: BesluitInformatieObject):
+def sync_create_bio(relation: BesluitInformatieObject):
     operation = 'create'
 
     # build the URL of the Besluit
@@ -53,7 +51,7 @@ def sync_create(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
-def sync_delete(relation: BesluitInformatieObject):
+def sync_delete_bio(relation: BesluitInformatieObject):
     operation = 'delete'
 
     # build the URL of the Besluit
@@ -90,10 +88,72 @@ def sync_delete(relation: BesluitInformatieObject):
         raise SyncError(f"Could not {operation} remote relation") from exc
 
 
+def sync_create_besluit(besluit: Besluit):
+    if besluit.zaak == '':
+        return
+
+    # build the URL of the besluit
+    path = reverse('besluit-detail', kwargs={
+        'version': settings.REST_FRAMEWORK['DEFAULT_VERSION'],
+        'uuid': besluit.uuid,
+    })
+    domain = Site.objects.get_current().domain
+    protocol = 'https' if settings.IS_HTTPS else 'http'
+    besluit_url = f'{protocol}://{domain}{path}'
+
+    logger.info("Zaak object: %s", besluit.zaak)
+    logger.info("Besluit object: %s", besluit_url)
+
+    # figure out which remote resource we need to interact with
+    client = Client.from_url(besluit.zaak)
+    client.auth = APICredential.get_auth(besluit.zaak)
+
+    try:
+        pattern = get_operation_url(client.schema, f'zaakbesluit_create', pattern_only=True)
+    except ValueError as exc:
+        raise SyncError("Could not determine remote operation") from exc
+
+    # The real resource URL is extracted from the ``openapi.yaml`` based on
+    # the operation
+    params = extract_params(f"{besluit.zaak}/irrelevant", pattern)
+
+    try:
+        response = client.create('zaakbesluit', {'besluit': besluit_url}, **params)
+    except Exception as exc:
+        logger.error(f"Could not create zaakbesluit", exc_info=1)
+        raise SyncError(f"Could not create zaakbesluit") from exc
+
+    # save ZaakBesluit url for delete signal
+    besluit._zaakbesluit = response['url']
+    besluit.save()
+
+
+def sync_delete_besluit(besluit: Besluit):
+    if besluit.zaak == '':
+        return
+
+    client = Client.from_url(besluit._zaakbesluit)
+    client.auth = APICredential.get_auth(besluit._zaakbesluit)
+    try:
+        client.delete('zaakbesluit', url=besluit._zaakbesluit)
+    except Exception as exc:
+        logger.error(f"Could not delete ZaakBesluit", exc_info=1)
+        raise SyncError(f"Could not delete ZaakBesluit") from exc
+
+
 @receiver([post_save, post_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
 def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=None, **kwargs):
     signal = kwargs['signal']
     if signal is post_save and kwargs.get('created', False):
-        sync_create(instance)
+        sync_create_bio(instance)
     elif signal is post_delete:
-        sync_delete(instance)
+        sync_delete_bio(instance)
+
+
+@receiver([post_save, post_delete], sender=Besluit)
+def sync_besluit(sender, instance: Besluit = None, **kwargs):
+    signal = kwargs['signal']
+    if signal is post_save and kwargs.get('created', False):
+        sync_create_besluit(instance)
+    elif signal is post_delete:
+        sync_delete_besluit(instance)

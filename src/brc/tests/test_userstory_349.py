@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
 
 from brc.api.scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
-from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
+from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
@@ -15,7 +15,7 @@ from brc.datamodel.tests.factories import (
 BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 
 
-class US349TestCase(BesluitInformatieObjectSyncMixin, JWTAuthMixin, APITestCase):
+class US349TestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     scopes = [SCOPE_BESLUITEN_ALLES_VERWIJDEREN]
     besluittype = BESLUITTYPE

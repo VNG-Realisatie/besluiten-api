@@ -3,7 +3,7 @@ from django.test import override_settings
 from rest_framework.test import APITestCase
 from zds_client.tests.mocks import mock_client
 
-from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
+from brc.api.tests.mixins import MockSyncMixin
 
 from .factories import BesluitFactory, BesluitInformatieObjectFactory
 
@@ -11,7 +11,7 @@ from .factories import BesluitFactory, BesluitInformatieObjectFactory
 @override_settings(
     ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
-class UniqueRepresentationTestCase(BesluitInformatieObjectSyncMixin, APITestCase):
+class UniqueRepresentationTestCase(MockSyncMixin, APITestCase):
 
     def test_besluit(self):
         besluit = BesluitFactory(

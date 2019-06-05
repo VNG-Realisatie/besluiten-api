@@ -9,7 +9,7 @@ from vng_api_common.tests import (
     JWTAuthMixin, TypeCheckMixin, get_operation_url, reverse
 )
 
-from brc.api.tests.mixins import BesluitInformatieObjectSyncMixin
+from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit
 from brc.datamodel.tests.factories import (
@@ -23,7 +23,7 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
-class BesluitCreateTests(BesluitInformatieObjectSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCase):
+class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
