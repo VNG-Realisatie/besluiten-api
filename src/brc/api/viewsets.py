@@ -1,15 +1,9 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework import viewsets
-from rest_framework.reverse import reverse
 from vng_api_common.audittrails.viewsets import (
     AuditTrailViewSet, AuditTrailViewsetMixin
 )
-from vng_api_common.notifications.kanalen import Kanaal
 from vng_api_common.notifications.viewsets import NotificationViewSetMixin
-from vng_api_common.permissions import permission_class_factory
-from vng_api_common.utils import lookup_kwargs_to_filters
-from vng_api_common.viewsets import CheckQueryParamsMixin, NestedViewSetMixin
+from vng_api_common.viewsets import CheckQueryParamsMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
@@ -18,8 +12,7 @@ from .data_filtering import ListFilterByAuthorizationsMixin
 from .filters import BesluitFilter, BesluitInformatieObjectFilter
 from .kanalen import KANAAL_BESLUITEN
 from .permissions import (
-    BesluitAuthScopesRequired, BesluitBaseAuthRequired,
-    BesluitRelatedAuthScopesRequired
+    BesluitAuthScopesRequired, BesluitRelatedAuthScopesRequired
 )
 from .scopes import (
     SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN,
