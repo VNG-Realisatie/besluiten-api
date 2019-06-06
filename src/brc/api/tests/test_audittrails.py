@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.audittrails.models import AuditTrail
 from vng_api_common.tests import JWTAuthMixin, reverse
+from vng_api_common.utils import get_uuid_from_path
 from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
@@ -192,3 +193,15 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         response_audittrails = self.client.get(audittrails_url)
 
         self.assertEqual(response_audittrails.status_code, status.HTTP_200_OK)
+
+    def test_audittrail_resource_weergave(self):
+        besluit_response = self._create_besluit()
+
+        besluit_uuid = get_uuid_from_path(besluit_response['url'])
+        besluit_unique_representation = Besluit.objects.get(uuid=besluit_uuid).unique_representation()
+
+        audittrail = AuditTrail.objects.filter(hoofd_object=besluit_response['url']).get()
+
+        # Verify that the resource weergave stored in the AuditTrail matches
+        # the unique representation as defined in the besluit model
+        self.assertIn(audittrail.resource_weergave, besluit_unique_representation)
