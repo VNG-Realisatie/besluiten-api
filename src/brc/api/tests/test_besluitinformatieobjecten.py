@@ -19,7 +19,7 @@ from brc.sync.signals import SyncError
 
 from .mixins import MockSyncMixin
 
-INFORMATIEOBJECT = f'http://example.com/drc/api/v1/enkelvoudiginformatieobjecten/{uuid.uuid4().hex}'
+INFORMATIEOBJECT = f'http://drc.com/api/v1/enkelvoudiginformatieobjecten/{uuid.uuid4().hex}'
 
 
 def dt_to_api(dt: datetime):
@@ -29,7 +29,10 @@ def dt_to_api(dt: datetime):
     return formatted
 
 
-@override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
+@override_settings(
+    LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
+    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
+)
 class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     list_url = reverse_lazy('besluitinformatieobject-list', kwargs={'version': '1'})

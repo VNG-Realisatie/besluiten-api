@@ -95,7 +95,7 @@ class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
 @override_settings(
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
-    ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
+    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
 class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
@@ -125,7 +125,7 @@ class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(response_data[0]['besluit'], f'http://testserver{besluit_url}')
 
     def test_create_bio_limited_to_authorized_besluiten(self):
-        informatieobject = 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234'
+        informatieobject = 'https://drc.com/api/v1/enkelvoudigeinformatieobjecten/1234'
 
         besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')
         besluit2 = BesluitFactory.create(besluittype='https://besluittype.nl/not_ok')
