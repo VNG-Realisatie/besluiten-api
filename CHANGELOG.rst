@@ -2,7 +2,23 @@
 Wijzigingen
 ===========
 
-0.12.0 (2019-05-22)
+0.11.0 (2019-06-06)
+===================
+
+First step towards release candidate
+
+* ``BesluitInformatieObject`` relation direction has been inverted. The BRC
+  syncs this to DRC automatically.
+* Added a view-config page to diagnose configuration problems
+* Upgraded to Django 2.2 (LTS) and other libraries for security releases
+
+Breaking changes
+----------------
+
+* ``BesluitInformatieObject`` must now be made in BRC instead of DRC via
+  ``ObjectInformatieObject`` in DRC. This affects consumers.
+
+0.10.0 (2019-05-22)
 ===================
 
 Authorizations V2 and audit trail release - breaking changes
