@@ -7,15 +7,17 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import AuthCheckMixin, JWTAuthMixin, reverse
 
+from brc.datamodel.models import BesluitInformatieObject
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
 from ..scopes import SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN
+from .mixins import MockSyncMixin
 
 
 @override_settings(ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient')
-class BesluitScopeForbiddenTests(AuthCheckMixin, APITestCase):
+class BesluitScopeForbiddenTests(MockSyncMixin, AuthCheckMixin, APITestCase):
 
     def test_cannot_create_besluit_without_correct_scope(self):
         url = reverse('besluit-list')
@@ -27,8 +29,8 @@ class BesluitScopeForbiddenTests(AuthCheckMixin, APITestCase):
         urls = [
             reverse('besluit-list'),
             reverse(besluit),
-            reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit.uuid}),
-            reverse(bio, kwargs={'besluit_uuid': besluit.uuid})
+            reverse('besluitinformatieobject-list'),
+            reverse(bio)
         ]
 
         for url in urls:
@@ -36,7 +38,7 @@ class BesluitScopeForbiddenTests(AuthCheckMixin, APITestCase):
                 self.assertForbidden(url, method='get')
 
 
-class BesluitReadCorrectScopeTests(JWTAuthMixin, APITestCase):
+class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
     scopes = [SCOPE_BESLUITEN_ALLES_LEZEN]
     besluittype = 'https://besluittype.nl/ok'
 
@@ -90,11 +92,12 @@ class BesluitReadCorrectScopeTests(JWTAuthMixin, APITestCase):
         response_data = response.json()
         self.assertEqual(len(response_data), 2)
 
+
 @override_settings(
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
 )
-class BioReadTests(JWTAuthMixin, APITestCase):
+class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     scopes = [SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_AANMAKEN]
     besluittype = 'https://besluittype.nl/ok'
@@ -102,52 +105,51 @@ class BioReadTests(JWTAuthMixin, APITestCase):
     def test_list_bio_limited_to_authorized_zaken(self):
         besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')
         besluit2 = BesluitFactory.create(besluittype='https://besluittype.nl/not_ok')
-        url1 = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit1.uuid})
-        url2 = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit2.uuid})
 
-        # must show up
-        BesluitInformatieObjectFactory.create(besluit=besluit1)
-        # must not show up
-        BesluitInformatieObjectFactory.create(besluit=besluit2)
+        url = reverse(BesluitInformatieObject)
 
-        response1 = self.client.get(url1)
-        response2 = self.client.get(url2)
-
-        self.assertEqual(response1.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.status_code, status.HTTP_200_OK)
-
-        response_data1 = response1.json()
-        response_data2 = response2.json()
-
-        self.assertEqual(len(response_data1), 1)
-        self.assertEqual(len(response_data2), 0)
-
-    def test_create_bio_limited_to_authorized_zaken(self):
-        besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')
-        besluit2 = BesluitFactory.create(besluittype='https://besluittype.nl/not_ok')
-        url1 = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit1.uuid})
-        url2 = reverse('besluitinformatieobject-list', kwargs={'besluit_uuid': besluit2.uuid})
-        data = {'informatieobject': 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234'}
-
-        response1 = self.client.post(url1, data)
-        response2 = self.client.post(url2, data)
-
-        self.assertEqual(response1.status_code, status.HTTP_201_CREATED, response1.data)
-        self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN, response2.data)
-
-    def test_detail_zaakinformatieobject_limited_to_authorized_zaken(self):
-        besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')
-        besluit2 = BesluitFactory.create(besluittype='https://besluittype.nl/not_ok')
         # must show up
         bio1 = BesluitInformatieObjectFactory.create(besluit=besluit1)
         # must not show up
         bio2 = BesluitInformatieObjectFactory.create(besluit=besluit2)
 
-        url1 = reverse(bio1, kwargs={'besluit_uuid': besluit1.uuid})
-        url2 = reverse(bio2, kwargs={'besluit_uuid': besluit2.uuid})
+        response = self.client.get(url)
 
-        response1 = self.client.get(url1)
-        response2 = self.client.get(url2)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(response1.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN)
+        response_data = response.json()
+
+        self.assertEqual(len(response_data), 1)
+
+        besluit_url = reverse(bio1.besluit)
+        self.assertEqual(response_data[0]['besluit'], f'http://testserver{besluit_url}')
+
+    def test_create_bio_limited_to_authorized_besluiten(self):
+        informatieobject = 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234'
+
+        besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')
+        besluit2 = BesluitFactory.create(besluittype='https://besluittype.nl/not_ok')
+
+        besluit_uri1 = reverse(besluit1)
+        besluit_url1 = f'http://testserver{besluit_uri1}'
+
+        besluit_uri2 = reverse(besluit2)
+        besluit_url2 = f'http://testserver{besluit_uri2}'
+
+        url1 = reverse('besluitinformatieobject-list')
+        url2 = reverse('besluitinformatieobject-list')
+
+        data1 = {
+            'informatieobject': informatieobject,
+            'besluit': besluit_url1
+        }
+        data2 = {
+            'informatieobject': informatieobject,
+            'besluit': besluit_url2
+        }
+
+        response1 = self.client.post(url1, data1)
+        response2 = self.client.post(url2, data2)
+
+        self.assertEqual(response1.status_code, status.HTTP_201_CREATED, response1.data)
+        self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN, response2.data)

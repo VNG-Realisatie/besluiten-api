@@ -1,4 +1,3 @@
-import unittest
 from copy import deepcopy
 
 from django.test import override_settings
@@ -9,6 +8,8 @@ from vng_api_common.tests import JWTAuthMixin, reverse
 from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
+
+from .mixins import MockSyncMixin
 
 # ZTC
 ZTC_ROOT = 'https://example.com/ztc/api/v1'
@@ -22,7 +23,7 @@ INFORMATIE_OBJECT = f'{DRC_ROOT}/enkelvoudiginformatieobjecten/1234'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
-class AuditTrailTests(JWTAuthMixin, APITestCase):
+class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
@@ -36,7 +37,7 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
         }
     }
 
-    def _create_besluit(self):
+    def _create_besluit(self, **HEADERS):
         url = reverse(Besluit)
 
         besluit_data = {
@@ -47,7 +48,7 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
             'vervaldatum': '2019-04-28'
         }
         with mock_client(self.responses):
-            response = self.client.post(url, besluit_data)
+            response = self.client.post(url, besluit_data, **HEADERS)
 
         return response.data
 
@@ -113,10 +114,10 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
     def test_create_besluitinformatieobject_audittrail(self):
         besluit_data = self._create_besluit()
 
-        besluit_uuid = besluit_data['url'].split('/')[-1]
-        url = reverse(BesluitInformatieObject, kwargs={'besluit_uuid': besluit_uuid})
+        url = reverse(BesluitInformatieObject)
 
         response = self.client.post(url, {
+            'besluit': besluit_data['url'],
             'informatieobject': INFORMATIE_OBJECT,
         })
 
@@ -169,3 +170,13 @@ class AuditTrailTests(JWTAuthMixin, APITestCase):
         # Verify that the user representation stored in the AuditTrail matches
         # the user representation in the JWT token for the request
         self.assertEqual(audittrail.gebruikers_weergave, self.user_representation)
+
+    def test_audittrail_toelichting(self):
+        toelichting = 'blaaaa'
+        besluit_data = self._create_besluit(HTTP_X_AUDIT_TOELICHTING=toelichting)
+
+        audittrail = AuditTrail.objects.filter(hoofd_object=besluit_data['url']).get()
+
+        # Verify that the toelichting stored in the AuditTrail matches
+        # the X-Audit-Toelichting header in the HTTP request
+        self.assertEqual(audittrail.toelichting, toelichting)

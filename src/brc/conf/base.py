@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'brc.accounts',
     'brc.api',
     'brc.datamodel',
+    'brc.sync',
     'brc.utils',
 ]
 

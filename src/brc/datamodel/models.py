@@ -11,7 +11,7 @@ from vng_api_common.validators import (
     UntilTodayValidator, alphanumeric_excluding_diacritic
 )
 
-from .constants import VervalRedenen
+from .constants import RelatieAarden, VervalRedenen
 from .query import BesluitQuerySet, BesluitRelatedQuerySet
 
 logger = logging.getLogger(__name__)
@@ -99,6 +99,10 @@ class Besluit(APIMixin, models.Model):
         'uiterlijke reactiedatum', null=True, blank=True,
         help_text="De datum tot wanneer verweer tegen het besluit mogelijk is."
     )
+    _zaakbesluit = models.URLField(
+        'zaakbesluit', blank=True,
+        help_text="Link to the related object in the ZRC API"
+    )
 
     objects = BesluitQuerySet.as_manager()
 
@@ -127,7 +131,10 @@ class BesluitInformatieObject(models.Model):
     meerdere afzonderlijke informatieobjecten vastgelegd of zijn in één
     informatieobject meerdere besluiten vastgelegd.
     """
-    uuid = models.UUIDField(default=_uuid.uuid4)
+    uuid = models.UUIDField(
+        unique=True,
+        default=_uuid.uuid4,
+        help_text="Unieke resource identifier (UUID4)")
 
     besluit = models.ForeignKey(
         'besluit', on_delete=models.CASCADE,
@@ -136,7 +143,12 @@ class BesluitInformatieObject(models.Model):
     informatieobject = models.URLField(
         'informatieobject',
         help_text="URL-referentie naar het informatieobject waarin (een deel van) "
-                  "het besluit beschreven is."
+                  "het besluit beschreven is.",
+        max_length=1000
+    )
+    aard_relatie = models.CharField(
+        "aard relatie", max_length=20,
+        choices=RelatieAarden.choices
     )
 
     objects = BesluitRelatedQuerySet.as_manager()
@@ -150,6 +162,11 @@ class BesluitInformatieObject(models.Model):
 
     def __str__(self):
         return str(self.uuid)
+
+    def save(self, *args, **kwargs):
+        # override to set aard_relatie
+        self.aard_relatie = RelatieAarden.from_object_type('besluit')
+        super().save(*args, **kwargs)
 
     def unique_representation(self):
         if not hasattr(self, '_unique_representation'):
