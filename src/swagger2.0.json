@@ -236,6 +236,27 @@
                         "schema": {
                             "$ref": "#/definitions/Besluit"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -538,6 +559,13 @@
                 },
                 "tags": [
                     "besluiten"
+                ],
+                "security": [
+                    {
+                        "JWT-Claims": [
+                            "audittrails.lezen"
+                        ]
+                    }
                 ]
             },
             "parameters": [
@@ -700,6 +728,13 @@
                 },
                 "tags": [
                     "besluiten"
+                ],
+                "security": [
+                    {
+                        "JWT-Claims": [
+                            "audittrails.lezen"
+                        ]
+                    }
                 ]
             },
             "parameters": [
@@ -890,6 +925,27 @@
                         "schema": {
                             "$ref": "#/definitions/Besluit"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1070,6 +1126,27 @@
                         "schema": {
                             "$ref": "#/definitions/Besluit"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1242,7 +1319,29 @@
             "delete": {
                 "operationId": "besluit_delete",
                 "description": "Verwijdert een BESLUIT, samen met alle gerelateerde resources binnen deze API.\n\n**De gerelateerde resources zijn**\n- `BesluitInformatieObject` - de relaties van het Besluit naar de\n  informatieobjecten",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": "",
@@ -1411,7 +1510,7 @@
                     {
                         "name": "besluit",
                         "in": "query",
-                        "description": "URL to the related resource",
+                        "description": "URL naar de/het gerelateerde besluit",
                         "required": false,
                         "type": "string",
                         "format": "uri"
@@ -1592,6 +1691,27 @@
                         "schema": {
                             "$ref": "#/definitions/BesluitInformatieObject"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1925,6 +2045,27 @@
                         "schema": {
                             "$ref": "#/definitions/BesluitInformatieObject"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -2105,6 +2246,27 @@
                         "schema": {
                             "$ref": "#/definitions/BesluitInformatieObject"
                         }
+                    },
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -2277,7 +2439,29 @@
             "delete": {
                 "operationId": "besluitinformatieobject_delete",
                 "description": "Verwijdert de relatie tussen BESLUIT en INFORMATIEOBJECT.",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-NLX-Request-Application-Id",
+                        "in": "header",
+                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-NLX-Request-User-Id",
+                        "in": "header",
+                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Audit-Toelichting",
+                        "in": "header",
+                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": "",
@@ -2701,6 +2885,7 @@
                 "hoofdObject",
                 "resource",
                 "resourceUrl",
+                "resourceWeergave",
                 "wijzigingen"
             ],
             "type": "object",
@@ -2795,6 +2980,13 @@
                     "title": "Toelichting",
                     "description": "Toelichting waarom de handeling is uitgevoerd",
                     "type": "string"
+                },
+                "resourceWeergave": {
+                    "title": "Resource weergave",
+                    "description": "Vriendelijke identificatie van het object",
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
                 },
                 "aanmaakdatum": {
                     "title": "Aanmaakdatum",
