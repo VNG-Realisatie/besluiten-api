@@ -2,6 +2,16 @@
 Wijzigingen
 ===========
 
+0.11.1 (2019-06-18)
+===================
+
+Bugfixes and maintenance release
+
+* Added tests for audittrails
+* Removed atomic transaction for ``Besluit`` create so that ZRC can validate
+  the relation for ``ZaakBesluit``. On errors, the ``Besluit`` creation is
+  still rolled back.
+
 0.11.0 (2019-06-06)
 ===================
 
