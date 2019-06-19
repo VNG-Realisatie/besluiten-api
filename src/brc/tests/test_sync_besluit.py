@@ -41,7 +41,7 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         self.mocked_sync_create_besluit.assert_called_with(besluit)
 
     def test_delete_sync_besluit(self):
-        besluit = BesluitFactory.create()
+        besluit = BesluitFactory.create(_zaakbesluit='https://example.com/zrc/zaakbesluittype/abcd')
         url = get_operation_url('besluit_read', uuid=besluit.uuid)
 
         response = self.client.delete(url)

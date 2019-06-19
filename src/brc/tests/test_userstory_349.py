@@ -12,7 +12,7 @@ from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
-BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
+BESLUITTYPE = 'https://ztc.com/besluittype/abcd'
 
 
 class US349TestCase(MockSyncMixin, JWTAuthMixin, APITestCase):

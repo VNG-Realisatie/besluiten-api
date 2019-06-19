@@ -89,8 +89,6 @@ def sync_delete_bio(relation: BesluitInformatieObject):
 
 
 def sync_create_besluit(besluit: Besluit):
-    if besluit.zaak == '':
-        return
 
     # build the URL of the besluit
     path = reverse('besluit-detail', kwargs={
@@ -129,9 +127,6 @@ def sync_create_besluit(besluit: Besluit):
 
 
 def sync_delete_besluit(besluit: Besluit):
-    if besluit.zaak == '':
-        return
-
     client = Client.from_url(besluit._zaakbesluit)
     client.auth = APICredential.get_auth(besluit._zaakbesluit)
     try:
@@ -153,7 +148,7 @@ def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=Non
 @receiver([post_save, post_delete], sender=Besluit)
 def sync_besluit(sender, instance: Besluit = None, **kwargs):
     signal = kwargs['signal']
-    if signal is post_save and kwargs.get('created', False):
+    if signal is post_save and instance.zaak and not instance._zaakbesluit:
         sync_create_besluit(instance)
-    elif signal is post_delete:
+    elif signal is post_delete and instance._zaakbesluit:
         sync_delete_besluit(instance)

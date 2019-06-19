@@ -1,7 +1,6 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
-from django.db import transaction
 from django.utils.encoding import force_text
 
 from rest_framework import serializers
@@ -66,15 +65,20 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
         value_display_mapping = add_choice_values_help_text(VervalRedenen)
         self.fields['vervalreden'].help_text += f"\n\n{value_display_mapping}"
 
-    @transaction.atomic()
-    def save(self, **kwargs):
+    def create(self, validated_data):
+        zaak = validated_data.pop('zaak', '')
+        besluit = super().create(validated_data)
         try:
-            return super().save(**kwargs)
+            besluit.zaak = zaak
+            besluit.save()
         except SyncError as sync_error:
+            besluit.delete()
             raise serializers.ValidationError(
-                {'zaak': sync_error.args[0]},
+                {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]},
                 code='sync-with-zrc'
-            )
+            ) from sync_error
+        else:
+            return besluit
 
 
 class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):

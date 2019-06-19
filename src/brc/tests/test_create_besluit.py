@@ -16,12 +16,12 @@ from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
-BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
+BESLUITTYPE = 'https://ztc.com/besluittype/abcd'
 
 
 @override_settings(
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
-    ZDS_CLIENT_CLASS='vng_api_common.mocks.ObjectInformatieObjectClient'
+    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
 class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCase):
 
@@ -36,7 +36,7 @@ class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCas
             response = self.client.post(url, {
                 'verantwoordelijke_organisatie': '517439943',  # RSIN
                 'besluittype': BESLUITTYPE,
-                'zaak': 'https://example.com/zrc/zaken/1234',
+                'zaak': 'https://zrc.com/zaken/1234',
                 'datum': '2018-09-06',
                 'toelichting': "Vergunning verleend.",
                 'ingangsdatum': '2018-10-01',
@@ -66,8 +66,8 @@ class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCas
 
             besluit = Besluit.objects.get()
             self.assertEqual(besluit.verantwoordelijke_organisatie, '517439943')
-            self.assertEqual(besluit.besluittype, 'https://example.com/ztc/besluittype/abcd')
-            self.assertEqual(besluit.zaak, 'https://example.com/zrc/zaken/1234')
+            self.assertEqual(besluit.besluittype, 'https://ztc.com/besluittype/abcd')
+            self.assertEqual(besluit.zaak, 'https://zrc.com/zaken/1234')
             self.assertEqual(
                 besluit.datum,
                 date(2018, 9, 6)
@@ -84,7 +84,7 @@ class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCas
 
             response = self.client.post(url, {
                 'besluit': reverse(besluit),
-                'informatieobject': 'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234',
+                'informatieobject': 'https://drc.com/api/v1/enkelvoudigeinformatieobjecten/1234',
             })
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
@@ -96,7 +96,7 @@ class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCas
             self.assertEqual(besluit.besluitinformatieobject_set.count(), 1)
             self.assertEqual(
                 besluit.besluitinformatieobject_set.get().informatieobject,
-                'https://example.com/api/v1/enkelvoudigeinformatieobjecten/1234'
+                'https://drc.com/api/v1/enkelvoudigeinformatieobjecten/1234'
             )
 
     def test_opvragen_informatieobjecten_besluit(self):
