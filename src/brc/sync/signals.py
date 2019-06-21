@@ -1,8 +1,9 @@
 import logging
 
+from django.core.cache import cache
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import pre_delete, post_save, post_delete
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -136,13 +137,27 @@ def sync_delete_besluit(besluit: Besluit):
         raise SyncError(f"Could not delete ZaakBesluit") from exc
 
 
-@receiver([post_save, post_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
+@receiver([post_save, pre_delete], sender=BesluitInformatieObject, dispatch_uid='sync.sync_informatieobject_relation')
 def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=None, **kwargs):
     signal = kwargs['signal']
     if signal is post_save and kwargs.get('created', False):
         sync_create_bio(instance)
-    elif signal is post_delete:
-        sync_delete_bio(instance)
+    elif signal is pre_delete:
+        # Add the uuid of the BesluitInformatieObject to the list of bios that are
+        # marked for delete, causing them not to show up when performing
+        # GET requests on the BRC, allowing the validation in the DRC to pass
+        marked_bios = cache.get('bios_marked_for_delete')
+        if marked_bios:
+            cache.set('bios_marked_for_delete', marked_bios + [instance.uuid])
+        else:
+            cache.set('bios_marked_for_delete', [instance.uuid])
+
+        try:
+            sync_delete_bio(instance)
+        finally:
+            marked_bios = cache.get('bios_marked_for_delete')
+            marked_bios.remove(instance.uuid)
+            cache.set('bios_marked_for_delete', marked_bios)
 
 
 @receiver([post_save, post_delete], sender=Besluit)
