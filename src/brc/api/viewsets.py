@@ -1,3 +1,5 @@
+from django.core.cache import cache
+
 from rest_framework import viewsets
 from vng_api_common.audittrails.viewsets import (
     AuditTrailViewSet, AuditTrailViewsetMixin
@@ -162,6 +164,15 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     notifications_kanaal = KANAAL_BESLUITEN
     notifications_main_resource_key = 'besluit'
     audit = AUDIT_BRC
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        # Do not display BesluitInformatieObjecten that are marked to be deleted
+        marked_bios = cache.get('bios_marked_for_delete')
+        if marked_bios:
+            return qs.exclude(uuid__in=marked_bios)
+        return qs
 
 
 class BesluitAuditTrailViewSet(AuditTrailViewSet):
