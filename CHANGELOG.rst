@@ -2,6 +2,11 @@
 Wijzigingen
 ===========
 
+0.11.4 (2019-06-28)
+===================
+
+Fixed issue with BesluitInformatieObject deletion drc validation
+
 0.11.3 (2019-06-18)
 ===================
 
