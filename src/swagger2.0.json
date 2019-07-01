@@ -41,7 +41,7 @@
                     {
                         "name": "identificatie",
                         "in": "query",
-                        "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.",
+                        "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld. Indien deze niet opgegeven is, dan wordt die gegenereerd.",
                         "required": false,
                         "type": "string"
                     },
@@ -2642,10 +2642,9 @@
                 },
                 "identificatie": {
                     "title": "Identificatie",
-                    "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld.",
+                    "description": "Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld. Indien deze niet opgegeven is, dan wordt die gegenereerd.",
                     "type": "string",
-                    "maxLength": 50,
-                    "minLength": 1
+                    "maxLength": 50
                 },
                 "verantwoordelijkeOrganisatie": {
                     "title": "Verantwoordelijke organisatie",
