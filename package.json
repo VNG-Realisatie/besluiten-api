@@ -1,6 +1,6 @@
 {
   "name": "brc",
-  "version": "0.11.4",
+  "version": "0.11.5",
   "description": "brc referentie implementatie API",
   "main": "src/index.js",
   "directories": {
