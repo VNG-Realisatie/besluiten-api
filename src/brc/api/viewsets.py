@@ -1,6 +1,7 @@
 from django.core.cache import cache
 
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from vng_api_common.audittrails.viewsets import (
     AuditTrailViewSet, AuditTrailViewsetMixin
 )
@@ -76,10 +77,11 @@ class BesluitViewSet(NotificationViewSetMixin,
     - `BesluitInformatieObject` - de relaties van het Besluit naar de
       informatieobjecten
     """
-    queryset = Besluit.objects.all()
+    queryset = Besluit.objects.all().order_by('-pk')
     serializer_class = BesluitSerializer
     filter_class = BesluitFilter
     lookup_field = 'uuid'
+    pagination_class = PageNumberPagination
     permission_classes = (BesluitAuthScopesRequired, )
     required_scopes = {
         'list': SCOPE_BESLUITEN_ALLES_LEZEN,
