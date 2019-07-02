@@ -54,7 +54,7 @@ class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        results = response.data
+        results = response.data['results']
 
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['besluittype'], 'https://besluittype.nl/ok')
@@ -89,7 +89,7 @@ class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response_data = response.json()
+        response_data = response.json()['results']
         self.assertEqual(len(response_data), 2)
 
 
