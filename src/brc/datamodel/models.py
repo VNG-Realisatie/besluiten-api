@@ -5,8 +5,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from vng_api_common.fields import RSINField
-from vng_api_common.models import APICredential, APIMixin
-from vng_api_common.utils import request_object_attribute
+from vng_api_common.models import APIMixin
+from vng_api_common.utils import (
+    generate_unique_identification, request_object_attribute
+)
 from vng_api_common.validators import (
     UntilTodayValidator, alphanumeric_excluding_diacritic
 )
@@ -21,10 +23,11 @@ class Besluit(APIMixin, models.Model):
     uuid = models.UUIDField(default=_uuid.uuid4)
 
     identificatie = models.CharField(
-        'identificatie', max_length=50, default=_uuid.uuid4,
+        'identificatie', max_length=50, blank=True,
         validators=[alphanumeric_excluding_diacritic],
         help_text="Identificatie van het besluit binnen de organisatie die "
-                  "het besluit heeft vastgesteld."
+                  "het besluit heeft vastgesteld. Indien deze niet opgegeven is, "
+                  "dan wordt die gegenereerd."
     )
     verantwoordelijke_organisatie = RSINField(
         'verantwoordelijke organisatie',
@@ -115,6 +118,11 @@ class Besluit(APIMixin, models.Model):
 
     def __str__(self):
         return f"{self.verantwoordelijke_organisatie} - {self.identificatie}"
+
+    def save(self, *args, **kwargs):
+        if not self.identificatie:
+            self.identificatie = generate_unique_identification(self, "datum")
+        super().save(*args, **kwargs)
 
     def unique_representation(self):
         return f"{self.identificatie}"

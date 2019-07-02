@@ -9,7 +9,7 @@ class BesluitFactory(factory.django.DjangoModelFactory):
     verantwoordelijke_organisatie = factory.Faker('ssn', locale='nl_NL')
     besluittype = factory.Faker('url')
     zaak = factory.Faker('url')
-    datum = factory.Faker('date_time_this_decade', after_now=False, tzinfo=timezone.utc)
+    datum = factory.Faker('date_this_decade')
 
     class Meta:
         model = 'datamodel.Besluit'
@@ -20,7 +20,7 @@ class BesluitFactory(factory.django.DjangoModelFactory):
             'date_time_between',
             start_date=self.datum,
             end_date=self.datum + timedelta(days=180),
-            tzinfo=self.datum.tzinfo
+            tzinfo=timezone.utc
         )
         return _ingangsdatum.evaluate(self, None, None)
 
