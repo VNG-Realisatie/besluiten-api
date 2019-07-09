@@ -29,10 +29,10 @@ class BesluitViewSet(NotificationViewSetMixin,
                      ListFilterByAuthorizationsMixin,
                      viewsets.ModelViewSet):
     """
-    Opvragen en bewerken van BESLUITen
+    Opvragen en bewerken van BESLUITen.
 
     create:
-    Registreer een besluit.
+    Maak een BESLUIT aan.
 
     Indien geen identificatie gegeven is, dan wordt deze automatisch
     gegenereerd.
@@ -45,13 +45,17 @@ class BesluitViewSet(NotificationViewSetMixin,
     - datum in het verleden of nu
 
     list:
-    Geef een lijst van BESLUITen, waarin gefiltered kan worden.
+    Alle BESLUITen opvragen.
+
+    Deze lijst kan gefilterd wordt met query-string parameters.
 
     retrieve:
-    Geef de details van 1 enkel BESLUIT.
+    Een specifiek BESLUIT opvragen.
+
+    Een specifiek BESLUIT opvragen.
 
     update:
-    Werk een BESLUIT bij.
+    Werk een BESLUIT in zijn geheel bij.
 
     Er wordt gevalideerd op:
     - uniciteit van verantwoorlijke organisatie + identificatie
@@ -61,7 +65,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     - datum in het verleden of nu
 
     partial_update:
-    Werk een BESLUIT bij.
+    Werk een BESLUIT deels bij.
 
     Er wordt gevalideerd op:
     - uniciteit van verantwoorlijke organisatie + identificatie
@@ -71,7 +75,9 @@ class BesluitViewSet(NotificationViewSetMixin,
     - datum in het verleden of nu
 
     destroy:
-    Verwijdert een BESLUIT, samen met alle gerelateerde resources binnen deze API.
+    Verwijder een BESLUIT.
+
+    Verwijder een BESLUIT samen met alle gerelateerde resources binnen deze API.
 
     **De gerelateerde resources zijn**
     - `BesluitInformatieObject` - de relaties van het Besluit naar de
@@ -101,9 +107,11 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
                                      ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
-    Opvragen en bewerken van Besluit-Informatieobject relaties.
+    Opvragen en bewerken van BESLUIT-INFORMATIEOBJECT relaties.
 
     create:
+    Maak een BESLUIT-INFORMATIEOBJECT relatie aan.
+
     Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van
     relaties met andere objecten gerealiseerd:
 
@@ -118,7 +126,6 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     - Bij het aanmaken wordt ook in het DRC de gespiegelde relatie aangemaakt,
       echter zonder de relatie-informatie.
 
-
     Registreer welk(e) INFORMATIEOBJECT(en) een BESLUIT kent.
 
     **Er wordt gevalideerd op**
@@ -126,29 +133,37 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
     - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
 
     list:
-    Geef een lijst van relaties tussen INFORMATIEOBJECTen en BESLUITen.
+    Alle INFORMATIEOBJECT-BESLUIT relaties opvragen.
 
-    Deze lijst kan gefilterd wordt met querystringparameters.
+    Deze lijst kan gefilterd wordt met query-string parameters.
 
     retrieve:
-    Geef de details van een relatie tussen een INFORMATIEOBJECT en een BESLUIT.
+    Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.
+
+    Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.
 
     update:
-    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
-    van de relatie bewerken, en niet de relatie zelf aanpassen.
+    Werk een INFORMATIEOBJECT-BESLUIT relatie in zijn geheel bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
 
     **Er wordt gevalideerd op**
     - informatieobject URL en besluit URL mogen niet veranderen
 
     partial_update:
-    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
-    van de relatie bewerken, en niet de relatie zelf aanpassen.
+    Werk een INFORMATIEOBJECT-BESLUIT relatie deels bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
 
     **Er wordt gevalideerd op**
     - informatieobject URL en besluit URL mogen niet veranderen
 
     destroy:
-    Verwijdert de relatie tussen BESLUIT en INFORMATIEOBJECT.
+    Verwijder een INFORMATIEOBJECT-BESLUIT relatie.
+
+    Verwijder een INFORMATIEOBJECT-BESLUIT relatie.
     """
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer

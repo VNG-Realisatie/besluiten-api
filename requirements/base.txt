@@ -24,7 +24,7 @@ djangorestframework-camel-case==0.2.0  # via vng-api-common
 djangorestframework==3.9.4
 docutils==0.14            # via sphinx
 drf-nested-routers==0.90.2  # via vng-api-common
-drf-yasg==1.10.0          # via vng-api-common
+drf-yasg==1.16.0          # via vng-api-common
 first==2.0.1              # via pip-tools
 future==0.16.0            # via drf-yasg
 gemma-zds-client==0.11.0  # via vng-api-common
