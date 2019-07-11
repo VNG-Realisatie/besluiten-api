@@ -6,12 +6,12 @@ from .kanalen import KANAAL_BESLUITEN
 
 description = f"""Een API om een besluitregistratiecomponent te benaderen.
 
-Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet 
-noodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere 
-besluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een 
-besluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is 
-een besluit van een andere organisatie dat het onderwerp (object) is van een 
-zaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele 
+Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet
+noodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere
+besluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een
+besluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is
+een besluit van een andere organisatie dat het onderwerp (object) is van een
+zaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele
 relatie met de ZAAK waarvan het een uitkomst is.
 
 **Afhankelijkheden**
@@ -26,7 +26,7 @@ Deze API is afhankelijk van:
 **Autorisatie**
 
 Deze API vereist autorisatie. Je kan de
-[token-tool](https://ref.tst.vng.cloud/tokens/) gebruiken om JWT-tokens te
+[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
 genereren.
 
 **Notificaties**
