@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "Besluiten API",
-        "description": "Een API om een besluitregistratiecomponent te benaderen.\n\nEen BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet\nnoodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere\nbesluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een\nbesluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is\neen besluit van een andere organisatie dat het onderwerp (object) is van een\nzaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele\nrelatie met de ZAAK waarvan het een uitkomst is.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Catalogi API\n* Notificaties API\n* Documenten API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Notificaties**\n\nDeze API publiceert notificaties op het kanaal `besluiten`.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
+        "description": "Een API om een besluitregistratiecomponent (BRC) te benaderen.\n\nEen BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet\nnoodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere\nbesluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een\nbesluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is\neen besluit van een andere organisatie dat het onderwerp (object) is van een\nzaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele\nrelatie met de ZAAK waarvan het een uitkomst is.\n\nDe typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm \nvan BESLUITTYPEn.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Catalogi API\n* Notificaties API\n* Documenten API *(optioneel)*\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Notificaties**\n\nDeze API publiceert notificaties op het kanaal `besluiten`.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
         "contact": {
             "url": "https://zaakgerichtwerken.vng.cloud",
             "email": "standaarden.ondersteuning@vng.nl"
@@ -258,7 +258,7 @@
             "post": {
                 "operationId": "besluit_create",
                 "summary": "Maak een BESLUIT aan.",
-                "description": "Indien geen identificatie gegeven is, dan wordt deze automatisch\ngegenereerd.\n\nEr wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Indien geen identificatie gegeven is, dan wordt deze automatisch\ngegenereerd.\n\nEr wordt gevalideerd op:\n- uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`\n- geldigheid `verantwoorlijkeOrganisatie` RSIN\n- geldigheid `besluittype` URL\n- geldigheid `zaak` URL\n- `datum` in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -455,7 +455,8 @@
         "/besluiten/{besluit_uuid}/audittrail": {
             "get": {
                 "operationId": "audittrail_list",
-                "description": "",
+                "summary": "Alle audit trail regels behorend bij het BESLUIT.",
+                "description": "Alle audit trail regels behorend bij het BESLUIT.",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -613,7 +614,8 @@
         "/besluiten/{besluit_uuid}/audittrail/{uuid}": {
             "get": {
                 "operationId": "audittrail_read",
-                "description": "",
+                "summary": "Een specifieke audit trail regel opvragen.",
+                "description": "Een specifieke audit trail regel opvragen.",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -949,7 +951,7 @@
             "put": {
                 "operationId": "besluit_update",
                 "summary": "Werk een BESLUIT in zijn geheel bij.",
-                "description": "Er wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Er wordt gevalideerd op:\n- uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`\n- geldigheid `verantwoorlijkeOrganisatie` RSIN\n- geldigheid `besluittype` URL\n- geldigheid `zaak` URL\n- `datum` in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -1151,7 +1153,7 @@
             "patch": {
                 "operationId": "besluit_partial_update",
                 "summary": "Werk een BESLUIT deels bij.",
-                "description": "Er wordt gevalideerd op:\n- uniciteit van verantwoorlijke organisatie + identificatie\n- RSIN verantwoorlijke organisatie\n- geldigheid besluittype URL\n- geldigheid zaak URL\n- datum in het verleden of nu",
+                "description": "Er wordt gevalideerd op:\n- uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`\n- geldigheid `verantwoorlijkeOrganisatie` RSIN\n- geldigheid `besluittype` URL\n- geldigheid `zaak` URL\n- `datum` in het verleden of nu",
                 "parameters": [
                     {
                         "name": "data",
@@ -1353,7 +1355,7 @@
             "delete": {
                 "operationId": "besluit_delete",
                 "summary": "Verwijder een BESLUIT.",
-                "description": "Verwijder een BESLUIT samen met alle gerelateerde resources binnen deze API.\n\n**De gerelateerde resources zijn**\n- `BesluitInformatieObject` - de relaties van het Besluit naar de\n  informatieobjecten",
+                "description": "Verwijder een BESLUIT samen met alle gerelateerde resources binnen deze API.\n\n**De gerelateerde resources zijn**\n- `BESLUITINFORMATIEOBJECT`\n- audit trail regels",
                 "parameters": [
                     {
                         "name": "X-NLX-Request-Application-Id",
@@ -1540,7 +1542,7 @@
         "/besluitinformatieobjecten": {
             "get": {
                 "operationId": "besluitinformatieobject_list",
-                "summary": "Alle INFORMATIEOBJECT-BESLUIT relaties opvragen.",
+                "summary": "Alle BESLUIT-INFORMATIEOBJECT relaties opvragen.",
                 "description": "Deze lijst kan gefilterd wordt met query-string parameters.",
                 "parameters": [
                     {
@@ -1719,7 +1721,7 @@
             "post": {
                 "operationId": "besluitinformatieobject_create",
                 "summary": "Maak een BESLUIT-INFORMATIEOBJECT relatie aan.",
-                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid besluit URL\n- geldigheid informatieobject URL\n- de combinatie informatieobject en besluit moet uniek zijn\n\n**Opmerkingen**\n- De registratiedatum wordt door het systeem op 'NU' gezet. De `aardRelatie`\n  wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in het DRC de gespiegelde relatie aangemaakt,\n  echter zonder de relatie-informatie.\n\nRegistreer welk(e) INFORMATIEOBJECT(en) een BESLUIT kent.\n\n**Er wordt gevalideerd op**\n- geldigheid informatieobject URL\n- uniek zijn van relatie BESLUIT-INFORMATIEOBJECT",
+                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n- de combinatie `informatieobject` en `besluit` moet uniek zijn\n\n**Opmerkingen**\n- De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie` wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie.",
                 "parameters": [
                     {
                         "name": "data",
@@ -1916,8 +1918,8 @@
         "/besluitinformatieobjecten/{uuid}": {
             "get": {
                 "operationId": "besluitinformatieobject_read",
-                "summary": "Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.",
-                "description": "Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.",
+                "summary": "Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.",
+                "description": "Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -2074,8 +2076,8 @@
             },
             "put": {
                 "operationId": "besluitinformatieobject_update",
-                "summary": "Werk een INFORMATIEOBJECT-BESLUIT relatie in zijn geheel bij.",
-                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- informatieobject URL en besluit URL mogen niet veranderen",
+                "summary": "Werk een BESLUIT-INFORMATIEOBJECT relatie in zijn geheel bij.",
+                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- `informatieobject` URL en `besluit` URL mogen niet veranderen",
                 "parameters": [
                     {
                         "name": "data",
@@ -2276,8 +2278,8 @@
             },
             "patch": {
                 "operationId": "besluitinformatieobject_partial_update",
-                "summary": "Werk een INFORMATIEOBJECT-BESLUIT relatie deels bij.",
-                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- informatieobject URL en besluit URL mogen niet veranderen",
+                "summary": "Werk een BESLUIT-INFORMATIEOBJECT relatie deels bij.",
+                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- `informatieobject` URL en `besluit` URL mogen niet veranderen",
                 "parameters": [
                     {
                         "name": "data",
@@ -2478,8 +2480,8 @@
             },
             "delete": {
                 "operationId": "besluitinformatieobject_delete",
-                "summary": "Verwijder een INFORMATIEOBJECT-BESLUIT relatie.",
-                "description": "Verwijder een INFORMATIEOBJECT-BESLUIT relatie.",
+                "summary": "Verwijder een BESLUIT-INFORMATIEOBJECT relatie.",
+                "description": "Verwijder een BESLUIT-INFORMATIEOBJECT relatie.",
                 "parameters": [
                     {
                         "name": "X-NLX-Request-Application-Id",
