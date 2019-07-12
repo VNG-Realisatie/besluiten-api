@@ -1,6 +1,6 @@
-============================
+===========================
 besluitregistratiecomponent
-============================
+===========================
 
 :Version: 0.1.0
 :Source: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent
@@ -9,14 +9,15 @@ besluitregistratiecomponent
 
 |build-status|
 
-Referentieimplementatie van de besluitregistratiecomponent (BRC).
+Referentieimplementatie van de Besluiten API als besluitregistratiecomponent
+(BRC).
 
 Introduction
 ============
 
 Binnen het Nederlandse gemeentelandschap wordt zaakgericht werken nagestreefd.
 Om dit mogelijk te maken is er gegevensuitwisseling nodig. Er is een behoefte
-om informatieobjecten (documenten) te relateren aan zaken.
+om besluiten te relateren aan zaken.
 
 Deze referentieimplementatie toont aan dat de API specificatie voor de
 besluitregistratiecomponent (hierna BRC) implementeerbaar is, en vormt een
@@ -56,4 +57,4 @@ References
      :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
      :alt: Requirements status
 
-.. _testomgeving: https://ref.tst.vng.cloud/brc/
+.. _testomgeving: https://besluiten-api.vng.cloud/
