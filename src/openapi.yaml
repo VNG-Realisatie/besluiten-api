@@ -655,7 +655,7 @@ paths:
         format: uuid
     - name: uuid
       in: path
-      description: Unieke identificatie van de audit regel
+      description: Unieke identificatie van de audit regel.
       required: true
       schema:
         type: string
@@ -2349,7 +2349,7 @@ components:
             is of komt te vervallen.
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
             * `tijdelijk` - Besluit met tijdelijke werking
@@ -2495,11 +2495,11 @@ components:
         oud:
           title: Oud
           description: Volledige JSON body van het object zoals dat bestond voordat
-            de actie heeft plaatsgevonden
+            de actie heeft plaatsgevonden.
           type: object
         nieuw:
           title: Nieuw
-          description: Volledige JSON body van het object na de actie
+          description: Volledige JSON body van het object na de actie.
           type: object
     AuditTrail:
       required:
@@ -2515,127 +2515,127 @@ components:
       properties:
         uuid:
           title: Uuid
-          description: Unieke identificatie van de audit regel
+          description: Unieke identificatie van de audit regel.
           type: string
           format: uuid
         bron:
           title: Bron
-          description: 'De naam van het component waar de wijziging in is gedaan
+          description: 'De naam van het component waar de wijziging in is gedaan.
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
-            * `AC` - Autorisatiecomponent
+            * `ac` - Autorisatiecomponent
 
-            * `NRC` - Notificatierouteringcomponent
+            * `nrc` - Notificatierouteringcomponent
 
-            * `ZRC` - Zaakregistratiecomponent
+            * `zrc` - Zaakregistratiecomponent
 
-            * `ZTC` - Zaaktypecatalogus
+            * `ztc` - Zaaktypecatalogus
 
-            * `DRC` - Documentregistratiecomponent
+            * `drc` - Documentregistratiecomponent
 
-            * `BRC` - Besluitregistratiecomponent'
+            * `brc` - Besluitregistratiecomponent'
           type: string
           enum:
-          - AC
-          - NRC
-          - ZRC
-          - ZTC
-          - DRC
-          - BRC
+          - ac
+          - nrc
+          - zrc
+          - ztc
+          - drc
+          - brc
         applicatieId:
           title: Applicatie id
-          description: Unieke identificatie van de applicatie, binnen de organisatie
+          description: Unieke identificatie van de applicatie, binnen de organisatie.
           type: string
           maxLength: 100
         applicatieWeergave:
           title: Applicatie weergave
-          description: Vriendelijke naam van de applicatie
+          description: Vriendelijke naam van de applicatie.
           type: string
           maxLength: 200
         gebruikersId:
           title: Gebruikers id
           description: Unieke identificatie van de gebruiker die binnen de organisatie
-            herleid kan worden naar een persoon
+            herleid kan worden naar een persoon.
           type: string
           maxLength: 255
         gebruikersWeergave:
           title: Gebruikers weergave
-          description: Vriendelijke naam van de gebruiker
+          description: Vriendelijke naam van de gebruiker.
           type: string
           maxLength: 255
         actie:
           title: Actie
-          description: 'De uitgevoerde handeling
+          description: 'De uitgevoerde handeling.
 
 
             De bekende waardes voor dit veld zijn hieronder aangegeven,                         maar
             andere waardes zijn ook toegestaan
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
-            * `create` - aangemaakt
+            * `create` - Object aangemaakt
 
-            * `list` - opgehaald
+            * `list` - Lijst van objecten opgehaald
 
-            * `retrieve` - opgehaald
+            * `retrieve` - Object opgehaald
 
-            * `destroy` - verwijderd
+            * `destroy` - Object verwijderd
 
-            * `update` - bijgewerkt
+            * `update` - Object bijgewerkt
 
-            * `partial_update` - deels bijgewerkt'
+            * `partial_update` - Object deels bijgewerkt'
           type: string
           maxLength: 50
           minLength: 1
         actieWeergave:
           title: Actie weergave
-          description: Vriendelijke naam van de actie
+          description: Vriendelijke naam van de actie.
           type: string
           maxLength: 200
         resultaat:
           title: Resultaat
-          description: HTTP status code van de API response van de uitgevoerde handeling
+          description: HTTP status code van de API response van de uitgevoerde handeling.
           type: integer
           maximum: 599
           minimum: 100
         hoofdObject:
           title: Hoofd object
-          description: De URL naar het hoofdobject van een component
+          description: De URL naar het hoofdobject van een component.
           type: string
           format: uri
           maxLength: 1000
           minLength: 1
         resource:
           title: Resource
-          description: Het type resource waarop de actie gebeurde
+          description: Het type resource waarop de actie gebeurde.
           type: string
           maxLength: 50
           minLength: 1
         resourceUrl:
           title: Resource url
-          description: De URL naar het object
+          description: De URL naar het object.
           type: string
           format: uri
           maxLength: 1000
           minLength: 1
         toelichting:
           title: Toelichting
-          description: Toelichting waarom de handeling is uitgevoerd
+          description: Toelichting waarom de handeling is uitgevoerd.
           type: string
         resourceWeergave:
           title: Resource weergave
-          description: Vriendelijke identificatie van het object
+          description: Vriendelijke identificatie van het object.
           type: string
           maxLength: 200
           minLength: 1
         aanmaakdatum:
           title: Aanmaakdatum
-          description: De datum waarop de handeling is gedaan
+          description: De datum waarop de handeling is gedaan.
           type: string
           format: date-time
           readOnly: true
@@ -2669,10 +2669,3 @@ components:
           description: URL-referentie naar het BESLUIT.
           type: string
           format: uri
-        aardRelatieWeergave:
-          title: Aard relatie weergave
-          type: string
-          enum:
-          - 'Hoort bij, omgekeerd: kent'
-          - 'Legt vast, omgekeerd: kan vastgelegd zijn als'
-          readOnly: true

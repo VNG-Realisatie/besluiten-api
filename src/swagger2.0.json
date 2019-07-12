@@ -782,7 +782,7 @@
                 {
                     "name": "uuid",
                     "in": "path",
-                    "description": "Unieke identificatie van de audit regel",
+                    "description": "Unieke identificatie van de audit regel.",
                     "required": true,
                     "type": "string",
                     "format": "uuid"
@@ -2746,7 +2746,7 @@
                 },
                 "vervalreden": {
                     "title": "Vervalreden",
-                    "description": "De omschrijving die aangeeft op grond waarvan het besluit is of komt te vervallen.\n\nDe mapping van waarden naar weergave is als volgt:\n\n* `tijdelijk` - Besluit met tijdelijke werking\n* `ingetrokken_overheid` - Besluit ingetrokken door overheid\n* `ingetrokken_belanghebbende` - Besluit ingetrokken o.v.v. belanghebbende",
+                    "description": "De omschrijving die aangeeft op grond waarvan het besluit is of komt te vervallen.\n\nUitleg bij mogelijke waarden:\n\n* `tijdelijk` - Besluit met tijdelijke werking\n* `ingetrokken_overheid` - Besluit ingetrokken door overheid\n* `ingetrokken_belanghebbende` - Besluit ingetrokken o.v.v. belanghebbende",
                     "type": "string",
                     "enum": [
                         "tijdelijk",
@@ -2916,12 +2916,12 @@
             "properties": {
                 "oud": {
                     "title": "Oud",
-                    "description": "Volledige JSON body van het object zoals dat bestond voordat de actie heeft plaatsgevonden",
+                    "description": "Volledige JSON body van het object zoals dat bestond voordat de actie heeft plaatsgevonden.",
                     "type": "object"
                 },
                 "nieuw": {
                     "title": "Nieuw",
-                    "description": "Volledige JSON body van het object na de actie",
+                    "description": "Volledige JSON body van het object na de actie.",
                     "type": "object"
                 }
             }
@@ -2941,70 +2941,70 @@
             "properties": {
                 "uuid": {
                     "title": "Uuid",
-                    "description": "Unieke identificatie van de audit regel",
+                    "description": "Unieke identificatie van de audit regel.",
                     "type": "string",
                     "format": "uuid"
                 },
                 "bron": {
                     "title": "Bron",
-                    "description": "De naam van het component waar de wijziging in is gedaan\n\nDe mapping van waarden naar weergave is als volgt:\n\n* `AC` - Autorisatiecomponent\n* `NRC` - Notificatierouteringcomponent\n* `ZRC` - Zaakregistratiecomponent\n* `ZTC` - Zaaktypecatalogus\n* `DRC` - Documentregistratiecomponent\n* `BRC` - Besluitregistratiecomponent",
+                    "description": "De naam van het component waar de wijziging in is gedaan.\n\nUitleg bij mogelijke waarden:\n\n* `ac` - Autorisatiecomponent\n* `nrc` - Notificatierouteringcomponent\n* `zrc` - Zaakregistratiecomponent\n* `ztc` - Zaaktypecatalogus\n* `drc` - Documentregistratiecomponent\n* `brc` - Besluitregistratiecomponent",
                     "type": "string",
                     "enum": [
-                        "AC",
-                        "NRC",
-                        "ZRC",
-                        "ZTC",
-                        "DRC",
-                        "BRC"
+                        "ac",
+                        "nrc",
+                        "zrc",
+                        "ztc",
+                        "drc",
+                        "brc"
                     ]
                 },
                 "applicatieId": {
                     "title": "Applicatie id",
-                    "description": "Unieke identificatie van de applicatie, binnen de organisatie",
+                    "description": "Unieke identificatie van de applicatie, binnen de organisatie.",
                     "type": "string",
                     "maxLength": 100
                 },
                 "applicatieWeergave": {
                     "title": "Applicatie weergave",
-                    "description": "Vriendelijke naam van de applicatie",
+                    "description": "Vriendelijke naam van de applicatie.",
                     "type": "string",
                     "maxLength": 200
                 },
                 "gebruikersId": {
                     "title": "Gebruikers id",
-                    "description": "Unieke identificatie van de gebruiker die binnen de organisatie herleid kan worden naar een persoon",
+                    "description": "Unieke identificatie van de gebruiker die binnen de organisatie herleid kan worden naar een persoon.",
                     "type": "string",
                     "maxLength": 255
                 },
                 "gebruikersWeergave": {
                     "title": "Gebruikers weergave",
-                    "description": "Vriendelijke naam van de gebruiker",
+                    "description": "Vriendelijke naam van de gebruiker.",
                     "type": "string",
                     "maxLength": 255
                 },
                 "actie": {
                     "title": "Actie",
-                    "description": "De uitgevoerde handeling\n\nDe bekende waardes voor dit veld zijn hieronder aangegeven,                         maar andere waardes zijn ook toegestaan\n\nDe mapping van waarden naar weergave is als volgt:\n\n* `create` - aangemaakt\n* `list` - opgehaald\n* `retrieve` - opgehaald\n* `destroy` - verwijderd\n* `update` - bijgewerkt\n* `partial_update` - deels bijgewerkt",
+                    "description": "De uitgevoerde handeling.\n\nDe bekende waardes voor dit veld zijn hieronder aangegeven,                         maar andere waardes zijn ook toegestaan\n\nUitleg bij mogelijke waarden:\n\n* `create` - Object aangemaakt\n* `list` - Lijst van objecten opgehaald\n* `retrieve` - Object opgehaald\n* `destroy` - Object verwijderd\n* `update` - Object bijgewerkt\n* `partial_update` - Object deels bijgewerkt",
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 1
                 },
                 "actieWeergave": {
                     "title": "Actie weergave",
-                    "description": "Vriendelijke naam van de actie",
+                    "description": "Vriendelijke naam van de actie.",
                     "type": "string",
                     "maxLength": 200
                 },
                 "resultaat": {
                     "title": "Resultaat",
-                    "description": "HTTP status code van de API response van de uitgevoerde handeling",
+                    "description": "HTTP status code van de API response van de uitgevoerde handeling.",
                     "type": "integer",
                     "maximum": 599,
                     "minimum": 100
                 },
                 "hoofdObject": {
                     "title": "Hoofd object",
-                    "description": "De URL naar het hoofdobject van een component",
+                    "description": "De URL naar het hoofdobject van een component.",
                     "type": "string",
                     "format": "uri",
                     "maxLength": 1000,
@@ -3012,14 +3012,14 @@
                 },
                 "resource": {
                     "title": "Resource",
-                    "description": "Het type resource waarop de actie gebeurde",
+                    "description": "Het type resource waarop de actie gebeurde.",
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 1
                 },
                 "resourceUrl": {
                     "title": "Resource url",
-                    "description": "De URL naar het object",
+                    "description": "De URL naar het object.",
                     "type": "string",
                     "format": "uri",
                     "maxLength": 1000,
@@ -3027,19 +3027,19 @@
                 },
                 "toelichting": {
                     "title": "Toelichting",
-                    "description": "Toelichting waarom de handeling is uitgevoerd",
+                    "description": "Toelichting waarom de handeling is uitgevoerd.",
                     "type": "string"
                 },
                 "resourceWeergave": {
                     "title": "Resource weergave",
-                    "description": "Vriendelijke identificatie van het object",
+                    "description": "Vriendelijke identificatie van het object.",
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 1
                 },
                 "aanmaakdatum": {
                     "title": "Aanmaakdatum",
-                    "description": "De datum waarop de handeling is gedaan",
+                    "description": "De datum waarop de handeling is gedaan.",
                     "type": "string",
                     "format": "date-time",
                     "readOnly": true
@@ -3078,15 +3078,6 @@
                     "description": "URL-referentie naar het BESLUIT.",
                     "type": "string",
                     "format": "uri"
-                },
-                "aardRelatieWeergave": {
-                    "title": "Aard relatie weergave",
-                    "type": "string",
-                    "enum": [
-                        "Hoort bij, omgekeerd: kent",
-                        "Legt vast, omgekeerd: kan vastgelegd zijn als"
-                    ],
-                    "readOnly": true
                 }
             }
         }
