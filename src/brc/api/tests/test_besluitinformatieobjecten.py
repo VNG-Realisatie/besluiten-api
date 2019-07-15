@@ -10,7 +10,6 @@ from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_validation_errors
 from vng_api_common.validators import IsImmutableValidator
 
-from brc.datamodel.constants import RelatieAarden
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
@@ -62,7 +61,6 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(BesluitInformatieObject.objects.count(), 1)
         stored_object = BesluitInformatieObject.objects.get()
         self.assertEqual(stored_object.besluit, besluit)
-        self.assertEqual(stored_object.aard_relatie, RelatieAarden.legt_vast)
 
         expected_url = reverse('besluitinformatieobject-detail', kwargs={
             'version': '1',
@@ -72,7 +70,6 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         expected_response = content.copy()
         expected_response.update({
             'url': f'http://testserver{expected_url}',
-            # 'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
         })
         self.assertEqual(response.json(), expected_response)
 
@@ -124,7 +121,6 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
             'url': f'http://testserver{bio_detail_url}',
             'informatieobject': bio.informatieobject,
             'besluit': f'http://testserver{besluit_url}',
-            # 'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
         }
 
         self.assertEqual(response.json(), expected)
