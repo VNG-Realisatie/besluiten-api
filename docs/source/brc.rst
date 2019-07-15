@@ -3,5 +3,5 @@ Reference
 
 .. toctree::
 
-    drc.api
-    drc.datamodel
+    brc.api
+    brc.datamodel

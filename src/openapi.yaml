@@ -1,63 +1,21 @@
 openapi: 3.0.0
 info:
   title: Besluiten API
-  description: 'Een API om een besluitregistratiecomponent te benaderen.
-
-
-    Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet
-
-    noodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere
-
-    besluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een
-
-    besluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is
-
-    een besluit van een andere organisatie dat het onderwerp (object) is van een
-
-    zaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele
-
-    relatie met de ZAAK waarvan het een uitkomst is.
-
-
-    **Afhankelijkheden**
-
-
-    Deze API is afhankelijk van:
-
-
-    * Catalogi API
-
-    * Notificaties API
-
-    * Documenten API *(optioneel)*
-
-    * Autorisaties API *(optioneel)*
-
-
-    **Autorisatie**
-
-
-    Deze API vereist autorisatie. Je kan de
-
-    [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
-
-    genereren.
-
-
-    **Notificaties**
-
-
-    Deze API publiceert notificaties op het kanaal `besluiten`.
-
-
-    **Handige links**
-
-
-    * [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)
-
-    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)
-
-    '
+  description: "Een API om een besluitregistratiecomponent (BRC) te benaderen.\n\n\
+    Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet\nnoodzakelijk.\
+    \ Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere\nbesluiten\
+    \ vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een\nbesluit\
+    \ komt voort uit een zaak van de zaakbehandelende organisatie dan wel is\neen\
+    \ besluit van een andere organisatie dat het onderwerp (object) is van een\nzaak\
+    \ van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele\nrelatie\
+    \ met de ZAAK waarvan het een uitkomst is.\n\nDe typering van BESLUITen is in\
+    \ de Catalogi API (ZTC) ondergebracht in de vorm \nvan BESLUITTYPEn.\n\n**Afhankelijkheden**\n\
+    \nDeze API is afhankelijk van:\n\n* Catalogi API\n* Notificaties API\n* Documenten\
+    \ API *(optioneel)*\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\
+    \n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/)\
+    \ gebruiken om JWT-tokens te\ngenereren.\n\n**Notificaties**\n\nDeze API publiceert\
+    \ notificaties op het kanaal `besluiten`.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n\
+    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n"
   contact:
     url: https://zaakgerichtwerken.vng.cloud
     email: standaarden.ondersteuning@vng.nl
@@ -263,15 +221,15 @@ paths:
 
         Er wordt gevalideerd op:
 
-        - uniciteit van verantwoorlijke organisatie + identificatie
+        - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
 
-        - RSIN verantwoorlijke organisatie
+        - geldigheid `verantwoorlijkeOrganisatie` RSIN
 
-        - geldigheid besluittype URL
+        - geldigheid `besluittype` URL
 
-        - geldigheid zaak URL
+        - geldigheid `zaak` URL
 
-        - datum in het verleden of nu'
+        - `datum` in het verleden of nu'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -430,7 +388,8 @@ paths:
   /besluiten/{besluit_uuid}/audittrail:
     get:
       operationId: audittrail_list
-      description: ''
+      summary: Alle audit trail regels behorend bij het BESLUIT.
+      description: Alle audit trail regels behorend bij het BESLUIT.
       responses:
         '200':
           description: OK
@@ -558,7 +517,8 @@ paths:
   /besluiten/{besluit_uuid}/audittrail/{uuid}:
     get:
       operationId: audittrail_read
-      description: ''
+      summary: Een specifieke audit trail regel opvragen.
+      description: Een specifieke audit trail regel opvragen.
       responses:
         '200':
           description: OK
@@ -695,7 +655,7 @@ paths:
         format: uuid
     - name: uuid
       in: path
-      description: Unieke identificatie van de audit regel
+      description: Unieke identificatie van de audit regel.
       required: true
       schema:
         type: string
@@ -836,15 +796,15 @@ paths:
       summary: Werk een BESLUIT in zijn geheel bij.
       description: 'Er wordt gevalideerd op:
 
-        - uniciteit van verantwoorlijke organisatie + identificatie
+        - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
 
-        - RSIN verantwoorlijke organisatie
+        - geldigheid `verantwoorlijkeOrganisatie` RSIN
 
-        - geldigheid besluittype URL
+        - geldigheid `besluittype` URL
 
-        - geldigheid zaak URL
+        - geldigheid `zaak` URL
 
-        - datum in het verleden of nu'
+        - `datum` in het verleden of nu'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1011,15 +971,15 @@ paths:
       summary: Werk een BESLUIT deels bij.
       description: 'Er wordt gevalideerd op:
 
-        - uniciteit van verantwoorlijke organisatie + identificatie
+        - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
 
-        - RSIN verantwoorlijke organisatie
+        - geldigheid `verantwoorlijkeOrganisatie` RSIN
 
-        - geldigheid besluittype URL
+        - geldigheid `besluittype` URL
 
-        - geldigheid zaak URL
+        - geldigheid `zaak` URL
 
-        - datum in het verleden of nu'
+        - `datum` in het verleden of nu'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1184,9 +1144,15 @@ paths:
     delete:
       operationId: besluit_delete
       summary: Verwijder een BESLUIT.
-      description: "Verwijder een BESLUIT samen met alle gerelateerde resources binnen\
-        \ deze API.\n\n**De gerelateerde resources zijn**\n- `BesluitInformatieObject`\
-        \ - de relaties van het Besluit naar de\n  informatieobjecten"
+      description: 'Verwijder een BESLUIT samen met alle gerelateerde resources binnen
+        deze API.
+
+
+        **De gerelateerde resources zijn**
+
+        - `BESLUITINFORMATIEOBJECT`
+
+        - audit trail regels'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1340,7 +1306,7 @@ paths:
   /besluitinformatieobjecten:
     get:
       operationId: besluitinformatieobject_list
-      summary: Alle INFORMATIEOBJECT-BESLUIT relaties opvragen.
+      summary: Alle BESLUIT-INFORMATIEOBJECT relaties opvragen.
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       parameters:
       - name: besluit
@@ -1491,14 +1457,11 @@ paths:
       summary: Maak een BESLUIT-INFORMATIEOBJECT relatie aan.
       description: "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee\
         \ types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd\
-        \ op**\n- geldigheid besluit URL\n- geldigheid informatieobject URL\n- de\
-        \ combinatie informatieobject en besluit moet uniek zijn\n\n**Opmerkingen**\n\
-        - De registratiedatum wordt door het systeem op 'NU' gezet. De `aardRelatie`\n\
-        \  wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in het\
-        \ DRC de gespiegelde relatie aangemaakt,\n  echter zonder de relatie-informatie.\n\
-        \nRegistreer welk(e) INFORMATIEOBJECT(en) een BESLUIT kent.\n\n**Er wordt\
-        \ gevalideerd op**\n- geldigheid informatieobject URL\n- uniek zijn van relatie\
-        \ BESLUIT-INFORMATIEOBJECT"
+        \ op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n\
+        - de combinatie `informatieobject` en `besluit` moet uniek zijn\n\n**Opmerkingen**\n\
+        - De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie`\
+        \ wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten\
+        \ API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie."
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1657,8 +1620,8 @@ paths:
   /besluitinformatieobjecten/{uuid}:
     get:
       operationId: besluitinformatieobject_read
-      summary: Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.
-      description: Een specifieke INFORMATIEOBJECT-BESLUIT relatie opvragen.
+      summary: Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.
+      description: Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.
       responses:
         '200':
           description: OK
@@ -1787,7 +1750,7 @@ paths:
         - besluiten.lezen
     put:
       operationId: besluitinformatieobject_update
-      summary: Werk een INFORMATIEOBJECT-BESLUIT relatie in zijn geheel bij.
+      summary: Werk een BESLUIT-INFORMATIEOBJECT relatie in zijn geheel bij.
       description: 'Je mag enkel de gegevens van de relatie bewerken, en niet de relatie
         zelf
 
@@ -1796,7 +1759,7 @@ paths:
 
         **Er wordt gevalideerd op**
 
-        - informatieobject URL en besluit URL mogen niet veranderen'
+        - `informatieobject` URL en `besluit` URL mogen niet veranderen'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1960,7 +1923,7 @@ paths:
         $ref: '#/components/requestBodies/BesluitInformatieObject'
     patch:
       operationId: besluitinformatieobject_partial_update
-      summary: Werk een INFORMATIEOBJECT-BESLUIT relatie deels bij.
+      summary: Werk een BESLUIT-INFORMATIEOBJECT relatie deels bij.
       description: 'Je mag enkel de gegevens van de relatie bewerken, en niet de relatie
         zelf
 
@@ -1969,7 +1932,7 @@ paths:
 
         **Er wordt gevalideerd op**
 
-        - informatieobject URL en besluit URL mogen niet veranderen'
+        - `informatieobject` URL en `besluit` URL mogen niet veranderen'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -2133,8 +2096,8 @@ paths:
         $ref: '#/components/requestBodies/BesluitInformatieObject'
     delete:
       operationId: besluitinformatieobject_delete
-      summary: Verwijder een INFORMATIEOBJECT-BESLUIT relatie.
-      description: Verwijder een INFORMATIEOBJECT-BESLUIT relatie.
+      summary: Verwijder een BESLUIT-INFORMATIEOBJECT relatie.
+      description: Verwijder een BESLUIT-INFORMATIEOBJECT relatie.
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -2386,7 +2349,7 @@ components:
             is of komt te vervallen.
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
             * `tijdelijk` - Besluit met tijdelijke werking
@@ -2532,11 +2495,11 @@ components:
         oud:
           title: Oud
           description: Volledige JSON body van het object zoals dat bestond voordat
-            de actie heeft plaatsgevonden
+            de actie heeft plaatsgevonden.
           type: object
         nieuw:
           title: Nieuw
-          description: Volledige JSON body van het object na de actie
+          description: Volledige JSON body van het object na de actie.
           type: object
     AuditTrail:
       required:
@@ -2552,127 +2515,127 @@ components:
       properties:
         uuid:
           title: Uuid
-          description: Unieke identificatie van de audit regel
+          description: Unieke identificatie van de audit regel.
           type: string
           format: uuid
         bron:
           title: Bron
-          description: 'De naam van het component waar de wijziging in is gedaan
+          description: 'De naam van het component waar de wijziging in is gedaan.
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
-            * `AC` - Autorisatiecomponent
+            * `ac` - Autorisatiecomponent
 
-            * `NRC` - Notificatierouteringcomponent
+            * `nrc` - Notificatierouteringcomponent
 
-            * `ZRC` - Zaakregistratiecomponent
+            * `zrc` - Zaakregistratiecomponent
 
-            * `ZTC` - Zaaktypecatalogus
+            * `ztc` - Zaaktypecatalogus
 
-            * `DRC` - Documentregistratiecomponent
+            * `drc` - Documentregistratiecomponent
 
-            * `BRC` - Besluitregistratiecomponent'
+            * `brc` - Besluitregistratiecomponent'
           type: string
           enum:
-          - AC
-          - NRC
-          - ZRC
-          - ZTC
-          - DRC
-          - BRC
+          - ac
+          - nrc
+          - zrc
+          - ztc
+          - drc
+          - brc
         applicatieId:
           title: Applicatie id
-          description: Unieke identificatie van de applicatie, binnen de organisatie
+          description: Unieke identificatie van de applicatie, binnen de organisatie.
           type: string
           maxLength: 100
         applicatieWeergave:
           title: Applicatie weergave
-          description: Vriendelijke naam van de applicatie
+          description: Vriendelijke naam van de applicatie.
           type: string
           maxLength: 200
         gebruikersId:
           title: Gebruikers id
           description: Unieke identificatie van de gebruiker die binnen de organisatie
-            herleid kan worden naar een persoon
+            herleid kan worden naar een persoon.
           type: string
           maxLength: 255
         gebruikersWeergave:
           title: Gebruikers weergave
-          description: Vriendelijke naam van de gebruiker
+          description: Vriendelijke naam van de gebruiker.
           type: string
           maxLength: 255
         actie:
           title: Actie
-          description: 'De uitgevoerde handeling
+          description: 'De uitgevoerde handeling.
 
 
             De bekende waardes voor dit veld zijn hieronder aangegeven,                         maar
             andere waardes zijn ook toegestaan
 
 
-            De mapping van waarden naar weergave is als volgt:
+            Uitleg bij mogelijke waarden:
 
 
-            * `create` - aangemaakt
+            * `create` - Object aangemaakt
 
-            * `list` - opgehaald
+            * `list` - Lijst van objecten opgehaald
 
-            * `retrieve` - opgehaald
+            * `retrieve` - Object opgehaald
 
-            * `destroy` - verwijderd
+            * `destroy` - Object verwijderd
 
-            * `update` - bijgewerkt
+            * `update` - Object bijgewerkt
 
-            * `partial_update` - deels bijgewerkt'
+            * `partial_update` - Object deels bijgewerkt'
           type: string
           maxLength: 50
           minLength: 1
         actieWeergave:
           title: Actie weergave
-          description: Vriendelijke naam van de actie
+          description: Vriendelijke naam van de actie.
           type: string
           maxLength: 200
         resultaat:
           title: Resultaat
-          description: HTTP status code van de API response van de uitgevoerde handeling
+          description: HTTP status code van de API response van de uitgevoerde handeling.
           type: integer
           maximum: 599
           minimum: 100
         hoofdObject:
           title: Hoofd object
-          description: De URL naar het hoofdobject van een component
+          description: De URL naar het hoofdobject van een component.
           type: string
           format: uri
           maxLength: 1000
           minLength: 1
         resource:
           title: Resource
-          description: Het type resource waarop de actie gebeurde
+          description: Het type resource waarop de actie gebeurde.
           type: string
           maxLength: 50
           minLength: 1
         resourceUrl:
           title: Resource url
-          description: De URL naar het object
+          description: De URL naar het object.
           type: string
           format: uri
           maxLength: 1000
           minLength: 1
         toelichting:
           title: Toelichting
-          description: Toelichting waarom de handeling is uitgevoerd
+          description: Toelichting waarom de handeling is uitgevoerd.
           type: string
         resourceWeergave:
           title: Resource weergave
-          description: Vriendelijke identificatie van het object
+          description: Vriendelijke identificatie van het object.
           type: string
           maxLength: 200
           minLength: 1
         aanmaakdatum:
           title: Aanmaakdatum
-          description: De datum waarop de handeling is gedaan
+          description: De datum waarop de handeling is gedaan.
           type: string
           format: date-time
           readOnly: true
@@ -2706,10 +2669,3 @@ components:
           description: URL-referentie naar het BESLUIT.
           type: string
           format: uri
-        aardRelatieWeergave:
-          title: Aard relatie weergave
-          type: string
-          enum:
-          - 'Hoort bij, omgekeerd: kent'
-          - 'Legt vast, omgekeerd: kan vastgelegd zijn als'
-          readOnly: true

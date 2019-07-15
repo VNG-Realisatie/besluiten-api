@@ -82,18 +82,12 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
-    aard_relatie_weergave = serializers.ChoiceField(
-        source='get_aard_relatie_display', read_only=True,
-        choices=[(force_text(value), key) for key, value in RelatieAarden.choices]
-    )
-
     class Meta:
         model = BesluitInformatieObject
         fields = (
             'url',
             'informatieobject',
             'besluit',
-            'aard_relatie_weergave',
         )
         extra_kwargs = {
             'url': {

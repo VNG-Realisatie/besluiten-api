@@ -4,7 +4,7 @@ from drf_yasg import openapi
 
 from .kanalen import KANAAL_BESLUITEN
 
-description = f"""Een API om een besluitregistratiecomponent te benaderen.
+description = f"""Een API om een besluitregistratiecomponent (BRC) te benaderen.
 
 Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet
 noodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere
@@ -14,6 +14,9 @@ een besluit van een andere organisatie dat het onderwerp (object) is van een
 zaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele
 relatie met de ZAAK waarvan het een uitkomst is.
 
+De typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm 
+van BESLUITTYPEn.
+
 **Afhankelijkheden**
 
 Deze API is afhankelijk van:
@@ -21,6 +24,7 @@ Deze API is afhankelijk van:
 * Catalogi API
 * Notificaties API
 * Documenten API *(optioneel)*
+* Zaken API *(optioneel)*
 * Autorisaties API *(optioneel)*
 
 **Autorisatie**
