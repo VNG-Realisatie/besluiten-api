@@ -72,7 +72,7 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         expected_response = content.copy()
         expected_response.update({
             'url': f'http://testserver{expected_url}',
-            'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
+            # 'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
         })
         self.assertEqual(response.json(), expected_response)
 
@@ -124,7 +124,7 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
             'url': f'http://testserver{bio_detail_url}',
             'informatieobject': bio.informatieobject,
             'besluit': f'http://testserver{besluit_url}',
-            'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
+            # 'aardRelatieWeergave': RelatieAarden.labels[RelatieAarden.legt_vast],
         }
 
         self.assertEqual(response.json(), expected)
