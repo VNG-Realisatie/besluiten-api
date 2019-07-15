@@ -2,6 +2,17 @@
 Wijzigingen
 ===========
 
+0.12.0 (2019-07-15)
+===================
+
+Prepare for release candidate (consistency)
+
+* Added pagination to ``Besluit`` resource
+* Update to latest Django & vng-api-common versions
+* Set up CI/CD for ``develop`` builds to test domains
+* Removed ``BesluitInformatieObject.aardRelatieWeergave``
+* Added management command to migrate URL references to new domains
+
 0.11.6 (2019-07-02)
 ===================
 
