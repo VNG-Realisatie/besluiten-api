@@ -1,6 +1,7 @@
 from django.core.cache import cache
 
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from vng_api_common.audittrails.viewsets import (
     AuditTrailViewSet, AuditTrailViewsetMixin
 )
@@ -28,58 +29,65 @@ class BesluitViewSet(NotificationViewSetMixin,
                      ListFilterByAuthorizationsMixin,
                      viewsets.ModelViewSet):
     """
-    Opvragen en bewerken van BESLUITen
+    Opvragen en bewerken van BESLUITen.
 
     create:
-    Registreer een besluit.
+    Maak een BESLUIT aan.
 
     Indien geen identificatie gegeven is, dan wordt deze automatisch
     gegenereerd.
 
     Er wordt gevalideerd op:
-    - uniciteit van verantwoorlijke organisatie + identificatie
-    - RSIN verantwoorlijke organisatie
-    - geldigheid besluittype URL
-    - geldigheid zaak URL
-    - datum in het verleden of nu
+    - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
+    - geldigheid `verantwoorlijkeOrganisatie` RSIN
+    - geldigheid `besluittype` URL
+    - geldigheid `zaak` URL
+    - `datum` in het verleden of nu
 
     list:
-    Geef een lijst van BESLUITen, waarin gefiltered kan worden.
+    Alle BESLUITen opvragen.
+
+    Deze lijst kan gefilterd wordt met query-string parameters.
 
     retrieve:
-    Geef de details van 1 enkel BESLUIT.
+    Een specifiek BESLUIT opvragen.
+
+    Een specifiek BESLUIT opvragen.
 
     update:
-    Werk een BESLUIT bij.
+    Werk een BESLUIT in zijn geheel bij.
 
     Er wordt gevalideerd op:
-    - uniciteit van verantwoorlijke organisatie + identificatie
-    - RSIN verantwoorlijke organisatie
-    - geldigheid besluittype URL
-    - geldigheid zaak URL
-    - datum in het verleden of nu
+    - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
+    - geldigheid `verantwoorlijkeOrganisatie` RSIN
+    - geldigheid `besluittype` URL
+    - geldigheid `zaak` URL
+    - `datum` in het verleden of nu
 
     partial_update:
-    Werk een BESLUIT bij.
+    Werk een BESLUIT deels bij.
 
     Er wordt gevalideerd op:
-    - uniciteit van verantwoorlijke organisatie + identificatie
-    - RSIN verantwoorlijke organisatie
-    - geldigheid besluittype URL
-    - geldigheid zaak URL
-    - datum in het verleden of nu
+    - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
+    - geldigheid `verantwoorlijkeOrganisatie` RSIN
+    - geldigheid `besluittype` URL
+    - geldigheid `zaak` URL
+    - `datum` in het verleden of nu
 
     destroy:
-    Verwijdert een BESLUIT, samen met alle gerelateerde resources binnen deze API.
+    Verwijder een BESLUIT.
+
+    Verwijder een BESLUIT samen met alle gerelateerde resources binnen deze API.
 
     **De gerelateerde resources zijn**
-    - `BesluitInformatieObject` - de relaties van het Besluit naar de
-      informatieobjecten
+    - `BESLUITINFORMATIEOBJECT`
+    - audit trail regels
     """
-    queryset = Besluit.objects.all()
+    queryset = Besluit.objects.all().order_by('-pk')
     serializer_class = BesluitSerializer
     filter_class = BesluitFilter
     lookup_field = 'uuid'
+    pagination_class = PageNumberPagination
     permission_classes = (BesluitAuthScopesRequired, )
     required_scopes = {
         'list': SCOPE_BESLUITEN_ALLES_LEZEN,
@@ -99,54 +107,57 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
                                      ListFilterByAuthorizationsMixin,
                                      viewsets.ModelViewSet):
     """
-    Opvragen en bewerken van Besluit-Informatieobject relaties.
+    Opvragen en bewerken van BESLUIT-INFORMATIEOBJECT relaties.
 
     create:
+    Maak een BESLUIT-INFORMATIEOBJECT relatie aan.
+
     Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van
     relaties met andere objecten gerealiseerd:
 
     **Er wordt gevalideerd op**
-    - geldigheid besluit URL
-    - geldigheid informatieobject URL
-    - de combinatie informatieobject en besluit moet uniek zijn
+    - geldigheid `besluit` URL
+    - geldigheid `informatieobject` URL
+    - de combinatie `informatieobject` en `besluit` moet uniek zijn
 
     **Opmerkingen**
-    - De registratiedatum wordt door het systeem op 'NU' gezet. De `aardRelatie`
-      wordt ook door het systeem gezet.
-    - Bij het aanmaken wordt ook in het DRC de gespiegelde relatie aangemaakt,
-      echter zonder de relatie-informatie.
-
-
-    Registreer welk(e) INFORMATIEOBJECT(en) een BESLUIT kent.
-
-    **Er wordt gevalideerd op**
-    - geldigheid informatieobject URL
-    - uniek zijn van relatie BESLUIT-INFORMATIEOBJECT
+    - De `registratiedatum` wordt door het systeem op 'NU' gezet. De
+      `aardRelatie` wordt ook door het systeem gezet.
+    - Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie
+      aangemaakt, echter zonder de relatie-informatie.
 
     list:
-    Geef een lijst van relaties tussen INFORMATIEOBJECTen en BESLUITen.
+    Alle BESLUIT-INFORMATIEOBJECT relaties opvragen.
 
-    Deze lijst kan gefilterd wordt met querystringparameters.
+    Deze lijst kan gefilterd wordt met query-string parameters.
 
     retrieve:
-    Geef de details van een relatie tussen een INFORMATIEOBJECT en een BESLUIT.
+    Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.
+
+    Een specifieke BESLUIT-INFORMATIEOBJECT relatie opvragen.
 
     update:
-    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
-    van de relatie bewerken, en niet de relatie zelf aanpassen.
+    Werk een BESLUIT-INFORMATIEOBJECT relatie in zijn geheel bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
 
     **Er wordt gevalideerd op**
-    - informatieobject URL en besluit URL mogen niet veranderen
+    - `informatieobject` URL en `besluit` URL mogen niet veranderen
 
     partial_update:
-    Update een INFORMATIEOBJECT bij een BESLUIT. Je mag enkel de gegevens
-    van de relatie bewerken, en niet de relatie zelf aanpassen.
+    Werk een BESLUIT-INFORMATIEOBJECT relatie deels bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
 
     **Er wordt gevalideerd op**
-    - informatieobject URL en besluit URL mogen niet veranderen
+    - `informatieobject` URL en `besluit` URL mogen niet veranderen
 
     destroy:
-    Verwijdert de relatie tussen BESLUIT en INFORMATIEOBJECT.
+    Verwijder een BESLUIT-INFORMATIEOBJECT relatie.
+
+    Verwijder een BESLUIT-INFORMATIEOBJECT relatie.
     """
     queryset = BesluitInformatieObject.objects.all()
     serializer_class = BesluitInformatieObjectSerializer
@@ -176,4 +187,17 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
 
 
 class BesluitAuditTrailViewSet(AuditTrailViewSet):
+    """
+    Opvragen van de audit trail regels.
+
+    list:
+    Alle audit trail regels behorend bij het BESLUIT.
+
+    Alle audit trail regels behorend bij het BESLUIT.
+
+    retrieve:
+    Een specifieke audit trail regel opvragen.
+
+    Een specifieke audit trail regel opvragen.
+    """
     main_resource_lookup_field = 'besluit_uuid'

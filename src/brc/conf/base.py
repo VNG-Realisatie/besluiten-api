@@ -290,6 +290,13 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_NAME = 'brc_sessionid'
 
 #
+# Silenced checks
+#
+SILENCED_SYSTEM_CHECKS = [
+    'rest_framework.W001',
+]
+
+#
 # Custom settings
 #
 PROJECT_NAME = 'Besluiten'
@@ -301,8 +308,6 @@ SHOW_ALERT = True
 #
 # Library settings
 #
-
-ADMIN_INDEX_SHOW_REMAINING_APPS = True
 
 # Django-axes
 AXES_LOGIN_FAILURE_LIMIT = 30  # Default: 3

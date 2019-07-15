@@ -1,6 +1,7 @@
 from vng_api_common.conf.api import *  # noqa - imports white-listed
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
+REST_FRAMEWORK['PAGE_SIZE'] = 100
 
 SECURITY_DEFINITION_NAME = 'JWT-Claims'
 
@@ -23,9 +24,6 @@ SWAGGER_SETTINGS.update({
             # 'type': 'apiKey',
         }
     },
-
-    # no geo things here
-    'DEFAULT_FIELD_INSPECTORS': BASE_SWAGGER_SETTINGS['DEFAULT_FIELD_INSPECTORS'][1:]
 })
 
 GEMMA_URL_INFORMATIEMODEL_VERSIE = '1.0'

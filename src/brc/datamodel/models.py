@@ -31,18 +31,17 @@ class Besluit(APIMixin, models.Model):
     )
     verantwoordelijke_organisatie = RSINField(
         'verantwoordelijke organisatie',
-        help_text="Het RSIN van de Niet-natuurlijk persoon zijnde de "
+        help_text="Het RSIN van de niet-natuurlijk persoon zijnde de "
                   "organisatie die het besluit heeft vastgesteld."
     )
 
     besluittype = models.URLField(
         'besluittype',
-        help_text="Aanduiding van de aard van het BESLUIT. Referentie naar het "
-                  "BESLUITTYPE in de zaaktypecatalogus."
+        help_text="URL-referentie naar het BESLUITTYPE (in de Catalogi API)."
     )
     zaak = models.URLField(
         'zaak', blank=True,  # een besluit kan niet bij een zaak horen (zoals raadsbesluit)
-        help_text="Referentie naar de ZAAK waarvan dit besluit uitkomst is"
+        help_text="URL-referentie naar de ZAAK (in de Zaken API) waarvan dit besluit uitkomst is."
     )
 
     datum = models.DateField(
@@ -150,8 +149,8 @@ class BesluitInformatieObject(models.Model):
     )
     informatieobject = models.URLField(
         'informatieobject',
-        help_text="URL-referentie naar het informatieobject waarin (een deel van) "
-                  "het besluit beschreven is.",
+        help_text="URL-referentie naar het INFORMATIEOBJECT (in de Documenten "
+                  "API) waarin (een deel van) het besluit beschreven is.",
         max_length=1000
     )
     aard_relatie = models.CharField(
