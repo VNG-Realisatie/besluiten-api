@@ -4,6 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 from vng_api_common.models import APICredential
+from vng_api_common.validators import (
+    UniekeIdentificatieValidator as _UniekeIdentificatieValidator
+)
 
 
 def fetch_object(resource: str, url: str) -> dict:
@@ -12,6 +15,17 @@ def fetch_object(resource: str, url: str) -> dict:
     client.auth = APICredential.get_auth(url)
     obj = client.retrieve(resource, url=url)
     return obj
+
+
+class UniekeIdentificatieValidator(_UniekeIdentificatieValidator):
+    """
+    Valideer dat de combinatie van verantwoordelijke organisatie en
+    identificatie uniek is.
+    """
+    message = _('Deze identificatie bestaat al voor deze verantwoordelijke organisatie')
+
+    def __init__(self):
+        super().__init__('verantwoordelijke_organisatie', 'identificatie')
 
 
 class BesluittypeZaaktypeValidator:

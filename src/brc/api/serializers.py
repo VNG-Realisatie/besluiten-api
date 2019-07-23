@@ -19,7 +19,7 @@ from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
 from .validators import (
-    BesluittypeZaaktypeValidator,
+    BesluittypeZaaktypeValidator, UniekeIdentificatieValidator,
     ZaaktypeInformatieobjecttypeRelationValidator
 )
 
@@ -57,7 +57,14 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                 'validators': [IsImmutableValidator(), validate_rsin],
             },
             'zaak': {
-                'validators': [URLValidator(get_auth=get_zrc_auth, headers={'Accept-Crs': 'EPSG:4326'})],
+                'validators': [
+                    ResourceValidator(
+                        'Zaak',
+                        settings.ZRC_API_SPEC,
+                        get_auth=get_zrc_auth,
+                        headers={'Accept-Crs': 'EPSG:4326'}
+                    )
+                ]
             },
             'besluittype': {
                 'validators': [
@@ -66,7 +73,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
         validators = [
-            UniekeIdentificatieValidator('verantwoordelijke_organisatie'),
+            UniekeIdentificatieValidator(),
             BesluittypeZaaktypeValidator('besluittype')
         ]
 
