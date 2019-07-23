@@ -17,6 +17,8 @@ from brc.datamodel.tests.factories import BesluitFactory
 from .mixins import BesluitSyncMixin
 from .utils import reverse, reverse_lazy
 
+INFORMATIEOBJECT = 'https://drc.com/informatieobjecten/1234'
+INFORMATIEOBJECT_TYPE = 'https://ztc.com/informatieobjecttypen/1234'
 BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
 ZAAK = 'https://zrc.com/zaken/1234'
 ZAAKTYPE = 'https://ztc.com/zaaktypen/1234'
@@ -30,6 +32,16 @@ RESPONSES = {
         'url': BESLUITTYPE,
         'zaaktypes': [
             ZAAKTYPE
+        ]
+    },
+    INFORMATIEOBJECT: {
+        'url': INFORMATIEOBJECT,
+        'informatieobjecttype': INFORMATIEOBJECT_TYPE
+    },
+    ZAAKTYPE: {
+        'url': ZAAKTYPE,
+        'informatieobjecttypen': [
+            INFORMATIEOBJECT_TYPE
         ]
     }
 }
@@ -238,3 +250,64 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         error = get_validation_errors(response, 'informatieobject')
         self.assertEqual(error['code'], URLValidator.code)
+
+    @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
+    def test_validate_informatieobject_invalid_resource(self):
+        besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
+        besluit_url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
+        url = reverse('besluitinformatieobject-list')
+
+        responses = {
+            INFORMATIEOBJECT: {
+                'some': 'incorrect property'
+            }
+        }
+
+        with mock_client(responses):
+            response = self.client.post(url, {
+                'besluit': f'http://testserver{besluit_url}',
+                'informatieobject': INFORMATIEOBJECT,
+            })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        error = get_validation_errors(response, 'informatieobject')
+        self.assertEqual(error['code'], 'invalid-resource')
+
+    @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_validate_no_informatieobjecttype_zaaktype_relation(self, *mocks):
+        besluit = BesluitFactory.create(besluittype=BESLUITTYPE, zaak=ZAAK)
+        besluit_url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
+        url = reverse('besluitinformatieobject-list')
+
+        responses = {
+            ZAAK: {
+                'url': ZAAK,
+                'zaaktype': ZAAKTYPE
+            },
+            BESLUITTYPE: {
+                'url': BESLUITTYPE,
+                'zaaktypes': []
+            },
+            INFORMATIEOBJECT: {
+                'url': INFORMATIEOBJECT,
+                'informatieobjecttype': INFORMATIEOBJECT_TYPE
+            },
+            ZAAKTYPE: {
+                'url': ZAAKTYPE,
+                'informatieobjecttypen': []
+            }
+        }
+
+        with mock_client(responses):
+            response = self.client.post(url, {
+                'besluit': f'http://testserver{besluit_url}',
+                'informatieobject': INFORMATIEOBJECT,
+            })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        error = get_validation_errors(response, 'nonFieldErrors')
+        self.assertEqual(error['code'], 'missing-zaaktype-informatieobjecttype-relation')
