@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import override_settings
 
 from freezegun import freeze_time
@@ -65,7 +67,9 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(error['code'], UntilTodayValidator.code)
 
     @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
-    def test_duplicate_rsin_identificatie(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_duplicate_rsin_identificatie(self, *mocks):
         besluit = BesluitFactory.create(identificatie='123456')
 
         response = self.client.post(self.url, {

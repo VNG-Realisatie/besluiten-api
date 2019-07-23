@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from unittest.mock import patch
 
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
@@ -39,7 +40,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
     heeft_alle_autorisaties = True
 
     @freeze_time('2018-09-19T12:25:19+0200')
-    def test_create(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_create(self, *mocks):
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
             'version': '1',
@@ -73,7 +76,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         })
         self.assertEqual(response.json(), expected_response)
 
-    def test_duplicate_object(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_duplicate_object(self, *mocks):
         """
         Test the (informatieobject, object) unique together validation.
         """
@@ -143,7 +148,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['besluit'], f'http://testserver{besluit_url}')
 
-    def test_update_besluit(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_update_besluit(self, *mocks):
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
             'version': '1',

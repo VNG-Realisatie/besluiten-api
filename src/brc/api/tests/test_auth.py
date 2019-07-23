@@ -1,6 +1,8 @@
 """
 Guarantee that the proper authorization amchinery is in place.
 """
+from unittest.mock import patch
+
 from django.test import override_settings
 
 from rest_framework import status
@@ -124,7 +126,9 @@ class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         besluit_url = reverse(bio1.besluit)
         self.assertEqual(response_data[0]['besluit'], f'http://testserver{besluit_url}')
 
-    def test_create_bio_limited_to_authorized_besluiten(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_create_bio_limited_to_authorized_besluiten(self, *mocks):
         informatieobject = 'https://drc.com/api/v1/enkelvoudigeinformatieobjecten/1234'
 
         besluit1 = BesluitFactory.create(besluittype='https://besluittype.nl/ok')

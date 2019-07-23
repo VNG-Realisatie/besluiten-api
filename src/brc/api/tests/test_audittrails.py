@@ -1,4 +1,5 @@
 from copy import deepcopy
+from unittest.mock import patch
 
 from django.test import override_settings
 
@@ -17,8 +18,11 @@ from .mixins import MockSyncMixin
 ZTC_ROOT = 'https://example.com/ztc/api/v1'
 DRC_ROOT = 'https://example.com/drc/api/v1'
 CATALOGUS = f'{ZTC_ROOT}/catalogus/878a3318-5950-4642-8715-189745f91b04'
-BESLUITTYPE = f'{CATALOGUS}/besluittypen/283ffaf5-8470-457b-8064-90e5728f413f'
 INFORMATIE_OBJECT = f'{DRC_ROOT}/enkelvoudiginformatieobjecten/1234'
+
+ZAAK = 'https://zrc.com/zaken/1234'
+ZAAKTYPE = f'{ZTC_ROOT}/zaaktypen/1234'
+BESLUITTYPE = f'{ZTC_ROOT}/besluittypen/1234'
 
 
 @override_settings(
@@ -32,14 +36,23 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
     responses = {
         BESLUITTYPE: {
             'url': BESLUITTYPE,
+            'zaaktypes': [
+                ZAAKTYPE
+            ],
             'productenOfDiensten': [
                 'https://example.com/product/123',
                 'https://example.com/dienst/123',
             ]
+        },
+        ZAAK: {
+            'url': ZAAK,
+            'zaaktype': ZAAKTYPE
         }
     }
 
-    def _create_besluit(self, **HEADERS):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def _create_besluit(self, *mocks, **HEADERS):
         url = reverse(Besluit)
 
         besluit_data = {
@@ -69,7 +82,9 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(besluit_create_audittrail.oud, None)
         self.assertEqual(besluit_create_audittrail.nieuw, besluit_response)
 
-    def test_update_besluit_audittrails(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_update_besluit_audittrails(self, *mocks):
         besluit_data = self._create_besluit()
 
         modified_data = deepcopy(besluit_data)
@@ -113,7 +128,9 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(besluit_update_audittrail.oud, besluit_data)
         self.assertEqual(besluit_update_audittrail.nieuw, besluit_response)
 
-    def test_create_besluitinformatieobject_audittrail(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_create_besluitinformatieobject_audittrail(self, *mocks):
         besluit_data = self._create_besluit()
 
         url = reverse(BesluitInformatieObject)
