@@ -229,6 +229,38 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         error = get_validation_errors(response, 'nonFieldErrors')
         self.assertEqual(error['code'], 'zaaktype-mismatch')
 
+    @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
+    def test_zaak_invalid_resource(self, *mocks):
+        list_url = reverse('besluit-list')
+
+        responses = {
+            ZAAK: {
+                'some': 'wrong property'
+            },
+            BESLUITTYPE: {
+                'url': BESLUITTYPE,
+                'zaaktypes': [
+                    ZAAKTYPE
+                ]
+            }
+        }
+
+        with mock_client(responses):
+            response = self.client.post(list_url, {
+                'verantwoordelijkeOrganisatie': '000000000',
+                'identificatie': '123456',
+
+                'besluittype': BESLUITTYPE,
+                'zaak': ZAAK,
+                'datum': '2018-09-06',
+                'ingangsdatum': '2018-10-01',
+            })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        error = get_validation_errors(response, 'zaak')
+        self.assertEqual(error['code'], 'invalid-resource')
+
 class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
