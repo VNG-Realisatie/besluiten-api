@@ -6,6 +6,7 @@ from django.utils.encoding import force_text
 
 from rest_framework import serializers
 from rest_framework.settings import api_settings
+from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
     IsImmutableValidator, ResourceValidator, UniekeIdentificatieValidator,
@@ -17,7 +18,10 @@ from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
-from .validators import BesluittypeZaaktypeValidator
+from .validators import (
+    BesluittypeZaaktypeValidator,
+    ZaaktypeInformatieobjecttypeRelationValidator
+)
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
@@ -96,13 +100,20 @@ class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             'informatieobject',
             'besluit',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=BesluitInformatieObject.objects.all(),
+                fields=['besluit', 'informatieobject']
+            ),
+            ZaaktypeInformatieobjecttypeRelationValidator("informatieobject"),
+        ]
         extra_kwargs = {
             'url': {
                 'lookup_field': 'uuid'
             },
             'informatieobject': {
                 'validators': [
-                    URLValidator(get_auth=get_drc_auth),
+                    ResourceValidator('EnkelvoudigInformatieObject', settings.DRC_API_SPEC, get_auth=get_drc_auth),
                     IsImmutableValidator(),
                 ]
             },
