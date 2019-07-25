@@ -8,7 +8,6 @@ import factory
 class BesluitFactory(factory.django.DjangoModelFactory):
     verantwoordelijke_organisatie = factory.Faker('ssn', locale='nl_NL')
     besluittype = factory.Faker('url')
-    zaak = factory.Faker('url')
     datum = factory.Faker('date_this_decade')
 
     class Meta:
