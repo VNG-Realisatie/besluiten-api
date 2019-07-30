@@ -13,7 +13,7 @@ from zds_client import Client, extract_params, get_operation_url
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 
 logger = logging.getLogger(__name__)
-
+sentry = logging.getLogger('sentry')
 
 class SyncError(Exception):
     pass
@@ -151,7 +151,8 @@ def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=Non
             cache.set('bios_marked_for_delete', marked_bios + [instance.uuid])
         else:
             cache.set('bios_marked_for_delete', [instance.uuid])
-
+        sentry.info(f'BIO {instance.__dict__}')
+        sentry.info(f"BIOs in cache marked for delete: {cache.get('bios_marked_for_delete')}")
         try:
             sync_delete_bio(instance)
         finally:
