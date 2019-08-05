@@ -72,7 +72,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
         validators = [
-            UniekeIdentificatieValidator(),
+            UniekeIdentificatieValidator("verantwoordelijke_organisatie"),
             BesluittypeZaaktypeValidator('besluittype')
         ]
 
