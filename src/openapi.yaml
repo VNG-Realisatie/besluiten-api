@@ -325,6 +325,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '201':
           description: Created
@@ -456,8 +458,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.aanmaken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     parameters: []
   /besluiten/{besluit_uuid}/audittrail:
     get:
@@ -900,6 +900,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '200':
           description: OK
@@ -1038,8 +1040,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     patch:
       operationId: besluit_partial_update
       summary: Werk een BESLUIT deels bij.
@@ -1075,6 +1075,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '200':
           description: OK
@@ -1213,8 +1215,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     delete:
       operationId: besluit_delete
       summary: Verwijder een BESLUIT.
@@ -1557,6 +1557,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/BesluitInformatieObject'
       responses:
         '201':
           description: Created
@@ -1688,8 +1690,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.aanmaken
-      requestBody:
-        $ref: '#/components/requestBodies/BesluitInformatieObject'
     parameters: []
   /besluitinformatieobjecten/{uuid}:
     get:
@@ -1855,6 +1855,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/BesluitInformatieObject'
       responses:
         '200':
           description: OK
@@ -1993,8 +1995,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/BesluitInformatieObject'
     patch:
       operationId: besluitinformatieobject_partial_update
       summary: Werk een BESLUIT-INFORMATIEOBJECT relatie deels bij.
@@ -2028,6 +2028,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/BesluitInformatieObject'
       responses:
         '200':
           description: OK
@@ -2166,8 +2168,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/BesluitInformatieObject'
     delete:
       operationId: besluitinformatieobject_delete
       summary: Verwijder een BESLUIT-INFORMATIEOBJECT relatie.
