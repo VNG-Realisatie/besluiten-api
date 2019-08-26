@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.cache import cache
+from django.core.cache import caches
 from django.db.models.signals import post_delete, post_save, pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -146,6 +146,7 @@ def sync_informatieobject_relation(sender, instance: BesluitInformatieObject=Non
         # Add the uuid of the BesluitInformatieObject to the list of bios that are
         # marked for delete, causing them not to show up when performing
         # GET requests on the BRC, allowing the validation in the DRC to pass
+        cache = caches['drc_sync']
         marked_bios = cache.get('bios_marked_for_delete')
         if marked_bios:
             cache.set('bios_marked_for_delete', marked_bios + [instance.uuid])

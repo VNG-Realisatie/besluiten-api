@@ -1,4 +1,4 @@
-from django.core.cache import cache
+from django.core.cache import caches
 
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -180,6 +180,7 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
         qs = super().get_queryset()
 
         # Do not display BesluitInformatieObjecten that are marked to be deleted
+        cache = caches['drc_sync']
         marked_bios = cache.get('bios_marked_for_delete')
         if marked_bios:
             return qs.exclude(uuid__in=marked_bios)
