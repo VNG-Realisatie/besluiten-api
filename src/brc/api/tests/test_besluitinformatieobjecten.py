@@ -150,7 +150,7 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
-    def test_update_besluit(self, *mocks):
+    def test_update_besluitinformatieobject_not_allowed(self, *mocks):
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
             'version': '1',
@@ -170,12 +170,7 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
             'informatieobject': 'https://bla.com',
         })
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
-
-        for field in ['besluit', 'informatieobject']:
-            with self.subTest(field=field):
-                error = get_validation_errors(response, field)
-                self.assertEqual(error['code'], IsImmutableValidator.code)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_sync_create_fails(self):
         self.mocked_sync_create_bio.side_effect = SyncError("Sync failed")
