@@ -325,6 +325,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '201':
           description: Created
@@ -456,8 +458,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.aanmaken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     parameters: []
   /besluiten/{besluit_uuid}/audittrail:
     get:
@@ -900,6 +900,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '200':
           description: OK
@@ -1038,8 +1040,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     patch:
       operationId: besluit_partial_update
       summary: Werk een BESLUIT deels bij.
@@ -1075,6 +1075,8 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Besluit'
       responses:
         '200':
           description: OK
@@ -1213,8 +1215,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.bijwerken
-      requestBody:
-        $ref: '#/components/requestBodies/Besluit'
     delete:
       operationId: besluit_delete
       summary: Verwijder een BESLUIT.
@@ -1557,6 +1557,12 @@ paths:
         required: false
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BesluitInformatieObject'
+        required: true
       responses:
         '201':
           description: Created
@@ -1688,12 +1694,6 @@ paths:
       security:
       - JWT-Claims:
         - besluiten.aanmaken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BesluitInformatieObject'
-        required: true
     parameters: []
   /besluitinformatieobjecten/{uuid}:
     get:
@@ -2214,7 +2214,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldValidationError'
-    Wijzgingen:
+    Wijzigingen:
       title: Wijzigingen
       type: object
       properties:
@@ -2366,7 +2366,7 @@ components:
           format: date-time
           readOnly: true
         wijzigingen:
-          $ref: '#/components/schemas/Wijzgingen'
+          $ref: '#/components/schemas/Wijzigingen'
     BesluitInformatieObject:
       required:
       - informatieobject
