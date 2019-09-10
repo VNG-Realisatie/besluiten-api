@@ -23,6 +23,11 @@ class BesluitFactory(factory.django.DjangoModelFactory):
         )
         return _ingangsdatum.evaluate(self, None, None).date()
 
+    class Params:
+        with_etag = factory.Trait(
+            _etag=factory.PostGenerationMethodCall("calculate_etag_value")
+        )
+
 
 class BesluitInformatieObjectFactory(factory.django.DjangoModelFactory):
     besluit = factory.SubFactory(BesluitFactory)
@@ -30,3 +35,8 @@ class BesluitInformatieObjectFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = 'datamodel.BesluitInformatieObject'
+
+    class Params:
+        with_etag = factory.Trait(
+            _etag=factory.PostGenerationMethodCall("calculate_etag_value")
+        )
