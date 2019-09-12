@@ -99,12 +99,21 @@ class BesluitInformatieObjectCacheTests(MockSyncMixin, CacheMixin, JWTAuthMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class BesluitCacheTransactionTests(JWTAuthMixin, APITestCase):
+class BesluitCacheTransactionTests(JWTAuthMixin, APITransactionTestCase):
     heeft_alle_autorisaties = True
 
-    def test_invalidate_new_status(self):
+    def setUp(self):
+        super().setUp()
+        self._create_credentials(
+            self.client_id,
+            self.secret,
+            self.heeft_alle_autorisaties,
+            self.max_vertrouwelijkheidaanduiding,
+        )
+
+    def test_invalidate_etag_after_change(self):
         """
-        Status URL is part of the resource, so new status invalidates the ETag.
+        Because changes are made to the besluit, a code 200 should be returned
         """
         besluit = BesluitFactory.create(toelichting="", with_etag=True)
         etag = besluit._etag
