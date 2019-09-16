@@ -8,6 +8,7 @@ from vng_api_common.audittrails.viewsets import (
     AuditTrailCreateMixin, AuditTrailDestroyMixin, AuditTrailViewSet,
     AuditTrailViewsetMixin
 )
+from vng_api_common.caching import conditional_retrieve
 from vng_api_common.notifications.viewsets import (
     NotificationCreateMixin, NotificationDestroyMixin,
     NotificationViewSetMixin
@@ -31,6 +32,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 sentry = logging.getLogger('sentry')
 
+@conditional_retrieve()
 class BesluitViewSet(NotificationViewSetMixin,
                      AuditTrailViewsetMixin,
                      ListFilterByAuthorizationsMixin,
@@ -108,6 +110,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     audit = AUDIT_BRC
 
 
+@conditional_retrieve()
 class BesluitInformatieObjectViewSet(NotificationCreateMixin,
                                      NotificationDestroyMixin,
                                      AuditTrailCreateMixin,
