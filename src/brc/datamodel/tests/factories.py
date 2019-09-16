@@ -6,20 +6,20 @@ import factory
 
 
 class BesluitFactory(factory.django.DjangoModelFactory):
-    verantwoordelijke_organisatie = factory.Faker('ssn', locale='nl_NL')
-    besluittype = factory.Faker('url')
-    datum = factory.Faker('date_this_decade')
+    verantwoordelijke_organisatie = factory.Faker("ssn", locale="nl_NL")
+    besluittype = factory.Faker("url")
+    datum = factory.Faker("date_this_decade")
 
     class Meta:
-        model = 'datamodel.Besluit'
+        model = "datamodel.Besluit"
 
     @factory.lazy_attribute
     def ingangsdatum(self):
         _ingangsdatum = factory.Faker(
-            'date_time_between',
+            "date_time_between",
             start_date=self.datum,
             end_date=self.datum + timedelta(days=180),
-            tzinfo=timezone.utc
+            tzinfo=timezone.utc,
         )
         return _ingangsdatum.evaluate(self, None, None).date()
 
@@ -31,10 +31,10 @@ class BesluitFactory(factory.django.DjangoModelFactory):
 
 class BesluitInformatieObjectFactory(factory.django.DjangoModelFactory):
     besluit = factory.SubFactory(BesluitFactory)
-    informatieobject = factory.Faker('url')
+    informatieobject = factory.Faker("url")
 
     class Meta:
-        model = 'datamodel.BesluitInformatieObject'
+        model = "datamodel.BesluitInformatieObject"
 
     class Params:
         with_etag = factory.Trait(

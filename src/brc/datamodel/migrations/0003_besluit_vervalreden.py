@@ -5,14 +5,24 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0002_auto_20180906_0950'),
-    ]
+    dependencies = [("datamodel", "0002_auto_20180906_0950")]
 
     operations = [
         migrations.AddField(
-            model_name='besluit',
-            name='vervalreden',
-            field=models.CharField(blank=True, choices=[('tijdelijk', 'Besluit met tijdelijke werking'), ('ingetrokken_overheid', 'Besluit ingetrokken door overheid'), ('ingetrokken_belanghebbende', 'Besluit ingetrokken o.v.v. belanghebbende')], max_length=30, verbose_name='vervalreden'),
-        ),
+            model_name="besluit",
+            name="vervalreden",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("tijdelijk", "Besluit met tijdelijke werking"),
+                    ("ingetrokken_overheid", "Besluit ingetrokken door overheid"),
+                    (
+                        "ingetrokken_belanghebbende",
+                        "Besluit ingetrokken o.v.v. belanghebbende",
+                    ),
+                ],
+                max_length=30,
+                verbose_name="vervalreden",
+            ),
+        )
     ]

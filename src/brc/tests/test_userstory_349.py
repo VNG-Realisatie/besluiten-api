@@ -8,11 +8,9 @@ from vng_api_common.tests import JWTAuthMixin, get_operation_url
 from brc.api.scopes import SCOPE_BESLUITEN_ALLES_VERWIJDEREN
 from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.models import Besluit, BesluitInformatieObject
-from brc.datamodel.tests.factories import (
-    BesluitFactory, BesluitInformatieObjectFactory
-)
+from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
 
-BESLUITTYPE = 'https://ztc.com/besluittype/abcd'
+BESLUITTYPE = "https://ztc.com/besluittype/abcd"
 
 
 class US349TestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
@@ -26,10 +24,12 @@ class US349TestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
         """
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
         BesluitInformatieObjectFactory.create(besluit=besluit)
-        besluit_delete_url = get_operation_url('besluit_delete', uuid=besluit.uuid)
+        besluit_delete_url = get_operation_url("besluit_delete", uuid=besluit.uuid)
 
         response = self.client.delete(besluit_delete_url)
 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, response.data)
+        self.assertEqual(
+            response.status_code, status.HTTP_204_NO_CONTENT, response.data
+        )
         self.assertFalse(Besluit.objects.exists())
         self.assertFalse(BesluitInformatieObject.objects.exists())

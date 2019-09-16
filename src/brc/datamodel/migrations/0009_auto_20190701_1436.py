@@ -6,14 +6,18 @@ import vng_api_common.validators
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0008_besluit__zaakbesluit'),
-    ]
+    dependencies = [("datamodel", "0008_besluit__zaakbesluit")]
 
     operations = [
         migrations.AlterField(
-            model_name='besluit',
-            name='identificatie',
-            field=models.CharField(blank=True, help_text='Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld. Indien deze niet opgegeven is, dan wordt die gegenereerd.', max_length=50, validators=[vng_api_common.validators.AlphanumericExcludingDiacritic()], verbose_name='identificatie'),
-        ),
+            model_name="besluit",
+            name="identificatie",
+            field=models.CharField(
+                blank=True,
+                help_text="Identificatie van het besluit binnen de organisatie die het besluit heeft vastgesteld. Indien deze niet opgegeven is, dan wordt die gegenereerd.",
+                max_length=50,
+                validators=[vng_api_common.validators.AlphanumericExcludingDiacritic()],
+                verbose_name="identificatie",
+            ),
+        )
     ]
