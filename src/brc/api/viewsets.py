@@ -32,6 +32,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 
 sentry = logging.getLogger('sentry')
 
+
 @conditional_retrieve()
 class BesluitViewSet(NotificationViewSetMixin,
                      AuditTrailViewsetMixin,
