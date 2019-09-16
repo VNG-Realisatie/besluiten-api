@@ -6,14 +6,16 @@ import vng_api_common.validators
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0003_besluit_vervalreden'),
-    ]
+    dependencies = [("datamodel", "0003_besluit_vervalreden")]
 
     operations = [
         migrations.AlterField(
-            model_name='besluit',
-            name='datum',
-            field=models.DateField(help_text='De beslisdatum (AWB) van het besluit.', validators=[vng_api_common.validators.UntilTodayValidator()], verbose_name='datum'),
-        ),
+            model_name="besluit",
+            name="datum",
+            field=models.DateField(
+                help_text="De beslisdatum (AWB) van het besluit.",
+                validators=[vng_api_common.validators.UntilTodayValidator()],
+                verbose_name="datum",
+            ),
+        )
     ]

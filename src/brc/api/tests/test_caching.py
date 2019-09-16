@@ -3,14 +3,10 @@ Test that the caching mechanisms are in place.
 """
 from rest_framework import status
 from rest_framework.test import APITestCase, APITransactionTestCase
-from vng_api_common.tests import (
-    CacheMixin, JWTAuthMixin, generate_jwt_auth, reverse
-)
+from vng_api_common.tests import CacheMixin, JWTAuthMixin, generate_jwt_auth, reverse
 from vng_api_common.tests.schema import get_spec
 
-from brc.datamodel.tests.factories import (
-    BesluitFactory, BesluitInformatieObjectFactory
-)
+from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
 
 from .mixins import MockSyncMixin
 
@@ -40,8 +36,7 @@ class BesluitCacheTests(CacheMixin, JWTAuthMixin, APITestCase):
     def test_conditional_get_304(self):
         besluit = BesluitFactory.create(with_etag=True)
         response = self.client.get(
-            reverse(besluit),
-            HTTP_IF_NONE_MATCH=f"\"{besluit._etag}\"",
+            reverse(besluit), HTTP_IF_NONE_MATCH=f'"{besluit._etag}"'
         )
 
         self.assertEqual(response.status_code, status.HTTP_304_NOT_MODIFIED)
@@ -49,15 +44,14 @@ class BesluitCacheTests(CacheMixin, JWTAuthMixin, APITestCase):
     def test_conditional_get_stale(self):
         besluit = BesluitFactory.create(with_etag=True)
 
-        response = self.client.get(
-            reverse(besluit),
-            HTTP_IF_NONE_MATCH=f"\"not-an-md5\"",
-        )
+        response = self.client.get(reverse(besluit), HTTP_IF_NONE_MATCH=f'"not-an-md5"')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class BesluitInformatieObjectCacheTests(MockSyncMixin, CacheMixin, JWTAuthMixin, APITestCase):
+class BesluitInformatieObjectCacheTests(
+    MockSyncMixin, CacheMixin, JWTAuthMixin, APITestCase
+):
     heeft_alle_autorisaties = True
 
     def test_besluit_get_cache_header(self):
@@ -81,20 +75,14 @@ class BesluitInformatieObjectCacheTests(MockSyncMixin, CacheMixin, JWTAuthMixin,
 
     def test_conditional_get_304(self):
         bio = BesluitInformatieObjectFactory.create(with_etag=True)
-        response = self.client.get(
-            reverse(bio),
-            HTTP_IF_NONE_MATCH=f"\"{bio._etag}\"",
-        )
+        response = self.client.get(reverse(bio), HTTP_IF_NONE_MATCH=f'"{bio._etag}"')
 
         self.assertEqual(response.status_code, status.HTTP_304_NOT_MODIFIED)
 
     def test_conditional_get_stale(self):
         bio = BesluitInformatieObjectFactory.create(with_etag=True)
 
-        response = self.client.get(
-            reverse(bio),
-            HTTP_IF_NONE_MATCH=f"\"not-an-md5\"",
-        )
+        response = self.client.get(reverse(bio), HTTP_IF_NONE_MATCH=f'"not-an-md5"')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -121,8 +109,5 @@ class BesluitCacheTransactionTests(JWTAuthMixin, APITransactionTestCase):
         besluit.toelichting = "bla"
         besluit.save()
 
-        response = self.client.get(
-            reverse(besluit),
-            HTTP_IF_NONE_MATCH=f"{etag}",
-        )
+        response = self.client.get(reverse(besluit), HTTP_IF_NONE_MATCH=f"{etag}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -6,21 +6,31 @@ import vng_api_common.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0010_migrate_to_flattened_urls'),
-    ]
+    dependencies = [("datamodel", "0010_migrate_to_flattened_urls")]
 
     operations = [
         migrations.AddField(
-            model_name='besluit',
-            name='_etag',
-            field=models.CharField(default='', editable=False, help_text='MD5 hash of the resource representation in its current version.', max_length=32, verbose_name='etag value'),
+            model_name="besluit",
+            name="_etag",
+            field=models.CharField(
+                default="",
+                editable=False,
+                help_text="MD5 hash of the resource representation in its current version.",
+                max_length=32,
+                verbose_name="etag value",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='besluitinformatieobject',
-            name='_etag',
-            field=models.CharField(default='', editable=False, help_text='MD5 hash of the resource representation in its current version.', max_length=32, verbose_name='etag value'),
+            model_name="besluitinformatieobject",
+            name="_etag",
+            field=models.CharField(
+                default="",
+                editable=False,
+                help_text="MD5 hash of the resource representation in its current version.",
+                max_length=32,
+                verbose_name="etag value",
+            ),
             preserve_default=False,
         ),
     ]

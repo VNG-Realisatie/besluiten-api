@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class UtilsConfig(AppConfig):
-    name = 'brc.utils'
+    name = "brc.utils"
 
     def ready(self):
         from . import checks  # noqa

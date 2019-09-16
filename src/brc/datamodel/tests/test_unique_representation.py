@@ -8,35 +8,28 @@ from brc.api.tests.mixins import MockSyncMixin
 from .factories import BesluitFactory, BesluitInformatieObjectFactory
 
 
-@override_settings(
-    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
-)
+@override_settings(ZDS_CLIENT_CLASS="vng_api_common.mocks.MockClient")
 class UniqueRepresentationTestCase(MockSyncMixin, APITestCase):
-
     def test_besluit(self):
-        besluit = BesluitFactory(
-            identificatie='5d940d52-ff5e-4b18-a769-977af9130c04'
-        )
+        besluit = BesluitFactory(identificatie="5d940d52-ff5e-4b18-a769-977af9130c04")
 
         self.assertEqual(
-            besluit.unique_representation(),
-            '5d940d52-ff5e-4b18-a769-977af9130c04'
+            besluit.unique_representation(), "5d940d52-ff5e-4b18-a769-977af9130c04"
         )
 
     def test_besluitinformatieobject(self):
         bio = BesluitInformatieObjectFactory(
-            besluit__identificatie='5d940d52-ff5e-4b18-a769-977af9130c04'
+            besluit__identificatie="5d940d52-ff5e-4b18-a769-977af9130c04"
         )
         responses = {
             bio.informatieobject: {
-                'url': bio.informatieobject,
-                'identificatie': "12345",
+                "url": bio.informatieobject,
+                "identificatie": "12345",
             }
         }
         with mock_client(responses):
             unique_representation = bio.unique_representation()
 
         self.assertEqual(
-            unique_representation,
-            '(5d940d52-ff5e-4b18-a769-977af9130c04) - 12345'
+            unique_representation, "(5d940d52-ff5e-4b18-a769-977af9130c04) - 12345"
         )

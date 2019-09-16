@@ -3,8 +3,8 @@ from django.urls import reverse as _reverse, reverse_lazy as _reverse_lazy
 
 
 def _inject_version(kwargs: dict):
-    kwargs.setdefault('kwargs', {})
-    kwargs['kwargs']['version'] = settings.REST_FRAMEWORK['DEFAULT_VERSION']
+    kwargs.setdefault("kwargs", {})
+    kwargs["kwargs"]["version"] = settings.REST_FRAMEWORK["DEFAULT_VERSION"]
 
 
 def reverse(*args, **kwargs):

@@ -13,26 +13,19 @@ from brc.datamodel.models import Besluit
 from brc.datamodel.tests.factories import BesluitFactory
 from brc.sync.signals import SyncError
 
-ZAAK = 'https://zrc.com/zaken/1234'
-ZAAKTYPE = 'https://ztc.com/zaaktypen/1234'
-BESLUITTYPE = 'https://ztc.com/besluittypen/1234'
+ZAAK = "https://zrc.com/zaken/1234"
+ZAAKTYPE = "https://ztc.com/zaaktypen/1234"
+BESLUITTYPE = "https://ztc.com/besluittypen/1234"
 
 RESPONSES = {
-    BESLUITTYPE: {
-        'url': BESLUITTYPE,
-        'zaaktypes': [
-            ZAAKTYPE
-        ]
-    },
-    ZAAK: {
-        'url': ZAAK,
-        'zaaktype': ZAAKTYPE
-    }
+    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": [ZAAKTYPE]},
+    ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
 }
 
+
 @override_settings(
-    LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
-    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
+    LINK_FETCHER="vng_api_common.mocks.link_fetcher_200",
+    ZDS_CLIENT_CLASS="vng_api_common.mocks.MockClient",
 )
 class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
@@ -41,19 +34,22 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
     def test_create_sync_besluit(self, *mocks):
-        url = get_operation_url('besluit_create')
+        url = get_operation_url("besluit_create")
 
         with mock_client(RESPONSES):
-            response = self.client.post(url, {
-                'verantwoordelijke_organisatie': '517439943',
-                'besluittype': BESLUITTYPE,
-                'zaak': ZAAK,
-                'datum': '2018-09-06',
-                'toelichting': "Vergunning verleend.",
-                'ingangsdatum': '2018-10-01',
-                'vervaldatum': '2018-11-01',
-                'vervalreden': VervalRedenen.tijdelijk,
-            })
+            response = self.client.post(
+                url,
+                {
+                    "verantwoordelijke_organisatie": "517439943",
+                    "besluittype": BESLUITTYPE,
+                    "zaak": ZAAK,
+                    "datum": "2018-09-06",
+                    "toelichting": "Vergunning verleend.",
+                    "ingangsdatum": "2018-10-01",
+                    "vervaldatum": "2018-11-01",
+                    "vervalreden": VervalRedenen.tijdelijk,
+                },
+            )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.mocked_sync_create_besluit.assert_called_once()
@@ -64,12 +60,16 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         self.mocked_sync_create_besluit.assert_called_with(besluit)
 
     def test_delete_sync_besluit(self):
-        besluit = BesluitFactory.create(_zaakbesluit='https://example.com/zrc/zaakbesluittype/abcd')
-        url = get_operation_url('besluit_read', uuid=besluit.uuid)
+        besluit = BesluitFactory.create(
+            _zaakbesluit="https://example.com/zrc/zaakbesluittype/abcd"
+        )
+        url = get_operation_url("besluit_read", uuid=besluit.uuid)
 
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, response.data)
+        self.assertEqual(
+            response.status_code, status.HTTP_204_NO_CONTENT, response.data
+        )
 
         args = self.mocked_sync_delete_besluit.call_args[0]
 
@@ -79,22 +79,27 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
     def test_create_sync_fails(self):
         self.mocked_sync_create_besluit.side_effect = SyncError("Sync failed")
 
-        url = get_operation_url('besluit_create')
+        url = get_operation_url("besluit_create")
 
         with mock_client(RESPONSES):
-            response = self.client.post(url, {
-                'verantwoordelijke_organisatie': '517439943',
-                'besluittype': 'https://example.com/ztc/besluittype/abcd',
-                'zaak': 'https://example.com/zrc/zaken/1234',
-                'datum': '2018-09-06',
-                'toelichting': "Vergunning verleend.",
-                'ingangsdatum': '2018-10-01',
-                'vervaldatum': '2018-11-01',
-                'vervalreden': VervalRedenen.tijdelijk,
-            })
+            response = self.client.post(
+                url,
+                {
+                    "verantwoordelijke_organisatie": "517439943",
+                    "besluittype": "https://example.com/ztc/besluittype/abcd",
+                    "zaak": "https://example.com/zrc/zaken/1234",
+                    "datum": "2018-09-06",
+                    "toelichting": "Vergunning verleend.",
+                    "ingangsdatum": "2018-10-01",
+                    "vervaldatum": "2018-11-01",
+                    "vervalreden": VervalRedenen.tijdelijk,
+                },
+            )
 
         # Test response
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
+        self.assertEqual(
+            response.status_code, status.HTTP_400_BAD_REQUEST, response.data
+        )
 
         # transaction must be rolled back
         self.assertFalse(Besluit.objects.exists())

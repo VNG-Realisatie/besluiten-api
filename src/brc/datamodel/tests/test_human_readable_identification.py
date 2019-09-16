@@ -9,7 +9,6 @@ from .factories import BesluitFactory
 
 
 class BesluitTests(TestCase):
-
     def test_human_readable_1(self):
         with mute_signals(post_save):
             besluit = BesluitFactory.create(identificatie="", datum=date(2019, 7, 1))
@@ -18,7 +17,9 @@ class BesluitTests(TestCase):
 
     def test_human_readable_2(self):
         with mute_signals(post_save):
-            BesluitFactory.create(identificatie="BESLUIT-2019-0000000020", datum=date(2019, 7, 1))
+            BesluitFactory.create(
+                identificatie="BESLUIT-2019-0000000020", datum=date(2019, 7, 1)
+            )
             besluit = BesluitFactory.create(identificatie="", datum=date(2019, 5, 1))
 
         self.assertEqual(besluit.identificatie, "BESLUIT-2019-0000000021")
