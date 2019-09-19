@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "Besluiten API",
-        "description": "Een API om een besluitregistratiecomponent (BRC) te benaderen.\n\nEen BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet\nnoodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere\nbesluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een\nbesluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is\neen besluit van een andere organisatie dat het onderwerp (object) is van een\nzaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele\nrelatie met de ZAAK waarvan het een uitkomst is.\n\nDe typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm \nvan BESLUITTYPEn.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Catalogi API\n* Notificaties API\n* Documenten API *(optioneel)*\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Notificaties**\n\nDeze API publiceert notificaties op het kanaal `besluiten`.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
+        "description": "Een API om een besluitregistratiecomponent (BRC) te benaderen.\n\nEen BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet\nnoodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere\nbesluiten vastgelegd zijn. Vandaar de N:M-relatie naar INFORMATIEOBJECT. Een\nbesluit komt voort uit een zaak van de zaakbehandelende organisatie dan wel is\neen besluit van een andere organisatie dat het onderwerp (object) is van een\nzaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele\nrelatie met de ZAAK waarvan het een uitkomst is.\n\nDe typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm\nvan BESLUITTYPEn.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Catalogi API\n* Notificaties API\n* Documenten API *(optioneel)*\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n### Notificaties\n\nDeze API publiceert notificaties op het kanaal `besluiten`.\n\n**Main resource**\n\n`besluit`\n\n\n\n**Kenmerken**\n\n* `verantwoordelijke_organisatie`: Het RSIN van de niet-natuurlijk persoon zijnde de organisatie die het besluit heeft vastgesteld.\n* `besluittype`: URL-referentie naar het BESLUITTYPE (in de Catalogi API).\n\n**Resources en acties**\n- `besluit`: create, update, destroy\n- `besluitinformatieobject`: create, destroy\n\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
         "contact": {
             "url": "https://zaakgerichtwerken.vng.cloud",
             "email": "standaarden.ondersteuning@vng.nl"
@@ -11,7 +11,7 @@
             "name": "EUPL 1.2",
             "url": "https://opensource.org/licenses/EUPL-1.2"
         },
-        "version": "1.0.0-rc1"
+        "version": "1.0.0-rc2"
     },
     "basePath": "/api/v1",
     "consumes": [
@@ -661,7 +661,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -839,7 +839,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -1041,7 +1041,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -1243,7 +1243,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -1420,7 +1420,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -1548,7 +1548,7 @@
                     {
                         "name": "besluit",
                         "in": "query",
-                        "description": "URL naar de/het gerelateerde besluit",
+                        "description": "URL-referentie naar het BESLUIT.",
                         "required": false,
                         "type": "string",
                         "format": "uri"
@@ -1965,7 +1965,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -2074,410 +2074,6 @@
                     }
                 ]
             },
-            "put": {
-                "operationId": "besluitinformatieobject_update",
-                "summary": "Werk een BESLUIT-INFORMATIEOBJECT relatie in zijn geheel bij.",
-                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- `informatieobject` URL en `besluit` URL mogen niet veranderen",
-                "parameters": [
-                    {
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    {
-                        "name": "X-NLX-Request-Application-Id",
-                        "in": "header",
-                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "X-NLX-Request-User-Id",
-                        "in": "header",
-                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "X-Audit-Toelichting",
-                        "in": "header",
-                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "$ref": "#/definitions/ValidatieFout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not_found",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not acceptable",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "410": {
-                        "description": "Gone",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "415": {
-                        "description": "Unsupported media type",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "429": {
-                        "description": "Too many requests",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ],
-                "security": [
-                    {
-                        "JWT-Claims": [
-                            "besluiten.bijwerken"
-                        ]
-                    }
-                ]
-            },
-            "patch": {
-                "operationId": "besluitinformatieobject_partial_update",
-                "summary": "Werk een BESLUIT-INFORMATIEOBJECT relatie deels bij.",
-                "description": "Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf\naanpassen.\n\n**Er wordt gevalideerd op**\n- `informatieobject` URL en `besluit` URL mogen niet veranderen",
-                "parameters": [
-                    {
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        }
-                    },
-                    {
-                        "name": "X-NLX-Request-Application-Id",
-                        "in": "header",
-                        "description": "Identificatie van de applicatie die het verzoek stuurt (indien NLX wordt gebruikt).",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "X-NLX-Request-User-Id",
-                        "in": "header",
-                        "description": "Identificatie van de gebruiker die het verzoek stuurt (indien NLX wordt gebruikt).",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "X-Audit-Toelichting",
-                        "in": "header",
-                        "description": "Toelichting waarom een bepaald verzoek wordt gedaan",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/BesluitInformatieObject"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "$ref": "#/definitions/ValidatieFout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not_found",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not acceptable",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "410": {
-                        "description": "Gone",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "415": {
-                        "description": "Unsupported media type",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "429": {
-                        "description": "Too many requests",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/Fout"
-                        },
-                        "headers": {
-                            "API-version": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "besluitinformatieobjecten"
-                ],
-                "security": [
-                    {
-                        "JWT-Claims": [
-                            "besluiten.bijwerken"
-                        ]
-                    }
-                ]
-            },
             "delete": {
                 "operationId": "besluitinformatieobject_delete",
                 "summary": "Verwijder een BESLUIT-INFORMATIEOBJECT relatie.",
@@ -2546,7 +2142,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not_found",
+                        "description": "Not found",
                         "schema": {
                             "$ref": "#/definitions/Fout"
                         },
@@ -2910,7 +2506,7 @@
                 }
             }
         },
-        "Wijzgingen": {
+        "Wijzigingen": {
             "title": "Wijzigingen",
             "type": "object",
             "properties": {
@@ -3045,7 +2641,7 @@
                     "readOnly": true
                 },
                 "wijzigingen": {
-                    "$ref": "#/definitions/Wijzgingen"
+                    "$ref": "#/definitions/Wijzigingen"
                 }
             }
         },

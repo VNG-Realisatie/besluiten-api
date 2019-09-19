@@ -1,13 +1,17 @@
 import logging
 
-from django.core.cache import cache
+from django.core.cache import caches
 
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.pagination import PageNumberPagination
 from vng_api_common.audittrails.viewsets import (
-    AuditTrailViewSet, AuditTrailViewsetMixin
+    AuditTrailCreateMixin, AuditTrailDestroyMixin, AuditTrailViewSet,
+    AuditTrailViewsetMixin
 )
-from vng_api_common.notifications.viewsets import NotificationViewSetMixin
+from vng_api_common.notifications.viewsets import (
+    NotificationCreateMixin, NotificationDestroyMixin,
+    NotificationViewSetMixin
+)
 from vng_api_common.viewsets import CheckQueryParamsMixin
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
@@ -28,6 +32,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
 sentry = logging.getLogger('sentry')
 
 class BesluitViewSet(NotificationViewSetMixin,
+                     CheckQueryParamsMixin,
                      AuditTrailViewsetMixin,
                      ListFilterByAuthorizationsMixin,
                      viewsets.ModelViewSet):
@@ -104,11 +109,15 @@ class BesluitViewSet(NotificationViewSetMixin,
     audit = AUDIT_BRC
 
 
-class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
-                                     AuditTrailViewsetMixin,
+class BesluitInformatieObjectViewSet(NotificationCreateMixin,
+                                     NotificationDestroyMixin,
+                                     AuditTrailCreateMixin,
+                                     AuditTrailDestroyMixin,
                                      CheckQueryParamsMixin,
                                      ListFilterByAuthorizationsMixin,
-                                     viewsets.ModelViewSet):
+                                     mixins.CreateModelMixin,
+                                     mixins.DestroyModelMixin,
+                                     viewsets.ReadOnlyModelViewSet):
     """
     Opvragen en bewerken van BESLUIT-INFORMATIEOBJECT relaties.
 
@@ -183,6 +192,7 @@ class BesluitInformatieObjectViewSet(NotificationViewSetMixin,
         qs = super().get_queryset()
 
         # Do not display BesluitInformatieObjecten that are marked to be deleted
+        cache = caches['drc_sync']
         marked_bios = cache.get('bios_marked_for_delete')
         if marked_bios:
             sentry.info(f"marked bios {marked_bios} returned qs {qs.exclude(uuid__in=marked_bios)}")

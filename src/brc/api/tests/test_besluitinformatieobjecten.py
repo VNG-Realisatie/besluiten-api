@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from unittest.mock import patch
 
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
@@ -7,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import JWTAuthMixin, get_validation_errors
+from vng_api_common.tests import JWTAuthMixin, get_operation_url, get_validation_errors
 from vng_api_common.validators import IsImmutableValidator
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
@@ -39,7 +40,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
     heeft_alle_autorisaties = True
 
     @freeze_time('2018-09-19T12:25:19+0200')
-    def test_create(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_create(self, *mocks):
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
             'version': '1',
@@ -73,7 +76,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         })
         self.assertEqual(response.json(), expected_response)
 
-    def test_duplicate_object(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_duplicate_object(self, *mocks):
         """
         Test the (informatieobject, object) unique together validation.
         """
@@ -143,7 +148,9 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['besluit'], f'http://testserver{besluit_url}')
 
-    def test_update_besluit(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_update_besluitinformatieobject_not_allowed(self, *mocks):
         besluit = BesluitFactory.create()
         besluit_url = reverse('besluit-detail', kwargs={
             'version': '1',
@@ -163,12 +170,7 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
             'informatieobject': 'https://bla.com',
         })
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
-
-        for field in ['besluit', 'informatieobject']:
-            with self.subTest(field=field):
-                error = get_validation_errors(response, field)
-                self.assertEqual(error['code'], IsImmutableValidator.code)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_sync_create_fails(self):
         self.mocked_sync_create_bio.side_effect = SyncError("Sync failed")
@@ -213,3 +215,14 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         # Relation is gone, besluit still exists.
         self.assertFalse(BesluitInformatieObject.objects.exists())
         self.assertTrue(Besluit.objects.exists())
+
+    def test_validate_unknown_query_params(self):
+        BesluitInformatieObjectFactory.create_batch(2)
+        url = get_operation_url("besluitinformatieobject_list")
+
+        response = self.client.get(url, {"someparam": "somevalue"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        error = get_validation_errors(response, "nonFieldErrors")
+        self.assertEqual(error["code"], "unknown-parameters")

@@ -1,8 +1,11 @@
+from unittest.mock import patch
+
 from django.test import override_settings
 
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
+from zds_client.tests.mocks import mock_client
 
 from brc.api.tests.mixins import BesluitSyncMixin
 from brc.datamodel.constants import VervalRedenen
@@ -10,27 +13,47 @@ from brc.datamodel.models import Besluit
 from brc.datamodel.tests.factories import BesluitFactory
 from brc.sync.signals import SyncError
 
+ZAAK = 'https://zrc.com/zaken/1234'
+ZAAKTYPE = 'https://ztc.com/zaaktypen/1234'
+BESLUITTYPE = 'https://ztc.com/besluittypen/1234'
+
+RESPONSES = {
+    BESLUITTYPE: {
+        'url': BESLUITTYPE,
+        'zaaktypes': [
+            ZAAKTYPE
+        ]
+    },
+    ZAAK: {
+        'url': ZAAK,
+        'zaaktype': ZAAKTYPE
+    }
+}
 
 @override_settings(
-    LINK_FETCHER='vng_api_common.mocks.link_fetcher_200'
+    LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
+    ZDS_CLIENT_CLASS='vng_api_common.mocks.MockClient'
 )
 class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
-    def test_create_sync_besluit(self):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_create_sync_besluit(self, *mocks):
         url = get_operation_url('besluit_create')
 
-        response = self.client.post(url, {
-            'verantwoordelijke_organisatie': '517439943',
-            'besluittype': 'https://example.com/ztc/besluittype/abcd',
-            'zaak': 'https://example.com/zrc/zaken/1234',
-            'datum': '2018-09-06',
-            'toelichting': "Vergunning verleend.",
-            'ingangsdatum': '2018-10-01',
-            'vervaldatum': '2018-11-01',
-            'vervalreden': VervalRedenen.tijdelijk,
-        })
+        with mock_client(RESPONSES):
+            response = self.client.post(url, {
+                'verantwoordelijke_organisatie': '517439943',
+                'besluittype': BESLUITTYPE,
+                'zaak': ZAAK,
+                'datum': '2018-09-06',
+                'toelichting': "Vergunning verleend.",
+                'ingangsdatum': '2018-10-01',
+                'vervaldatum': '2018-11-01',
+                'vervalreden': VervalRedenen.tijdelijk,
+            })
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.mocked_sync_create_besluit.assert_called_once()
@@ -58,16 +81,17 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
         url = get_operation_url('besluit_create')
 
-        response = self.client.post(url, {
-            'verantwoordelijke_organisatie': '517439943',
-            'besluittype': 'https://example.com/ztc/besluittype/abcd',
-            'zaak': 'https://example.com/zrc/zaken/1234',
-            'datum': '2018-09-06',
-            'toelichting': "Vergunning verleend.",
-            'ingangsdatum': '2018-10-01',
-            'vervaldatum': '2018-11-01',
-            'vervalreden': VervalRedenen.tijdelijk,
-        })
+        with mock_client(RESPONSES):
+            response = self.client.post(url, {
+                'verantwoordelijke_organisatie': '517439943',
+                'besluittype': 'https://example.com/ztc/besluittype/abcd',
+                'zaak': 'https://example.com/zrc/zaken/1234',
+                'datum': '2018-09-06',
+                'toelichting': "Vergunning verleend.",
+                'ingangsdatum': '2018-10-01',
+                'vervaldatum': '2018-11-01',
+                'vervalreden': VervalRedenen.tijdelijk,
+            })
 
         # Test response
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)

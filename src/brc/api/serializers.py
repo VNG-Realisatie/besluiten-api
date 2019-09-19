@@ -1,21 +1,26 @@
 """
 Serializers of the Besluit Registratie Component REST API
 """
-from django.utils.encoding import force_text
+from django.conf import settings
 
 from rest_framework import serializers
 from rest_framework.settings import api_settings
+from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
-    IsImmutableValidator, UniekeIdentificatieValidator, URLValidator,
+    IsImmutableValidator, ResourceValidator, UniekeIdentificatieValidator,
     validate_rsin
 )
 
-from brc.datamodel.constants import RelatieAarden, VervalRedenen
+from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
+from .validators import (
+    BesluittypeZaaktypeValidator,
+    ZaaktypeInformatieobjecttypeRelationValidator
+)
 
 
 class BesluitSerializer(serializers.HyperlinkedModelSerializer):
@@ -51,13 +56,25 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                 'validators': [IsImmutableValidator(), validate_rsin],
             },
             'zaak': {
-                'validators': [URLValidator(get_auth=get_zrc_auth, headers={'Accept-Crs': 'EPSG:4326'})],
+                'validators': [
+                    ResourceValidator(
+                        'Zaak',
+                        settings.ZRC_API_SPEC,
+                        get_auth=get_zrc_auth,
+                        headers={'Accept-Crs': 'EPSG:4326'}
+                    )
+                ]
             },
             'besluittype': {
-                'validators': [URLValidator(get_auth=get_ztc_auth)],
+                'validators': [
+                    ResourceValidator('BesluitType', settings.ZTC_API_SPEC, get_auth=get_ztc_auth)
+                ],
             },
         }
-        validators = [UniekeIdentificatieValidator('verantwoordelijke_organisatie')]
+        validators = [
+            UniekeIdentificatieValidator("verantwoordelijke_organisatie"),
+            BesluittypeZaaktypeValidator('besluittype')
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -89,13 +106,20 @@ class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             'informatieobject',
             'besluit',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=BesluitInformatieObject.objects.all(),
+                fields=['besluit', 'informatieobject']
+            ),
+            ZaaktypeInformatieobjecttypeRelationValidator("informatieobject"),
+        ]
         extra_kwargs = {
             'url': {
                 'lookup_field': 'uuid'
             },
             'informatieobject': {
                 'validators': [
-                    URLValidator(get_auth=get_drc_auth),
+                    ResourceValidator('EnkelvoudigInformatieObject', settings.DRC_API_SPEC, get_auth=get_drc_auth),
                     IsImmutableValidator(),
                 ]
             },

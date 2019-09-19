@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from drf_yasg import openapi
+from vng_api_common.notifications.utils import notification_documentation
 
 from .kanalen import KANAAL_BESLUITEN
 
@@ -14,7 +15,7 @@ een besluit van een andere organisatie dat het onderwerp (object) is van een
 zaak van de zaakbehandelende organisatie. BESLUIT heeft dan ook een optionele
 relatie met de ZAAK waarvan het een uitkomst is.
 
-De typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm 
+De typering van BESLUITen is in de Catalogi API (ZTC) ondergebracht in de vorm
 van BESLUITTYPEn.
 
 **Afhankelijkheden**
@@ -33,9 +34,9 @@ Deze API vereist autorisatie. Je kan de
 [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
 genereren.
 
-**Notificaties**
+### Notificaties
 
-Deze API publiceert notificaties op het kanaal `{KANAAL_BESLUITEN.label}`.
+{notification_documentation(KANAAL_BESLUITEN)}
 
 **Handige links**
 

@@ -7,15 +7,19 @@ services:
     # environment:
     #   - POSTGRES_USER=${PG_USER:brc}
     #   - POSTGRES_PASSWORD=${PG_PASSWORD:brc}
+  redis:
+    image: redis
   web:
     image: vngr/gemma-brc
     environment:
       - DJANGO_SETTINGS_MODULE=brc.conf.docker
       - SECRET_KEY=${SECRET_KEY}
+      - REDIS_CACHE=redis:6379/0
     ports:
       - 8000:8000
     depends_on:
       - db
+      - redis
 
 
   # See: src/brc/conf/docker.py

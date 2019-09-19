@@ -6,6 +6,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
+from zds_client.tests.mocks import mock_client as _mock_client
 
 from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.constants import VervalRedenen
@@ -13,7 +14,7 @@ from brc.datamodel.tests.factories import (
     BesluitFactory, BesluitInformatieObjectFactory
 )
 
-BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
+BESLUITTYPE = 'https://ztc.com/besluittypen/1234'
 
 
 @freeze_time("2018-09-07T00:00:00Z")
@@ -21,12 +22,14 @@ BESLUITTYPE = 'https://example.com/ztc/besluittype/abcd'
     LINK_FETCHER='vng_api_common.mocks.link_fetcher_200',
     NOTIFICATIONS_DISABLED=False
 )
-@patch('zds_client.Client.from_url')
 class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
 
-    def test_send_notif_create_besluit(self, mock_client):
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    @patch('zds_client.Client.from_url')
+    def test_send_notif_create_besluit(self, mock_client, *mocks):
         """
         Check if notifications will be send when Besluit is created
         """
@@ -35,7 +38,6 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
         data = {
             'verantwoordelijkeOrganisatie': '517439943',  # RSIN
             'besluittype': BESLUITTYPE,
-            'zaak': 'https://example.com/zrc/zaken/1234',
             'datum': '2018-09-06',
             'toelichting': "Vergunning verleend.",
             'ingangsdatum': '2018-10-01',
@@ -64,6 +66,7 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
             }
         )
 
+    @patch('zds_client.Client.from_url')
     def test_send_notif_delete_resultaat(self, mock_client):
         """
         Check if notifications will be send when resultaat is deleted
