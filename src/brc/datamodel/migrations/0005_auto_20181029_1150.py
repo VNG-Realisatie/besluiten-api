@@ -5,14 +5,16 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0004_auto_20181029_0959'),
-    ]
+    dependencies = [("datamodel", "0004_auto_20181029_0959")]
 
     operations = [
         migrations.AlterField(
-            model_name='besluit',
-            name='toelichting',
-            field=models.TextField(blank=True, help_text='Toelichting bij het besluit.', verbose_name='toelichting'),
-        ),
+            model_name="besluit",
+            name="toelichting",
+            field=models.TextField(
+                blank=True,
+                help_text="Toelichting bij het besluit.",
+                verbose_name="toelichting",
+            ),
+        )
     ]

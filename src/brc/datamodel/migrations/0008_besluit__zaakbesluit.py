@@ -5,14 +5,16 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('datamodel', '0007_auto_20190528_0940'),
-    ]
+    dependencies = [("datamodel", "0007_auto_20190528_0940")]
 
     operations = [
         migrations.AddField(
-            model_name='besluit',
-            name='_zaakbesluit',
-            field=models.URLField(blank=True, help_text='Link to the related object in the ZRC API', verbose_name='zaakbesluit'),
-        ),
+            model_name="besluit",
+            name="_zaakbesluit",
+            field=models.URLField(
+                blank=True,
+                help_text="Link to the related object in the ZRC API",
+                verbose_name="zaakbesluit",
+            ),
+        )
     ]
