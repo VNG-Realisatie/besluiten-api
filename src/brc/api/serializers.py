@@ -9,7 +9,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
     IsImmutableValidator, ResourceValidator, UniekeIdentificatieValidator,
-    validate_rsin
+    validate_rsin, PublishValidator
 )
 
 from brc.datamodel.constants import VervalRedenen
@@ -65,10 +65,12 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                     )
                 ]
             },
-            'besluittype': {
-                'validators': [
-                    ResourceValidator('BesluitType', settings.ZTC_API_SPEC, get_auth=get_ztc_auth)
-                ],
+            "besluittype": {
+                "validators": [
+                    PublishValidator(
+                        "BesluitType", settings.ZTC_API_SPEC, get_auth=get_ztc_auth
+                    )
+                ]
             },
         }
         validators = [

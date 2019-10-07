@@ -8,3 +8,4 @@ mock
 pyquery
 tblib
 webtest
+requests-mock

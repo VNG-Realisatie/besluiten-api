@@ -62,6 +62,7 @@ pytz==2018.5
 pyyaml==3.13
 raven==6.9.0
 redis==3.3.6
+requests-mock==1.7.0
 requests==2.21
 ruamel.yaml==0.15.64
 six==1.11.0
