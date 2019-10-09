@@ -1,5 +1,3 @@
-import logging
-
 from django.core.cache import caches
 
 from rest_framework import mixins, viewsets
@@ -32,8 +30,6 @@ from .scopes import (
     SCOPE_BESLUITEN_BIJWERKEN,
 )
 from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
-
-sentry = logging.getLogger("sentry")
 
 
 @conditional_retrieve()
@@ -208,9 +204,6 @@ class BesluitInformatieObjectViewSet(
         cache = caches["drc_sync"]
         marked_bios = cache.get("bios_marked_for_delete")
         if marked_bios:
-            sentry.info(
-                f"marked bios {marked_bios} returned qs {qs.exclude(uuid__in=marked_bios)}"
-            )
             return qs.exclude(uuid__in=marked_bios)
         return qs
 
