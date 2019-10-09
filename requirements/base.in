@@ -17,4 +17,4 @@ django-markup==1.3
 django_redis
 
 djangorestframework
-vng-api-common==1.3.0
+vng-api-common

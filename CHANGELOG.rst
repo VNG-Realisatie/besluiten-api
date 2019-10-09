@@ -2,6 +2,32 @@
 Wijzigingen
 ===========
 
+1.0.0-rc2 (2019-09-19)
+======================
+
+Second release candidate
+
+* Fixed some response descriptions
+* Fixed ``drc_sync`` cache backend on Docker
+* Added documentation w/r to notifications to the API spec document itself. For
+  provider implementations: this means you MUST send these notifications
+* Bump dependencies to latest stable/security releases
+* Fixed a bug leading to tests not being picked up and fixed the bug that was
+  revealed by that
+* Added missing query params check to endpoints taking filter parameters
+
+Breaking changes
+----------------
+
+* Removed update methods on ``BesluitInformatieObject`` - these were not
+  posssible in the first place because of immutable attributes
+* Fixed typo in audit trail ``Wijzigingen`` schema (was ``Wijzgingen``)
+* Added missing resource validation for ``Besluit.besluittype`` and validation
+  if ``besluittype`` and ``Besluit.zaak.zaaktype`` may be used together (based
+  on ZTC)
+* Added ``Zaaktype-Informatieobjecttype`` relation validation to ZIO if besluit
+  is linked to ``Zaak``
+
 1.0.0-rc1 (2019-07-18)
 ======================
 

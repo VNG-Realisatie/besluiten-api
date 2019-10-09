@@ -39,6 +39,7 @@ sentry = logging.getLogger("sentry")
 @conditional_retrieve()
 class BesluitViewSet(
     NotificationViewSetMixin,
+    CheckQueryParamsMixin,
     AuditTrailViewsetMixin,
     ListFilterByAuthorizationsMixin,
     viewsets.ModelViewSet,
