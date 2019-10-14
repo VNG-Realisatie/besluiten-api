@@ -1,8 +1,8 @@
 from unittest.mock import patch
-import requests_mock
 
 from django.test import override_settings
 
+import requests_mock
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
