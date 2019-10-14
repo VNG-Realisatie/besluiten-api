@@ -51,6 +51,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     - geldigheid `besluittype` URL
     - geldigheid `zaak` URL
     - `datum` in het verleden of nu
+    - `besluittype` being published (`besluittype.concept` = False)
 
     list:
     Alle BESLUITen opvragen.
@@ -71,6 +72,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     - geldigheid `besluittype` URL
     - geldigheid `zaak` URL
     - `datum` in het verleden of nu
+    - `besluittype` being published (`besluittype.concept` = False)
 
     partial_update:
     Werk een BESLUIT deels bij.
@@ -81,6 +83,7 @@ class BesluitViewSet(NotificationViewSetMixin,
     - geldigheid `besluittype` URL
     - geldigheid `zaak` URL
     - `datum` in het verleden of nu
+    - `besluittype` being published (`besluittype.concept` = False)
 
     destroy:
     Verwijder een BESLUIT.
