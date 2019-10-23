@@ -26,7 +26,6 @@ djangorestframework==3.9.4
 docutils==0.14            # via sphinx
 drf-nested-routers==0.90.2  # via vng-api-common
 drf-yasg==1.16.0          # via vng-api-common
-first==2.0.1              # via pip-tools
 gemma-zds-client==0.11.0  # via vng-api-common
 idna==2.7                 # via requests
 imagesize==1.1.0          # via sphinx
@@ -40,7 +39,7 @@ markupsafe==1.0           # via jinja2
 oyaml==0.7                # via vng-api-common
 packaging==19.0           # via sphinx
 pillow==5.2.0
-pip-tools==2.0.2
+pip-tools==4.2.0
 psycopg2-binary==2.7.5
 pygments==2.3.1           # via sphinx
 pyjwt==1.6.4              # via gemma-zds-client, vng-api-common
@@ -62,4 +61,4 @@ sqlparse==0.3.0           # via django
 unidecode==1.0.22         # via vng-api-common
 uritemplate==3.0.0        # via coreapi, drf-yasg
 urllib3==1.24.3           # via requests
-vng-api-common==1.0.21
+vng-api-common==1.0.26
