@@ -305,7 +305,7 @@ paths:
 
         - `datum` in het verleden of nu
 
-        - `besluittype` being published (`besluittype.concept` = False)'
+        - publicatie `besluittype` - `concept` moet `false` zijn'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -882,7 +882,7 @@ paths:
 
         - `datum` in het verleden of nu
 
-        - `besluittype` being published (`besluittype.concept` = False)'
+        - publicatie `besluittype` - `concept` moet `false` zijn'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
@@ -1059,7 +1059,7 @@ paths:
 
         - `datum` in het verleden of nu
 
-        - `besluittype` being published (`besluittype.concept` = False)'
+        - publicatie `besluittype` - `concept` moet `false` zijn'
       parameters:
       - name: X-NLX-Request-Application-Id
         in: header
