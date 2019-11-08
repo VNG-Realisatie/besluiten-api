@@ -29,6 +29,9 @@ RESPONSES = {
         'url': BESLUITTYPE,
         'zaaktypes': [
             ZAAKTYPE
+        ],
+        'informatieobjecttypen': [
+            INFORMATIEOBJECTTYPE
         ]
     },
     ZAAK: {

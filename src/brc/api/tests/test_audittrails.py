@@ -19,6 +19,7 @@ ZTC_ROOT = 'https://example.com/ztc/api/v1'
 DRC_ROOT = 'https://example.com/drc/api/v1'
 CATALOGUS = f'{ZTC_ROOT}/catalogus/878a3318-5950-4642-8715-189745f91b04'
 INFORMATIE_OBJECT = f'{DRC_ROOT}/enkelvoudiginformatieobjecten/1234'
+INFORMATIE_OBJECT_TYPE = f'{ZTC_ROOT}/informatieobjecttypen/1234'
 
 ZAAK = 'https://zrc.com/zaken/1234'
 ZAAKTYPE = f'{ZTC_ROOT}/zaaktypen/1234'
@@ -42,12 +43,17 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
             'productenOfDiensten': [
                 'https://example.com/product/123',
                 'https://example.com/dienst/123',
-            ]
+            ],
+            "informatieobjecttypen": [INFORMATIE_OBJECT_TYPE]
         },
         ZAAK: {
             'url': ZAAK,
             'zaaktype': ZAAKTYPE
-        }
+        },
+        INFORMATIE_OBJECT: {
+            'url': INFORMATIE_OBJECT,
+            'informatieobjecttype': INFORMATIE_OBJECT_TYPE,
+        },
     }
 
     @patch("vng_api_common.validators.fetcher")
@@ -135,10 +141,11 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
         url = reverse(BesluitInformatieObject)
 
-        response = self.client.post(url, {
-            'besluit': besluit_data['url'],
-            'informatieobject': INFORMATIE_OBJECT,
-        })
+        with mock_client(self.responses):
+            response = self.client.post(url, {
+                'besluit': besluit_data['url'],
+                'informatieobject': INFORMATIE_OBJECT,
+            })
 
         besluitinformatieobject_response = response.data
 

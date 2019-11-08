@@ -18,8 +18,8 @@ from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
 from .validators import (
-    BesluittypeZaaktypeValidator,
-    ZaaktypeInformatieobjecttypeRelationValidator
+    BesluittypeInformatieobjecttypeRelationValidator,
+    BesluittypeZaaktypeValidator
 )
 
 
@@ -113,7 +113,7 @@ class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
                 queryset=BesluitInformatieObject.objects.all(),
                 fields=['besluit', 'informatieobject']
             ),
-            ZaaktypeInformatieobjecttypeRelationValidator("informatieobject"),
+            BesluittypeInformatieobjecttypeRelationValidator("informatieobject"),
         ]
         extra_kwargs = {
             'url': {
