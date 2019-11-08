@@ -50,9 +50,11 @@ class BesluittypeZaaktypeValidator:
             raise serializers.ValidationError(self.message, code=self.code)
 
 
-class ZaaktypeInformatieobjecttypeRelationValidator:
-    code = "missing-zaaktype-informatieobjecttype-relation"
-    message = _("Het informatieobjecttype hoort niet bij het zaaktype van de zaak.")
+class BesluittypeInformatieobjecttypeRelationValidator:
+    code = "missing-besluittype-informatieobjecttype-relation"
+    message = _(
+        "Het informatieobjecttype hoort niet bij het besluitype van de besluit."
+    )
 
     def __init__(
         self, url_field: str, besluit_field: str = "besluit", resource: str = None
@@ -67,13 +69,10 @@ class ZaaktypeInformatieobjecttypeRelationValidator:
         if not informatieobject_url or not besluit:
             return
 
-        # Only apply validation if the Besluit is linked to a Zaak
-        if besluit.zaak:
-            zaak = fetch_object("zaak", besluit.zaak)
-            zaaktype = fetch_object("zaaktype", zaak["zaaktype"])
-            informatieobject = fetch_object(self.resource, informatieobject_url)
-            if (
-                informatieobject["informatieobjecttype"]
-                not in zaaktype["informatieobjecttypen"]
-            ):
-                raise serializers.ValidationError(self.message, code=self.code)
+        besluittype = fetch_object("besluittype", besluit.besluittype)
+        informatieobject = fetch_object(self.resource, informatieobject_url)
+        if (
+            informatieobject["informatieobjecttype"]
+            not in besluittype["informatieobjecttypen"]
+        ):
+            raise serializers.ValidationError(self.message, code=self.code)

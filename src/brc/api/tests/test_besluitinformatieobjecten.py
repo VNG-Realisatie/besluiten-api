@@ -3,13 +3,18 @@ from datetime import datetime
 from unittest.mock import patch
 
 from django.test import override_settings
-from django.urls import reverse, reverse_lazy
 
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import JWTAuthMixin, get_operation_url, get_validation_errors
-from vng_api_common.validators import IsImmutableValidator
+from vng_api_common.tests import (
+    JWTAuthMixin,
+    get_operation_url,
+    get_validation_errors,
+    reverse,
+    reverse_lazy,
+)
+from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import Besluit, BesluitInformatieObject
 from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
@@ -20,6 +25,16 @@ from .mixins import MockSyncMixin
 INFORMATIEOBJECT = (
     f"http://drc.com/api/v1/enkelvoudiginformatieobjecten/{uuid.uuid4().hex}"
 )
+INFORMATIEOBJECTTYPE = "https://ztc.com/informatieobjecttypen/1234"
+BESLUITTYPE = "https://ztc.com/besluittypen/1234"
+
+RESPONSES = {
+    BESLUITTYPE: {"url": BESLUITTYPE, "informatieobjecttypen": [INFORMATIEOBJECTTYPE]},
+    INFORMATIEOBJECT: {
+        "url": INFORMATIEOBJECT,
+        "informatieobjecttype": INFORMATIEOBJECTTYPE,
+    },
+}
 
 
 def dt_to_api(dt: datetime):
@@ -40,21 +55,18 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
     heeft_alle_autorisaties = True
 
     @freeze_time("2018-09-19T12:25:19+0200")
-    @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
     def test_create(self, *mocks):
-        besluit = BesluitFactory.create()
-        besluit_url = reverse(
-            "besluit-detail", kwargs={"version": "1", "uuid": besluit.uuid}
-        )
-
+        besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
+        besluit_url = reverse(besluit)
         content = {
             "informatieobject": INFORMATIEOBJECT,
             "besluit": "http://testserver" + besluit_url,
         }
 
         # Send to the API
-        response = self.client.post(self.list_url, content)
+        with mock_client(RESPONSES):
+            response = self.client.post(self.list_url, content)
 
         # Test response
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
@@ -73,24 +85,23 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         expected_response.update({"url": f"http://testserver{expected_url}"})
         self.assertEqual(response.json(), expected_response)
 
-    @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
     def test_duplicate_object(self, *mocks):
         """
         Test the (informatieobject, object) unique together validation.
         """
-        bio = BesluitInformatieObjectFactory.create(informatieobject=INFORMATIEOBJECT)
-        besluit_url = reverse(
-            "besluit-detail", kwargs={"version": "1", "uuid": bio.besluit.uuid}
+        bio = BesluitInformatieObjectFactory.create(
+            informatieobject=INFORMATIEOBJECT, besluit__besluittype=BESLUITTYPE
         )
-
+        besluit_url = reverse(bio.besluit)
         content = {
             "informatieobject": bio.informatieobject,
             "besluit": f"http://testserver{besluit_url}",
         }
 
         # Send to the API
-        response = self.client.post(self.list_url, content)
+        with mock_client(RESPONSES):
+            response = self.client.post(self.list_url, content)
 
         self.assertEqual(
             response.status_code, status.HTTP_400_BAD_REQUEST, response.data
@@ -130,12 +141,16 @@ class BesluitInformatieObjectAPITests(MockSyncMixin, JWTAuthMixin, APITestCase):
         bio_list_url = reverse("besluitinformatieobject-list", kwargs={"version": "1"})
 
         response = self.client.get(
-            bio_list_url, {"besluit": f"http://testserver{besluit_url}"}
+            bio_list_url,
+            {"besluit": f"http://testserver.com{besluit_url}"},
+            HTTP_HOST="testserver.com",
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["besluit"], f"http://testserver{besluit_url}")
+        self.assertEqual(
+            response.data[0]["besluit"], f"http://testserver.com{besluit_url}"
+        )
 
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
