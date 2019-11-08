@@ -311,6 +311,7 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         error = get_validation_errors(response, 'zaak')
         self.assertEqual(error['code'], 'invalid-resource')
 
+
 class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
     heeft_alle_autorisaties = True
@@ -359,7 +360,7 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
     @override_settings(LINK_FETCHER='vng_api_common.mocks.link_fetcher_200')
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
-    def test_validate_no_informatieobjecttype_zaaktype_relation(self, *mocks):
+    def test_validate_no_informatieobjecttype_besluittype_relation(self, *mocks):
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE, zaak=ZAAK)
         besluit_url = reverse('besluit-detail', kwargs={'uuid': besluit.uuid})
         url = reverse('besluitinformatieobject-list')
@@ -371,16 +372,13 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
             },
             BESLUITTYPE: {
                 'url': BESLUITTYPE,
-                'zaaktypes': []
+                'zaaktypes': [],
+                'informatieobjecttypen': [],
             },
             INFORMATIEOBJECT: {
                 'url': INFORMATIEOBJECT,
                 'informatieobjecttype': INFORMATIEOBJECT_TYPE
             },
-            ZAAKTYPE: {
-                'url': ZAAKTYPE,
-                'informatieobjecttypen': []
-            }
         }
 
         with mock_client(responses):
@@ -392,4 +390,4 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         error = get_validation_errors(response, 'nonFieldErrors')
-        self.assertEqual(error['code'], 'missing-zaaktype-informatieobjecttype-relation')
+        self.assertEqual(error['code'], 'missing-besluittype-informatieobjecttype-relation')
