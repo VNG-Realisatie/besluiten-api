@@ -9,6 +9,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import (
     IsImmutableValidator,
+    PublishValidator,
     ResourceValidator,
     UniekeIdentificatieValidator,
     validate_rsin,
@@ -20,8 +21,8 @@ from brc.sync.signals import SyncError
 
 from .auth import get_drc_auth, get_zrc_auth, get_ztc_auth
 from .validators import (
+    BesluittypeInformatieobjecttypeRelationValidator,
     BesluittypeZaaktypeValidator,
-    ZaaktypeInformatieobjecttypeRelationValidator,
 )
 
 
@@ -67,7 +68,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
             },
             "besluittype": {
                 "validators": [
-                    ResourceValidator(
+                    PublishValidator(
                         "BesluitType", settings.ZTC_API_SPEC, get_auth=get_ztc_auth
                     )
                 ]
@@ -109,7 +110,7 @@ class BesluitInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
                 queryset=BesluitInformatieObject.objects.all(),
                 fields=["besluit", "informatieobject"],
             ),
-            ZaaktypeInformatieobjecttypeRelationValidator("informatieobject"),
+            BesluittypeInformatieobjecttypeRelationValidator("informatieobject"),
         ]
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},

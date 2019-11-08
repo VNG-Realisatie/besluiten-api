@@ -26,7 +26,11 @@ INFORMATIEOBJECTTYPE = "https://ztc.com/informatieobjecttypen/1234"
 BESLUITTYPE = "https://ztc.com/besluittypen/1234"
 
 RESPONSES = {
-    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": [ZAAKTYPE]},
+    BESLUITTYPE: {
+        "url": BESLUITTYPE,
+        "zaaktypes": [ZAAKTYPE],
+        "informatieobjecttypen": [INFORMATIEOBJECTTYPE],
+    },
     ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
     ZAAKTYPE: {"url": ZAAKTYPE, "informatieobjecttypen": [INFORMATIEOBJECTTYPE]},
     INFORMATIEOBJECT: {
@@ -138,10 +142,16 @@ class BesluitCreateTests(MockSyncMixin, TypeCheckMixin, JWTAuthMixin, APITestCas
 
         base_uri = get_operation_url("besluitinformatieobject_list")
 
-        url1 = f"{base_uri}?besluit={besluit1_uri}"
-        response1 = self.client.get(url1)
+        response1 = self.client.get(
+            base_uri,
+            {"besluit": f"http://testserver.com{besluit1_uri}"},
+            HTTP_HOST="testserver.com",
+        )
         self.assertEqual(len(response1.data), 3)
 
-        url2 = f"{base_uri}?besluit={besluit2_uri}"
-        response2 = self.client.get(url2)
+        response2 = self.client.get(
+            base_uri,
+            {"besluit": f"http://testserver.com{besluit2_uri}"},
+            HTTP_HOST="testserver.com",
+        )
         self.assertEqual(len(response2.data), 2)

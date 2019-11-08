@@ -8,12 +8,25 @@ from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import AuthCheckMixin, JWTAuthMixin, reverse
+from zds_client.tests.mocks import mock_client
 
 from brc.datamodel.models import BesluitInformatieObject
 from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
 
 from ..scopes import SCOPE_BESLUITEN_AANMAKEN, SCOPE_BESLUITEN_ALLES_LEZEN
 from .mixins import MockSyncMixin
+
+INFORMATIEOBJECT = f"http://drc.com/api/v1/enkelvoudiginformatieobjecten/1234"
+INFORMATIEOBJECTTYPE = "https://ztc.com/informatieobjecttypen/1234"
+BESLUITTYPE = "https://ztc.com/besluittypen/1234"
+
+RESPONSES = {
+    BESLUITTYPE: {"url": BESLUITTYPE, "informatieobjecttypen": [INFORMATIEOBJECTTYPE]},
+    INFORMATIEOBJECT: {
+        "url": INFORMATIEOBJECT,
+        "informatieobjecttype": INFORMATIEOBJECTTYPE,
+    },
+}
 
 
 @override_settings(ZDS_CLIENT_CLASS="vng_api_common.mocks.MockClient")
@@ -99,10 +112,10 @@ class BesluitReadCorrectScopeTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     scopes = [SCOPE_BESLUITEN_ALLES_LEZEN, SCOPE_BESLUITEN_AANMAKEN]
-    besluittype = "https://besluittype.nl/ok"
+    besluittype = BESLUITTYPE
 
     def test_list_bio_limited_to_authorized_zaken(self):
-        besluit1 = BesluitFactory.create(besluittype="https://besluittype.nl/ok")
+        besluit1 = BesluitFactory.create(besluittype=BESLUITTYPE)
         besluit2 = BesluitFactory.create(besluittype="https://besluittype.nl/not_ok")
 
         url = reverse(BesluitInformatieObject)
@@ -123,12 +136,10 @@ class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         besluit_url = reverse(bio1.besluit)
         self.assertEqual(response_data[0]["besluit"], f"http://testserver{besluit_url}")
 
-    @patch("vng_api_common.validators.fetcher")
+    # @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
     def test_create_bio_limited_to_authorized_besluiten(self, *mocks):
-        informatieobject = "https://drc.com/api/v1/enkelvoudigeinformatieobjecten/1234"
-
-        besluit1 = BesluitFactory.create(besluittype="https://besluittype.nl/ok")
+        besluit1 = BesluitFactory.create(besluittype=BESLUITTYPE)
         besluit2 = BesluitFactory.create(besluittype="https://besluittype.nl/not_ok")
 
         besluit_uri1 = reverse(besluit1)
@@ -140,11 +151,12 @@ class BioReadTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         url1 = reverse("besluitinformatieobject-list")
         url2 = reverse("besluitinformatieobject-list")
 
-        data1 = {"informatieobject": informatieobject, "besluit": besluit_url1}
-        data2 = {"informatieobject": informatieobject, "besluit": besluit_url2}
+        data1 = {"informatieobject": INFORMATIEOBJECT, "besluit": besluit_url1}
+        data2 = {"informatieobject": INFORMATIEOBJECT, "besluit": besluit_url2}
 
-        response1 = self.client.post(url1, data1)
-        response2 = self.client.post(url2, data2)
+        with mock_client(RESPONSES):
+            response1 = self.client.post(url1, data1)
+            response2 = self.client.post(url2, data2)
 
         self.assertEqual(response1.status_code, status.HTTP_201_CREATED, response1.data)
         self.assertEqual(

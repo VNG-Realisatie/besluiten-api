@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.test import override_settings
 
+import requests_mock
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -175,6 +176,55 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         error = get_validation_errors(response, "besluittype")
         self.assertEqual(error["code"], "invalid-resource")
 
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_besluittype_unpublished_resource(self, *mocks):
+        responses = {BESLUITTYPE: {"url": BESLUITTYPE, "concept": True}}
+
+        list_url = reverse("besluit-list")
+
+        with requests_mock.Mocker() as m:
+            m.get(BESLUITTYPE, json=responses[BESLUITTYPE])
+            with mock_client(responses):
+                response = self.client.post(
+                    list_url,
+                    {
+                        "verantwoordelijkeOrganisatie": "000000000",
+                        "identificatie": "123456",
+                        "besluittype": BESLUITTYPE,
+                        "datum": "2018-09-06",
+                        "ingangsdatum": "2018-10-01",
+                    },
+                )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        error = get_validation_errors(response, "besluittype")
+        self.assertEqual(error["code"], "not-published")
+
+    @patch("vng_api_common.validators.fetcher")
+    @patch("vng_api_common.validators.obj_has_shape", return_value=True)
+    def test_besluittype_published_resource(self, *mocks):
+        responses = {BESLUITTYPE: {"url": BESLUITTYPE, "concept": False}}
+
+        list_url = reverse("besluit-list")
+
+        with requests_mock.Mocker() as m:
+            m.get(BESLUITTYPE, json=responses[BESLUITTYPE])
+            with mock_client(responses):
+                response = self.client.post(
+                    list_url,
+                    {
+                        "verantwoordelijkeOrganisatie": "000000000",
+                        "identificatie": "123456",
+                        "besluittype": BESLUITTYPE,
+                        "datum": "2018-09-06",
+                        "ingangsdatum": "2018-10-01",
+                    },
+                )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     @override_settings(LINK_FETCHER="vng_api_common.mocks.link_fetcher_200")
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
@@ -303,19 +353,22 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
     @override_settings(LINK_FETCHER="vng_api_common.mocks.link_fetcher_200")
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
-    def test_validate_no_informatieobjecttype_zaaktype_relation(self, *mocks):
+    def test_validate_no_informatieobjecttype_besluittype_relation(self, *mocks):
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE, zaak=ZAAK)
         besluit_url = reverse("besluit-detail", kwargs={"uuid": besluit.uuid})
         url = reverse("besluitinformatieobject-list")
 
         responses = {
             ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
-            BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": []},
+            BESLUITTYPE: {
+                "url": BESLUITTYPE,
+                "zaaktypes": [],
+                "informatieobjecttypen": [],
+            },
             INFORMATIEOBJECT: {
                 "url": INFORMATIEOBJECT,
                 "informatieobjecttype": INFORMATIEOBJECT_TYPE,
             },
-            ZAAKTYPE: {"url": ZAAKTYPE, "informatieobjecttypen": []},
         }
 
         with mock_client(responses):
@@ -331,5 +384,5 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
         error = get_validation_errors(response, "nonFieldErrors")
         self.assertEqual(
-            error["code"], "missing-zaaktype-informatieobjecttype-relation"
+            error["code"], "missing-besluittype-informatieobjecttype-relation"
         )
