@@ -18,7 +18,7 @@ ZAAKTYPE = "https://ztc.com/zaaktypen/1234"
 BESLUITTYPE = "https://ztc.com/besluittypen/1234"
 
 RESPONSES = {
-    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": [ZAAKTYPE]},
+    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypen": [ZAAKTYPE]},
     ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
 }
 
