@@ -50,8 +50,10 @@ class BesluitViewSet(
     Er wordt gevalideerd op:
     - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
     - geldigheid `verantwoorlijkeOrganisatie` RSIN
-    - geldigheid `besluittype` URL
-    - geldigheid `zaak` URL
+    - geldigheid `besluittype` URL - de resource moet opgevraagd kunnen
+      worden uit de Catalogi API en de vorm van een BESLUITTYPE hebben.
+    - geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden
+      uit de Zaken API en de vorm van een ZAAK hebben.
     - `datum` in het verleden of nu
     - publicatie `besluittype` - `concept` moet `false` zijn
 
@@ -71,8 +73,9 @@ class BesluitViewSet(
     Er wordt gevalideerd op:
     - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
     - geldigheid `verantwoorlijkeOrganisatie` RSIN
-    - geldigheid `besluittype` URL
-    - geldigheid `zaak` URL
+    - het `besluittype` mag niet gewijzigd worden
+    - geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden
+      uit de Zaken API en de vorm van een ZAAK hebben.
     - `datum` in het verleden of nu
     - publicatie `besluittype` - `concept` moet `false` zijn
 
@@ -82,8 +85,9 @@ class BesluitViewSet(
     Er wordt gevalideerd op:
     - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`
     - geldigheid `verantwoorlijkeOrganisatie` RSIN
-    - geldigheid `besluittype` URL
-    - geldigheid `zaak` URL
+    - het `besluittype` mag niet gewijzigd worden
+    - geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden
+      uit de Zaken API en de vorm van een ZAAK hebben.
     - `datum` in het verleden of nu
     - publicatie `besluittype` - `concept` moet `false` zijn
 
