@@ -46,7 +46,7 @@ class BesluittypeZaaktypeValidator:
 
         besluittype = fetch_object(self.resource, url)
         zaak = fetch_object(self.zaak_field, zaak_url)
-        if zaak["zaaktype"] not in besluittype["zaaktypes"]:
+        if zaak["zaaktype"] not in besluittype["zaaktypen"]:
             raise serializers.ValidationError(self.message, code=self.code)
 
 

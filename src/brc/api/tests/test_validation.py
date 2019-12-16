@@ -28,7 +28,7 @@ ZAAKTYPE = "https://ztc.com/zaaktypen/1234"
 
 RESPONSES = {
     ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
-    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": [ZAAKTYPE]},
+    BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypen": [ZAAKTYPE]},
     INFORMATIEOBJECT: {
         "url": INFORMATIEOBJECT,
         "informatieobjecttype": INFORMATIEOBJECT_TYPE,
@@ -254,7 +254,7 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
         responses = {
             ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
-            BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": []},
+            BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypen": []},
         }
 
         with mock_client(responses):
@@ -281,7 +281,7 @@ class BesluitValidationTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
 
         responses = {
             ZAAK: {"some": "wrong property"},
-            BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypes": [ZAAKTYPE]},
+            BESLUITTYPE: {"url": BESLUITTYPE, "zaaktypen": [ZAAKTYPE]},
         }
 
         with mock_client(responses):
@@ -362,7 +362,7 @@ class BesluitInformatieObjectTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
             ZAAK: {"url": ZAAK, "zaaktype": ZAAKTYPE},
             BESLUITTYPE: {
                 "url": BESLUITTYPE,
-                "zaaktypes": [],
+                "zaaktypen": [],
                 "informatieobjecttypen": [],
             },
             INFORMATIEOBJECT: {
