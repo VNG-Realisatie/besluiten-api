@@ -37,7 +37,7 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
     responses = {
         BESLUITTYPE: {
             "url": BESLUITTYPE,
-            "zaaktypes": [ZAAKTYPE],
+            "zaaktypen": [ZAAKTYPE],
             "productenOfDiensten": [
                 "https://example.com/product/123",
                 "https://example.com/dienst/123",

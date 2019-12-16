@@ -1,6 +1,6 @@
 from vng_api_common.conf.api import *  # noqa - imports white-listed
 
-API_VERSION = "1.0.0-rc2"
+API_VERSION = "1.0.1"
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 REST_FRAMEWORK["PAGE_SIZE"] = 100
@@ -31,7 +31,7 @@ SWAGGER_SETTINGS.update(
 GEMMA_URL_INFORMATIEMODEL_VERSIE = "1.0"
 
 ztc_repo = "vng-Realisatie/gemma-zaaktypecatalogus"
-ztc_commit = "9c51082d6399060bff6bee2e23d0f22472bfa47f"
+ztc_commit = "b8cc38484ad862b9bbbf975e24718ede3f662e1e"
 ZTC_API_SPEC = f"https://raw.githubusercontent.com/{ztc_repo}/{ztc_commit}/src/openapi.yaml"  # noqa
 
 drc_repo = "vng-Realisatie/gemma-documentregistratiecomponent"
