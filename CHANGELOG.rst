@@ -2,6 +2,26 @@
 Wijzigingen
 ===========
 
+1.0.1 (2019-12-16)
+==================
+
+API spec bugfix release. There are some fixes and clarifications in the API
+spec compared to 1.0.0. Additionally, some bugfixes without effect on the API
+spec have been carried out.
+
+API spec changes
+----------------
+
+* Fix ``Besluit`` validations documentation:
+    - ``Besluit.besluittype`` is immutable
+    - ``Besluit.besluittype`` is validated against ZTC API spec on ``besluit_create``
+
+Implementation changes
+----------------------
+
+* Updated ZTC API spec reference (commit hash) to point to 1.0.x version
+* Added validator for ``Besluit.besluittype`` immutability
+
 1.0.0 final (2019-11-18)
 ========================
 
