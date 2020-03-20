@@ -71,7 +71,7 @@ class BesluitSerializer(serializers.HyperlinkedModelSerializer):
                     IsImmutableValidator(),
                     PublishValidator(
                         "BesluitType", settings.ZTC_API_SPEC, get_auth=get_ztc_auth
-                    )
+                    ),
                 ]
             },
         }
