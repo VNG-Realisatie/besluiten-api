@@ -44,7 +44,7 @@ References
 
 .. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=develop
     :alt: Build status
-    :target: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=develop
+    :target: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent
 
 .. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
      :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
