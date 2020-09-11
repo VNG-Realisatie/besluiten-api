@@ -67,6 +67,7 @@ FROM python:3.6-alpine AS production
 RUN apk --no-cache add \
     ca-certificates \
     mailcap \
+    make \
     musl \
     pcre \
     postgresql \
@@ -80,6 +81,7 @@ RUN apk --no-cache add \
 
 COPY --from=build /usr/local/lib/python3.6 /usr/local/lib/python3.6
 COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
+COPY --from=build /usr/local/bin/sphinx-build /usr/local/bin/sphinx-build
 # required for swagger2openapi conversion
 COPY --from=frontend-build /app/node_modules /app/node_modules
 
@@ -91,10 +93,14 @@ RUN mkdir /app/log
 COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
 COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
 COPY ./src /app/src
+COPY ./docs /app/docs
 
 ENV DJANGO_SETTINGS_MODULE=brc.conf.docker
 
 ARG SECRET_KEY=dummy
+
+# build docs
+RUN make -C docs html
 
 # Run collectstatic, so the result is already included in the image
 RUN python src/manage.py collectstatic --noinput
