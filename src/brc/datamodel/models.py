@@ -4,6 +4,7 @@ import uuid as _uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from vng_api_common.caching import ETagMixin
 from vng_api_common.fields import RSINField
 from vng_api_common.models import APIMixin
 from vng_api_common.utils import (
@@ -21,7 +22,7 @@ from .query import BesluitQuerySet, BesluitRelatedQuerySet
 logger = logging.getLogger(__name__)
 
 
-class Besluit(APIMixin, models.Model):
+class Besluit(ETagMixin, APIMixin, models.Model):
     uuid = models.UUIDField(default=_uuid.uuid4)
 
     identificatie = models.CharField(
@@ -142,7 +143,7 @@ class Besluit(APIMixin, models.Model):
         return f"{self.identificatie}"
 
 
-class BesluitInformatieObject(models.Model):
+class BesluitInformatieObject(ETagMixin, models.Model):
     """
     Aanduiding van het (de) INFORMATIEOBJECT(en) waarin
     het BESLUIT beschreven is.

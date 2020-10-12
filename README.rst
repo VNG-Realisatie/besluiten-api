@@ -7,7 +7,7 @@ besluitregistratiecomponent
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
 :PythonVersion: 3.6
 
-|build-status|
+|build-status| |black|
 
 Referentieimplementatie van de besluitregistratiecomponent (BRC).
 
@@ -42,13 +42,16 @@ References
 * `Code <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/>`_
 
 
-.. |build-status| image:: http://jenkins.nlx.io/buildStatus/icon?job=gemma-besluitregistratiecomponent-stable
+.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=develop
     :alt: Build status
-    :target: http://jenkins.nlx.io/job/gemma-besluitregistratiecomponent-stable
+    :target: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent
 
 .. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
      :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
      :alt: Requirements status
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
 
 .. _testomgeving: https://ref.tst.vng.cloud/brc/
 
