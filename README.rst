@@ -7,7 +7,7 @@ besluitregistratiecomponent
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
 :PythonVersion: 3.6
 
-|build-status| |black|
+|build-status| |lint-oas| |generate-sdks| |generate-postman-collection|
 
 Referentieimplementatie van de besluitregistratiecomponent (BRC).
 
@@ -50,8 +50,17 @@ References
      :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
      :alt: Requirements status
 
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
+.. |lint-oas| image:: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/workflows/lint-oas/badge.svg
+    :alt: Lint OAS
+    :target: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/actions?query=workflow%3Alint-oas
+
+.. |generate-sdks| image:: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/workflows/generate-sdks/badge.svg
+    :alt: Generate SDKs
+    :target: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/actions?query=workflow%3Agenerate-sdks
+
+.. |generate-postman-collection| image:: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/workflows/generate-postman-collection/badge.svg
+    :alt: Generate Postman collection
+    :target: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/actions?query=workflow%3Agenerate-postman-collection
 
 .. _testomgeving: https://ref.tst.vng.cloud/brc/
 
