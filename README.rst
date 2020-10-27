@@ -1,54 +1,105 @@
-============================
-besluitregistratiecomponent
-============================
+=============
+Besluiten API
+=============
 
 :Version: 1.0.1
 :Source: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
-:PythonVersion: 3.6
 
-|build-status| |lint-oas| |generate-sdks| |generate-postman-collection|
+Introductie
+===========
 
-Referentieimplementatie van de besluitregistratiecomponent (BRC).
+De API ondersteunt het opslaan en het naar andere applicaties ontsluiten van 
+gegevens over alle gemeentelijke besluiten, van elk type. Voorlopig dient deze
+API vooral voor besluiten binnen zaakgericht werken maar in de toekomst kan de 
+Besluiten API ook voor andere domeinen worden ingezet.
 
-Introduction
-============
+API specificaties
+=================
 
-Binnen het Nederlandse gemeentelandschap wordt zaakgericht werken nagestreefd.
-Om dit mogelijk te maken is er gegevensuitwisseling nodig. Er is een behoefte
-om informatieobjecten (documenten) te relateren aan zaken.
+|lint-oas| |generate-sdks| |generate-postman-collection|
+
+==========  ==============  =============================
+Versie      Release datum   API specificatie
+==========  ==============  =============================
+1.0.1       2019-12-16      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/VNG-Realisatie/gemma-besluitregistratiecomponent/1.0.1/src/openapi.yaml>`_,
+                            `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/VNG-Realisatie/gemma-besluitregistratiecomponent/1.0.1/src/openapi.yaml>`_
+                            (`verschillen <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/compare/1.0.0..1.0.1?diff=split#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+1.0.0       2019-11-18      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/VNG-Realisatie/gemma-besluitregistratiecomponent/1.0.0/src/openapi.yaml>`_,
+                            `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/VNG-Realisatie/gemma-besluitregistratiecomponent/1.0.0/src/openapi.yaml>`_
+==========  ==============  =============================
+
+Zie ook: `Alle versies en wijzigingen <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/blob/master/CHANGELOG.rst>`_
+
+Ondersteuning
+-------------
+
+==========  ==============  ==========================  =================
+Versie      Release datum   Einddatum ondersteuning     Documentatie
+==========  ==============  ==========================  =================
+1.x         2019-11-18      (nog niet bekend)           `Documentatie <https://vng-realisatie.github.io/gemma-zaken/standaard/besluiten/index>`_
+==========  ==============  ==========================  =================
+
+Referentie implementatie
+========================
+
+|build-status| |coverage| |docker| |black| |python-versions|
+
+Referentieimplementatie van de Besluiten API. Ook wel
+Besluitregistratiecomponent (BRC) genoemd)
+
+Ontwikkeld door `Maykin Media B.V. <https://www.maykinmedia.nl>`_ in opdracht
+van VNG Realisatie.
 
 Deze referentieimplementatie toont aan dat de API specificatie voor de
-besluitregistratiecomponent (hierna BRC) implementeerbaar is, en vormt een
-voorbeeld voor andere implementaties indien ergens twijfel bestaat.
+Besluiten API implementeerbaar is, en vormt een voorbeeld voor andere
+implementaties indien ergens twijfel bestaat.
 
-Deze component heeft ook een `testomgeving`_ waar leveranciers tegenaan kunnen
+Deze component heeft ook een `demo omgeving`_ waar leveranciers tegenaan kunnen
 testen.
 
-Documentation
-=============
+Links
+=====
 
-See ``docs/contents/installation`` for installation instructions, available settings and
-commands.
+* Deze API is onderdeel van de `VNG standaard "API's voor Zaakgericht werken" <https://github.com/VNG-Realisatie/gemma-zaken>`_.
+* Lees de `functionele specificatie <https://vng-realisatie.github.io/gemma-zaken/standaard/besluiten/index>`_ bij de API specificatie.
+* Bekijk de `demo omgeving`_ met de laatst gepubliceerde versie.
+* Bekijk de `test omgeving <https://besluiten-api.test.vng.cloud/>`_ met de laatste ontwikkel versie.
+* Rapporteer `issues <https://github.com/VNG-Realisatie/gemma-zaken/issues>`_ bij vragen, fouten of wensen.
+* Bekijk de `code <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/>`_ van de referentie implementatie.
 
-If you intend to develop on the component, we recommend the ``development.rst``
-document, otherwise ``docker.rst`` is recommended.
+.. _`demo omgeving`: https://besluiten-api.vng.cloud/
 
+Licentie
+========
 
-References
-==========
+Copyright © VNG Realisatie 2018 - 2020
 
-* `Issues <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/issues>`_
-* `Code <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/>`_
+Licensed under the EUPL_
 
+.. _EUPL: LICENCE.md
 
-.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=develop
+.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=master
     :alt: Build status
     :target: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent
 
 .. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
-     :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
      :alt: Requirements status
+
+.. |coverage| image:: https://codecov.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/branch/master/graphs/badge.svg?branch=master
+    :alt: Coverage
+    :target: https://codecov.io/gh/VNG-Realisatie/gemma-besluitregistratiecomponent
+
+.. |docker| image:: https://img.shields.io/badge/docker-latest-blue.svg
+    :alt: Docker image
+    :target: https://hub.docker.com/r/vngr/gemma-brc/
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :alt: Code style
+    :target: https://github.com/psf/black
+
+.. |python-versions| image:: https://img.shields.io/badge/python-3.6%2B-blue.svg
+    :alt: Supported Python version
 
 .. |lint-oas| image:: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/workflows/lint-oas/badge.svg
     :alt: Lint OAS
@@ -61,14 +112,3 @@ References
 .. |generate-postman-collection| image:: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/workflows/generate-postman-collection/badge.svg
     :alt: Generate Postman collection
     :target: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/actions?query=workflow%3Agenerate-postman-collection
-
-.. _testomgeving: https://ref.tst.vng.cloud/brc/
-
-Licentie
-========
-
-Copyright © VNG Realisatie 2018
-
-Licensed under the EUPL_
-
-.. _EUPL: LICENSE.md
