@@ -39,6 +39,7 @@ markdown==3.1
 markupsafe==1.1.1         # via jinja2
 oyaml==0.7                # via vng-api-common
 packaging==19.0           # via sphinx
+pillow==5.2.0
 pip-tools==4.2.0
 psycopg2-binary==2.7.5
 pygments==2.3.1           # via sphinx
