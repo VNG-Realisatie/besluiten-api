@@ -2,8 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url, get_validation_errors
 
-from brc.datamodel.models import BesluitInformatieObject
-from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
+from brc.datamodel.tests.factories import BesluitFactory
 
 from .mixins import MockSyncMixin
 
