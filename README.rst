@@ -9,9 +9,9 @@ Besluiten API
 Introductie
 ===========
 
-De API ondersteunt het opslaan en het naar andere applicaties ontsluiten van 
+De API ondersteunt het opslaan en het naar andere applicaties ontsluiten van
 gegevens over alle gemeentelijke besluiten, van elk type. Voorlopig dient deze
-API vooral voor besluiten binnen zaakgericht werken maar in de toekomst kan de 
+API vooral voor besluiten binnen zaakgericht werken maar in de toekomst kan de
 Besluiten API ook voor andere domeinen worden ingezet.
 
 API specificaties
@@ -79,9 +79,9 @@ Licensed under the EUPL_
 
 .. _EUPL: LICENCE.md
 
-.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=master
+.. |build-status| image:: https://travis-ci.com/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=master
     :alt: Build status
-    :target: https://travis-ci.org/VNG-Realisatie/gemma-besluitregistratiecomponent
+    :target: https://travis-ci.com/VNG-Realisatie/gemma-besluitregistratiecomponent
 
 .. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
      :alt: Requirements status
