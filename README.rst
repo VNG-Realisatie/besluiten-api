@@ -79,9 +79,9 @@ Licensed under the EUPL_
 
 .. _EUPL: LICENCE.md
 
-.. |build-status| image:: https://travis-ci.com/VNG-Realisatie/gemma-besluitregistratiecomponent.svg?branch=master
+.. |build-status| image:: https://github.com/VNG-Realisatie/besluiten-api/workflows/ci-build/badge.svg
     :alt: Build status
-    :target: https://travis-ci.com/VNG-Realisatie/gemma-besluitregistratiecomponent
+    :target: https://github.com/VNG-Realisatie/besluiten-api/actions?query=workflow%3Aci-build
 
 .. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
      :alt: Requirements status
