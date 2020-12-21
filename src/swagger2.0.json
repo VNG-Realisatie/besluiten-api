@@ -1816,7 +1816,7 @@
             "post": {
                 "operationId": "besluitinformatieobject_create",
                 "summary": "Maak een BESLUIT-INFORMATIEOBJECT relatie aan.",
-                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n- de combinatie `informatieobject` en `besluit` moet uniek zijn\n\n**Opmerkingen**\n- De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie` wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie.",
+                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n- de combinatie `informatieobject` en `besluit` moet uniek zijn\n- `informatieobject.informatieobjecttype` moet in het ZTC gerelateerd zijn\n    aan `besluit.besluittype`\n\n**Opmerkingen**\n- De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie` wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie.",
                 "parameters": [
                     {
                         "name": "data",
@@ -2711,7 +2711,7 @@
                 },
                 "bron": {
                     "title": "Bron",
-                    "description": "De naam van het component waar de wijziging in is gedaan.\n\nUitleg bij mogelijke waarden:\n\n* `ac` - Autorisatiecomponent\n* `nrc` - Notificatierouteringcomponent\n* `zrc` - Zaakregistratiecomponent\n* `ztc` - Zaaktypecatalogus\n* `drc` - Documentregistratiecomponent\n* `brc` - Besluitregistratiecomponent",
+                    "description": "De naam van het component waar de wijziging in is gedaan.\n\nUitleg bij mogelijke waarden:\n\n* `ac` - Autorisatiecomponent\n* `nrc` - Notificatierouteringcomponent\n* `zrc` - Zaakregistratiecomponent\n* `ztc` - Zaaktypecatalogus\n* `drc` - Documentregistratiecomponent\n* `brc` - Besluitregistratiecomponent\n* `kic` - Klantinteractiescomponent",
                     "type": "string",
                     "enum": [
                         "ac",
@@ -2719,7 +2719,8 @@
                         "zrc",
                         "ztc",
                         "drc",
-                        "brc"
+                        "brc",
+                        "kic"
                     ]
                 },
                 "requestId": {
@@ -2851,5 +2852,15 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "besluiten",
+            "description": ""
+        },
+        {
+            "name": "besluitinformatieobjecten",
+            "description": ""
+        }
+    ]
 }
