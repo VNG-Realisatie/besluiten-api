@@ -32,13 +32,13 @@ You can retrieve the source code using the following command:
 
    .. code-block:: bash
 
-        $ git clone git@github.com:VNG-realisatie/gemma-besluitregistratiecomponent.git brc
+        $ git clone git@github.com:VNG-realisatie/besluiten-api.git brc
 
 **Note:** You can also use the HTTPS syntax:
 
    .. code-block:: bash
 
-        $ git clone https://github.com/VNG-realisatie/gemma-besluitregistratiecomponent.git brc
+        $ git clone https://github.com/VNG-realisatie/besluiten-api.git brc
 
 Setting up virtualenv
 ^^^^^^^^^^^^^^^^^^^^^^

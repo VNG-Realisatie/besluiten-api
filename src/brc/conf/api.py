@@ -43,6 +43,6 @@ zrc_repo = "vng-Realisatie/gemma-zaakregistratiecomponent"
 zrc_commit = "8ea1950fe4ec2ad99504d345eba60a175eea3edf"
 ZRC_API_SPEC = f"https://raw.githubusercontent.com/{zrc_repo}/{zrc_commit}/src/openapi.yaml"  # noqa
 
-SELF_REPO = "VNG-Realisatie/gemma-besluitregistratiecomponent"
+SELF_REPO = "VNG-Realisatie/besluiten-api"
 SELF_BRANCH = os.getenv("SELF_BRANCH") or API_VERSION
 GITHUB_API_SPEC = f"https://raw.githubusercontent.com/{SELF_REPO}/{SELF_BRANCH}/src/openapi.yaml"  # noqa

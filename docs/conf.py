@@ -28,7 +28,7 @@ import brc  # noqa isort:skip
 
 # -- Project information -----------------------------------------------------
 
-project = 'BesluitRegistratieComponent'
+project = 'Besluiten API'
 copyright = '2018, VNG Realisatie'
 author = brc.__author__
 
@@ -95,7 +95,7 @@ html_theme = 'alabaster'
 html_theme_options = {
     'github_user': 'VNG-Realisatie',
     'github_banner': True,
-    'github_repo': 'gemma-besluitregistratiecomponent',
+    'github_repo': 'besluiten-api',
     'travis_button': True,
     'codecov_button': True,
     # 'analytics_id':  '',
