@@ -58,6 +58,9 @@ COPY ./bin/runtests.sh /runtests.sh
 COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
 COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
 COPY ./src /app/src
+ARG COMMIT_HASH
+ENV GIT_SHA=${COMMIT_HASH}
+
 RUN mkdir /app/log && rm /app/src/brc/conf/test.py
 CMD ["/runtests.sh"]
 
@@ -94,6 +97,8 @@ COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
 COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
 COPY ./src /app/src
 COPY ./docs /app/docs
+ARG COMMIT_HASH
+ENV GIT_SHA=${COMMIT_HASH}
 
 ENV DJANGO_SETTINGS_MODULE=brc.conf.docker
 
