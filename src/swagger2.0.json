@@ -791,7 +791,7 @@
             "post": {
                 "operationId": "besluitinformatieobject_create",
                 "summary": "Maak een BESLUIT-INFORMATIEOBJECT relatie aan.",
-                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n- de combinatie `informatieobject` en `besluit` moet uniek zijn\n\n**Opmerkingen**\n- De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie` wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie.",
+                "description": "Registreer een INFORMATIEOBJECT bij een BESLUIT. Er worden twee types van\nrelaties met andere objecten gerealiseerd:\n\n**Er wordt gevalideerd op**\n- geldigheid `besluit` URL\n- geldigheid `informatieobject` URL\n- de combinatie `informatieobject` en `besluit` moet uniek zijn\n- `informatieobject.informatieobjecttype` moet in het ZTC gerelateerd zijn\n    aan `besluit.besluittype`\n\n**Opmerkingen**\n- De `registratiedatum` wordt door het systeem op 'NU' gezet. De\n  `aardRelatie` wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie.",
                 "parameters": [
                     {
                         "name": "data",
@@ -1302,7 +1302,7 @@
                 },
                 "bron": {
                     "title": "Bron",
-                    "description": "De naam van het component waar de wijziging in is gedaan.\n\nUitleg bij mogelijke waarden:\n\n* `ac` - Autorisaties API\n* `nrc` - Notificaties API\n* `zrc` - Zaken API\n* `ztc` - Catalogi API\n* `drc` - Documenten API\n* `brc` - Besluiten API",
+                    "description": "De naam van het component waar de wijziging in is gedaan.\n\nUitleg bij mogelijke waarden:\n\n* `ac` - Autorisatiecomponent\n* `nrc` - Notificatierouteringcomponent\n* `zrc` - Zaakregistratiecomponent\n* `ztc` - Zaaktypecatalogus\n* `drc` - Documentregistratiecomponent\n* `brc` - Besluitregistratiecomponent\n* `kic` - Klantinteractiescomponent",
                     "type": "string",
                     "enum": [
                         "ac",
@@ -1310,7 +1310,8 @@
                         "zrc",
                         "ztc",
                         "drc",
-                        "brc"
+                        "brc",
+                        "kic"
                     ]
                 },
                 "applicatieId": {
@@ -1437,160 +1438,14 @@
             }
         }
     },
-    "responses": {
-        "400": {
-            "description": "Bad request",
-            "schema": {
-                "$ref": "#/definitions/ValidatieFout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
+    "tags": [
+        {
+            "name": "besluiten",
+            "description": ""
         },
-        "401": {
-            "description": "Unauthorized",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "403": {
-            "description": "Forbidden",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "404": {
-            "description": "Not found",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "406": {
-            "description": "Not acceptable",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "409": {
-            "description": "Conflict",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "410": {
-            "description": "Gone",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "412": {
-            "description": "Precondition failed",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "415": {
-            "description": "Unsupported media type",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "429": {
-            "description": "Too many requests",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
-        },
-        "500": {
-            "description": "Internal server error",
-            "schema": {
-                "$ref": "#/definitions/Fout"
-            },
-            "headers": {
-                "API-version": {
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "Geeft een specifieke API-versie aan in de context van een specifieke aanroep. Voorbeeld: 1.2.1."
-                }
-            }
+        {
+            "name": "besluitinformatieobjecten",
+            "description": ""
         }
-    }
+    ]
 }

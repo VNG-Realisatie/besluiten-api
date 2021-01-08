@@ -143,6 +143,8 @@ class BesluitInformatieObjectViewSet(
     - geldigheid `besluit` URL
     - geldigheid `informatieobject` URL
     - de combinatie `informatieobject` en `besluit` moet uniek zijn
+    - `informatieobject.informatieobjecttype` moet in het ZTC gerelateerd zijn
+        aan `besluit.besluittype`
 
     **Opmerkingen**
     - De `registratiedatum` wordt door het systeem op 'NU' gezet. De
