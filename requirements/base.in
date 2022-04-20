@@ -1,5 +1,5 @@
 pip-tools
-psycopg2-binary
+psycopg2-binary<2.9.0
 python-dotenv
 python-dateutil
 pytz

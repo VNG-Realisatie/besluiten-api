@@ -181,7 +181,7 @@ pep8==1.7.1
     # via -r requirements/testing.in
 pip-tools==6.4.0
     # via -r requirements/base.txt
-psycopg2-binary==2.7.5
+psycopg2-binary==2.8.6
     # via -r requirements/base.txt
 pygments==2.3.1
     # via
