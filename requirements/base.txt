@@ -170,7 +170,7 @@ uritemplate==3.0.0
     #   drf-yasg
 urllib3==1.24.3
     # via requests
-vng-api-common==1.7.4
+vng-api-common==1.7.7
     # via -r requirements/base.in
 wheel==0.37.1
     # via pip-tools
