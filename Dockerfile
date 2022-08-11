@@ -1,5 +1,5 @@
 # Stage 1 - Compile needed python dependencies
-FROM python:3.6-alpine AS build
+FROM python:3.9-alpine AS build
 RUN apk --no-cache add \
     gcc \
     musl-dev \
@@ -32,7 +32,7 @@ WORKDIR /app
 COPY ./*.json /app/
 RUN npm install
 
-COPY ./Gulpfile.js /app/
+COPY ./*.js ./.babelrc /app/
 COPY ./build /app/build/
 
 COPY src/brc/sass/ /app/src/brc/sass/
@@ -45,7 +45,7 @@ FROM build AS jenkins
 RUN apk --no-cache add \
     postgresql-client
 
-COPY --from=build /usr/local/lib/python3.6 /usr/local/lib/python3.6
+COPY --from=build /usr/local/lib/python3.9 /usr/local/lib/python3.9
 COPY --from=build /app/requirements /app/requirements
 
 RUN pip install -r requirements/jenkins.txt --exists-action=s
@@ -55,8 +55,8 @@ COPY ./setup.cfg /app/setup.cfg
 COPY ./bin/runtests.sh /runtests.sh
 
 # Stage 3.3 - Copy source code
-COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
-COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
+COPY --from=frontend-build /app/src/brc/static/bundles /app/src/brc/static/bundles
+
 COPY ./src /app/src
 ARG COMMIT_HASH
 ENV GIT_SHA=${COMMIT_HASH}
@@ -66,7 +66,7 @@ CMD ["/runtests.sh"]
 
 
 # Stage 4 - Build docker image suitable for execution and deployment
-FROM python:3.6-alpine AS production
+FROM python:3.9-alpine AS production
 RUN apk --no-cache add \
     ca-certificates \
     mailcap \
@@ -82,7 +82,7 @@ RUN apk --no-cache add \
     zlib \
     nodejs
 
-COPY --from=build /usr/local/lib/python3.6 /usr/local/lib/python3.6
+COPY --from=build /usr/local/lib/python3.9 /usr/local/lib/python3.9
 COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 COPY --from=build /usr/local/bin/sphinx-build /usr/local/bin/sphinx-build
 # required for swagger2openapi conversion
@@ -93,8 +93,8 @@ WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
 RUN mkdir /app/log
 
-COPY --from=frontend-build /app/src/brc/static/fonts /app/src/brc/static/fonts
-COPY --from=frontend-build /app/src/brc/static/css /app/src/brc/static/css
+COPY --from=frontend-build /app/src/brc/static/bundles /app/src/brc/static/bundles
+
 COPY ./src /app/src
 COPY ./docs /app/docs
 ARG COMMIT_HASH
