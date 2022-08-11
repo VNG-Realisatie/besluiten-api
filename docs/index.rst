@@ -3,7 +3,7 @@ besluitregistratiecomponent
 ===========================
 
 :Version: 1.0.1
-:Source: https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent
+:Source: https://github.com/VNG-Realisatie/besluiten-api
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
 :PythonVersion: 3.6
 
@@ -45,16 +45,16 @@ Contents
 References
 ============
 
-* `Issues <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/issues>`_
-* `Code <https://github.com/VNG-Realisatie/gemma-besluitregistratiecomponent/>`_
+* `Issues <https://github.com/VNG-Realisatie/besluiten-api/issues>`_
+* `Code <https://github.com/VNG-Realisatie/besluiten-api/>`_
 
 
-.. |build-status| image:: http://jenkins.nlx.io/buildStatus/icon?job=gemma-besluitregistratiecomponent-stable
+.. |build-status| image:: http://jenkins.nlx.io/buildStatus/icon?job=besluiten-api-stable
     :alt: Build status
-    :target: http://jenkins.nlx.io/job/gemma-besluitregistratiecomponent-stable
+    :target: http://jenkins.nlx.io/job/besluiten-api-stable
 
-.. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements.svg?branch=master
-     :target: https://requires.io/github/VNG-Realisatie/gemma-besluitregistratiecomponent/requirements/?branch=master
+.. |requirements| image:: https://requires.io/github/VNG-Realisatie/besluiten-api/requirements.svg?branch=master
+     :target: https://requires.io/github/VNG-Realisatie/besluiten-api/requirements/?branch=master
      :alt: Requirements status
 
 .. _testomgeving: https://besluiten-api.vng.cloud/

@@ -19,7 +19,7 @@ Docker basics
 
    .. code-block:: bash
 
-       $ git clone https://github.com/VNG-realisatie/gemma-besluitregistratiecomponent.git brc
+       $ git clone https://github.com/VNG-realisatie/besluiten-api.git brc
        Cloning into 'brc'...
        ...
 
@@ -104,6 +104,6 @@ You can override this location through the ``FIXTURES_DIR`` environment
 variable. Only ``*.json`` files are considered.
 
 
-.. _Github: https://github.com/VNG-realisatie/gemma-besluitregistratiecomponent
+.. _Github: https://github.com/VNG-realisatie/besluiten-api
 .. _Docker: https://docs.docker.com/install/
 .. _Docker Compose: https://docs.docker.com/compose/install/
