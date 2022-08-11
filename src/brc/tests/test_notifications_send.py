@@ -47,7 +47,7 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
 
         data = response.json()
-        print(data)
+
         client.create.assert_called_once_with(
             "notificaties",
             {
