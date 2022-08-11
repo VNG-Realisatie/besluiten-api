@@ -6,8 +6,6 @@
 #
 alabaster==0.7.12
     # via sphinx
-asgiref==3.5.2
-    # via django
 babel==2.6.0
     # via sphinx
 certifi==2018.8.24
@@ -20,10 +18,9 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-django==3.2.15
+django==2.2.28
     # via
     #   -r requirements/base.in
-    #   django-capture-on-commit-callbacks
     #   django-choices
     #   django-filter
     #   django-markup
@@ -37,18 +34,14 @@ django-appconf==1.0.2
     # via django-axes
 django-axes==4.4.0
     # via -r requirements/base.in
-django-capture-on-commit-callbacks==1.11.0
-    # via -r requirements/base.in
 django-choices==1.7.0
     # via
     #   -r requirements/base.in
     #   vng-api-common
 django-cors-middleware==1.3.1
     # via -r requirements/base.in
-django-filter==21.1
-    # via
-    #   -r requirements/base.in
-    #   vng-api-common
+django-filter==2.1.0
+    # via vng-api-common
 django-ipware==2.1.0
     # via django-axes
 django-markup==1.3
@@ -59,8 +52,6 @@ django-rest-framework-condition==0.1.1
     # via vng-api-common
 django-solo==1.1.3
     # via vng-api-common
-django-utils-six==2.0
-    # via -r requirements/base.in
 djangorestframework==3.12.4
     # via
     #   -r requirements/base.in
@@ -103,7 +94,7 @@ packaging==21.3
     # via
     #   drf-yasg
     #   sphinx
-pillow==9.2.0
+pillow==9.2
     # via -r requirements/base.in
 psycopg2-binary==2.8.6
     # via -r requirements/base.in
@@ -169,7 +160,7 @@ uritemplate==3.0.0
     #   drf-yasg
 urllib3==1.24.3
     # via requests
-vng-api-common==1.8.0
+vng-api-common==1.7.8
     # via -r requirements/base.in
 
 # The following packages are considered to be unsafe in a requirements file:
