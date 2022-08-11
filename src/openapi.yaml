@@ -207,6 +207,14 @@ paths:
         \ vorm van een ZAAK hebben.\n- `datum` in het verleden of nu\n- publicatie\
         \ `besluittype` - `concept` moet `false` zijn"
       parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       - name: X-NLX-Logrecord-ID
         in: header
         description: Identifier of the request, traceable throughout the network
@@ -419,6 +427,14 @@ paths:
         \ hebben.\n- `datum` in het verleden of nu\n- publicatie `besluittype` - `concept`\
         \ moet `false` zijn"
       parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       - name: X-NLX-Logrecord-ID
         in: header
         description: Identifier of the request, traceable throughout the network
@@ -481,6 +497,14 @@ paths:
         \ hebben.\n- `datum` in het verleden of nu\n- publicatie `besluittype` - `concept`\
         \ moet `false` zijn"
       parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       - name: X-NLX-Logrecord-ID
         in: header
         description: Identifier of the request, traceable throughout the network
@@ -667,6 +691,14 @@ paths:
         \ wordt ook door het systeem gezet.\n- Bij het aanmaken wordt ook in de Documenten\
         \ API de gespiegelde relatie\n  aangemaakt, echter zonder de relatie-informatie."
       parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       - name: X-NLX-Logrecord-ID
         in: header
         description: Identifier of the request, traceable throughout the network
@@ -825,6 +857,11 @@ paths:
       schema:
         type: string
         format: uuid
+tags:
+- name: besluiten
+  description: ''
+- name: besluitinformatieobjecten
+  description: ''
 servers:
 - url: /api/v1
 components:
@@ -970,9 +1007,9 @@ components:
       required: true
   securitySchemes:
     JWT-Claims:
-      bearerFormat: JWT
-      scheme: bearer
       type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Besluit:
       required:
@@ -1192,7 +1229,6 @@ components:
           items:
             $ref: '#/components/schemas/FieldValidationError'
     Wijzigingen:
-      title: Wijzigingen
       type: object
       properties:
         oud:
@@ -1239,7 +1275,13 @@ components:
 
             * `drc` - Documenten API
 
-            * `brc` - Besluiten API'
+            * `brc` - Besluiten API
+
+            * `cmc` - Contactmomenten API
+
+            * `kc` - Klanten API
+
+            * `vrc` - Verzoeken API'
           type: string
           enum:
           - ac
@@ -1248,6 +1290,9 @@ components:
           - ztc
           - drc
           - brc
+          - cmc
+          - kc
+          - vrc
         applicatieId:
           title: Applicatie id
           description: Unieke identificatie van de applicatie, binnen de organisatie.
