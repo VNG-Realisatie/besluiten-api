@@ -1,5 +1,5 @@
-Pillow
-psycopg2-binary
+Pillow==9.2
+psycopg2-binary==2.8.6
 python-dotenv
 python-dateutil
 pytz
@@ -14,5 +14,6 @@ django-choices==1.7.0
 django-cors-middleware
 django-markup==1.3
 django_redis
+
 djangorestframework
-vng-api-common<1.1.0
+vng-api-common==1.7.8
