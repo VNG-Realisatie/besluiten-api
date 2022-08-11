@@ -1,4 +1,4 @@
-Pillow==9.2
+Pillow==9.2.0
 psycopg2-binary==2.8.6
 python-dotenv
 python-dateutil
@@ -17,6 +17,8 @@ django-utils-six
 django-markup==1.3
 django_redis
 django_capture_on_commit_callbacks
+
+factory-boy==3.0.1
 
 djangorestframework
 vng-api-common==1.8.0
