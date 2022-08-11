@@ -8,7 +8,6 @@ alabaster==0.7.12         # via sphinx
 babel==2.6.0              # via sphinx
 certifi==2018.8.24        # via requests
 chardet==3.0.4            # via requests
-click==7.1.2              # via pip-tools
 coreapi==2.3.3            # via drf-yasg
 coreschema==0.0.4         # via coreapi, drf-yasg
 django-appconf==1.0.2     # via django-axes
@@ -39,7 +38,6 @@ markupsafe==1.1.1         # via jinja2
 oyaml==0.7                # via vng-api-common
 packaging==19.0           # via sphinx
 pillow==5.2.0
-pip-tools==5.4.0
 psycopg2-binary==2.7.5
 pygments==2.3.1           # via sphinx
 pyjwt==1.6.4              # via gemma-zds-client, vng-api-common
@@ -52,7 +50,7 @@ raven==6.9.0
 redis==3.3.6              # via django-redis
 requests==2.21            # via coreapi, gemma-zds-client, sphinx, vng-api-common
 ruamel.yaml==0.15.64      # via drf-yasg
-six==1.11.0               # via django-markup, drf-yasg, isodate, packaging, pip-tools, python-dateutil, sphinx
+six==1.11.0               # via django-markup, drf-yasg, isodate, packaging, python-dateutil, sphinx
 snowballstemmer==1.2.1    # via sphinx
 sphinx-rtd-theme==0.4.3
 sphinx==1.8.4
@@ -64,5 +62,4 @@ urllib3==1.24.3           # via requests
 vng-api-common==1.0.56
 
 # The following packages are considered to be unsafe in a requirements file:
-# pip==20.3.3               # via pip-tools
 # setuptools==51.1.0.post20201221  # via markdown, sphinx
