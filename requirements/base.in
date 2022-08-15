@@ -14,6 +14,5 @@ django-choices==1.7.0
 django-cors-middleware
 django-markup==1.3
 django_redis
-factory-boy==3.0.1
 djangorestframework
 vng-api-common<1.1.0

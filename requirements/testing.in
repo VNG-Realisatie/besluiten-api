@@ -1,7 +1,7 @@
 # Shared between dev and jenkins requirements to run our tests
 black
 coverage
-factory_boy
+factory-boy==3.0.1
 freezegun
 isort
 pep8
