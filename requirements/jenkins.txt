@@ -118,13 +118,9 @@ drf-yasg==1.21.3
     #   -r requirements/base.txt
     #   vng-api-common
 factory-boy==3.0.1
-    # via
-    #   -r requirements/base.txt
-    #   -r requirements/testing.in
+    # via -r requirements/testing.in
 faker==13.15.1
-    # via
-    #   -r requirements/base.txt
-    #   factory-boy
+    # via factory-boy
 freezegun==0.3.10
     # via -r requirements/testing.in
 gemma-zds-client==1.0.1
