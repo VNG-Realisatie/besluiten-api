@@ -5,7 +5,7 @@ besluitregistratiecomponent
 :Version: 1.0.1
 :Source: https://github.com/VNG-Realisatie/besluiten-api
 :Keywords: zaken, zaakgericht werken, GEMMA, RGBZ, BRC
-:PythonVersion: 3.6
+:PythonVersion: 3.9
 
 |build-status|
 
