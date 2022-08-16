@@ -50,7 +50,6 @@ django==3.2.15
     #   django-jenkins
     #   django-markup
     #   django-redis
-    #   django-rest-framework-condition
     #   djangorestframework
     #   drf-nested-routers
     #   drf-yasg
@@ -83,10 +82,6 @@ django-markup==1.3
     # via -r requirements/base.txt
 django-redis==4.10.0
     # via -r requirements/base.txt
-django-rest-framework-condition==0.1.1
-    # via
-    #   -r requirements/base.txt
-    #   vng-api-common
 django-solo==1.1.3
     # via
     #   -r requirements/base.txt
@@ -285,6 +280,10 @@ tomli==1.2.3
     # via black
 typing-extensions==4.3.0
     # via black
+unidecode==1.3.4
+    # via
+    #   -r requirements/base.txt
+    #   vng-api-common
 uritemplate==3.0.0
     # via
     #   -r requirements/base.txt
@@ -294,7 +293,7 @@ urllib3==1.24.3
     # via
     #   -r requirements/base.txt
     #   requests
-vng-api-common==1.8.0
+vng-api-common==1.0.69
     # via -r requirements/base.txt
 wrapt==1.10.11
     # via astroid

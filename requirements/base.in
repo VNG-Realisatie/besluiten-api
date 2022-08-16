@@ -1,5 +1,5 @@
-Pillow==9.2.0
-psycopg2-binary==2.8.6
+Pillow
+psycopg2-binary
 python-dotenv
 python-dateutil
 pytz
@@ -19,4 +19,4 @@ django_redis
 django_capture_on_commit_callbacks
 
 djangorestframework
-vng-api-common==1.8.0
+vng-api-common<1.1.0

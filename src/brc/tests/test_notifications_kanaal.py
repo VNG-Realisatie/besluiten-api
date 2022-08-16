@@ -26,7 +26,7 @@ class CreateNotifKanaalTestCase(APITestCase):
         call_command(
             "register_kanaal",
             "kanaal_test",
-            notificaties_api_root="https://example.com/api/v1",
+            nc_api_root="https://example.com/api/v1",
             stdout=stdout,
         )
 
@@ -53,7 +53,7 @@ class CreateNotifKanaalTestCase(APITestCase):
         stdout = StringIO()
         call_command(
             "register_kanaal",
-            notificaties_api_root="https://example.com/api/v1",
+            nc_api_root="https://example.com/api/v1",
             stdout=stdout,
         )
 
