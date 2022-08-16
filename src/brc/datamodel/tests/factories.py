@@ -21,12 +21,7 @@ class BesluitFactory(factory.django.DjangoModelFactory):
             end_date=self.datum + timedelta(days=180),
             tzinfo=timezone.utc,
         )
-        return _ingangsdatum.evaluate(self, None, None).date()
-
-    class Params:
-        with_etag = factory.Trait(
-            _etag=factory.PostGenerationMethodCall("calculate_etag_value")
-        )
+        return _ingangsdatum.evaluate(self, None, None)
 
 
 class BesluitInformatieObjectFactory(factory.django.DjangoModelFactory):
@@ -35,8 +30,3 @@ class BesluitInformatieObjectFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = "datamodel.BesluitInformatieObject"
-
-    class Params:
-        with_etag = factory.Trait(
-            _etag=factory.PostGenerationMethodCall("calculate_etag_value")
-        )

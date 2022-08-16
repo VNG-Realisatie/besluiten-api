@@ -143,10 +143,7 @@ class AuditTrailTests(MockSyncMixin, JWTAuthMixin, APITestCase):
         with mock_client(self.responses):
             response = self.client.post(
                 url,
-                {
-                    "besluit": besluit_data["url"],
-                    "informatieobject": INFORMATIE_OBJECT,
-                },
+                {"besluit": besluit_data["url"], "informatieobject": INFORMATIE_OBJECT},
             )
 
         besluitinformatieobject_response = response.data

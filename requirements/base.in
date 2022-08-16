@@ -1,4 +1,4 @@
-pip-tools
+Pillow
 psycopg2-binary
 python-dotenv
 python-dateutil
@@ -14,6 +14,5 @@ django-choices==1.7.0
 django-cors-middleware
 django-markup==1.3
 django_redis
-
 djangorestframework
-vng-api-common
+vng-api-common<1.1.0

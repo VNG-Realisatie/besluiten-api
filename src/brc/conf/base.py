@@ -3,6 +3,8 @@ import os
 # Django-hijack (and Django-hijack-admin)
 from django.urls import reverse_lazy
 
+import raven
+
 from .api import *  # noqa
 
 SITE_ID = int(os.getenv("SITE_ID", 1))
@@ -297,16 +299,18 @@ HIJACK_ALLOW_GET_REQUESTS = True
 # Django-CORS-middleware
 CORS_ORIGIN_ALLOW_ALL = True
 
+if "GIT_SHA" in os.environ:
+    GIT_SHA = os.getenv("GIT_SHA")
+else:
+    GIT_SHA = raven.fetch_git_sha(BASE_DIR)
+
 # Raven
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 
 if SENTRY_DSN:
     INSTALLED_APPS = INSTALLED_APPS + ["raven.contrib.django.raven_compat"]
 
-    RAVEN_CONFIG = {
-        "dsn": SENTRY_DSN,
-        # 'release': raven.fetch_git_sha(BASE_DIR), doesn't work in Docker
-    }
+    RAVEN_CONFIG = {"dsn": SENTRY_DSN, "release": GIT_SHA}
     LOGGING["handlers"].update(
         {
             "sentry": {
@@ -327,3 +331,6 @@ IS_HTTPS = os.getenv("IS_HTTPS", "1").lower() in ["true", "1", "yes"]
 
 # settings for sending notifications
 NOTIFICATIONS_KANAAL = "besluiten"
+
+# URL for documentation that's shown in API schema
+DOCUMENTATION_URL = "https://vng-realisatie.github.io/gemma-zaken"
