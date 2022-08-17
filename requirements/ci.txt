@@ -18,7 +18,7 @@ babel==2.6.0
     # via
     #   -r requirements/base.txt
     #   sphinx
-black==21.10b0
+black==22.3.0
     # via -r requirements/testing.in
 certifi==2018.8.24
     # via
@@ -225,8 +225,6 @@ redis==3.3.6
     # via
     #   -r requirements/base.txt
     #   django-redis
-regex==2022.7.25
-    # via black
 requests==2.21.0
     # via
     #   -r requirements/base.txt
