@@ -1,4 +1,4 @@
-##!/bin/bash
+#!/bin/bash
 #
 # Compile the dependencies for production, CI and development.
 #
