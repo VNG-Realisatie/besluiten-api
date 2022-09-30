@@ -19,4 +19,4 @@ django_redis
 django_capture_on_commit_callbacks
 
 djangorestframework
-vng-api-common
+vng-api-common==1.8.0
