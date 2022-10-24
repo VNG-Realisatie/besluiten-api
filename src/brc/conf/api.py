@@ -18,6 +18,14 @@ SPECTACULAR_SETTINGS.update(
     }
 )
 
+SPECTACULAR_EXTENSIONS = [
+    "vng_api_common.extensions.fields.hyperlink_identity.HyperlinkedIdentityFieldExtension",
+    "vng_api_common.extensions.fields.hyperlinked_related.HyperlinkedRelatedFieldExtension",
+    "vng_api_common.extensions.fields.many_related.ManyRelatedFieldExtension",
+    "vng_api_common.extensions.fields.read_only.ReadOnlyFieldExtension",
+    "vng_api_common.extensions.filters.query.FilterExtension",
+]
+
 GEMMA_URL_INFORMATIEMODEL_VERSIE = "1.0"
 
 ztc_repo = "vng-Realisatie/gemma-zaaktypecatalogus"

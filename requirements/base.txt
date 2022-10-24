@@ -229,7 +229,7 @@ uritemplate==4.1.1
     # via drf-spectacular
 urllib3==1.26.12
     # via requests
-vng-api-common @ git+https://github.com/VNG-Realisatie/vng-api-common@drf-spectacular-upgrade
+vng-api-common==1.11.0
     # via -r requirements/base.in
 wrapt==1.14.1
     # via deprecated

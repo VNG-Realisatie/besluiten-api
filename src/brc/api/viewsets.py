@@ -55,8 +55,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
             "- geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden\n"
             "  uit de Zaken API en de vorm van een ZAAK hebben.\n"
             "- `datum` in het verleden of nu\n"
-            "- publicatie `besluittype` \n"
-            "- `concept` moet `false` zijn \n"
+            "- publicatie `besluittype` - `concept` moet `false` zijn \n"
         ),
     ),
     update=extend_schema(
@@ -66,9 +65,8 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
             "- uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`\n"
             "- geldigheid `verantwoorlijkeOrganisatie` RSIN\n"
             " - het `besluittype` mag niet gewijzigd worden\n"
-            " - geldigheid `zaak` URL \n"
-            "- de resource moet opgevraagd kunnen worden\n"
-            "uit de Zaken API en de vorm van een ZAAK hebben."
+            " - geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden\n"
+            "uit de Zaken API en de vorm van een ZAAK hebben.\n"
             "- `datum` in het verleden of nu\n"
             "- publicatie `besluittype` - `concept` moet `false` zijn\n"
         ),
@@ -80,8 +78,7 @@ from .serializers import BesluitInformatieObjectSerializer, BesluitSerializer
             " - uniciteit van `verantwoorlijkeOrganisatie` + `identificatie`\n"
             " - geldigheid `verantwoorlijkeOrganisatie` RSIN\n"
             "- het `besluittype` mag niet gewijzigd worden\n"
-            "- geldigheid `zaak` URL \n"
-            "- de resource moet opgevraagd kunnen worden"
+            "- geldigheid `zaak` URL - de resource moet opgevraagd kunnen worden"
             "  uit de Zaken API en de vorm van een ZAAK hebben.\n"
             " - `datum` in het verleden of nu\n"
             " - publicatie `besluittype` - `concept` moet `false` zijn\n"
@@ -106,7 +103,7 @@ class BesluitViewSet(
 ):
     queryset = Besluit.objects.all().order_by("-pk")
     serializer_class = BesluitSerializer
-    filter_class = BesluitFilter
+    filterset_class = BesluitFilter
     lookup_field = "uuid"
     pagination_class = PageNumberPagination
     permission_classes = (BesluitAuthScopesRequired,)
@@ -135,15 +132,15 @@ class BesluitViewSet(
     create=extend_schema(
         summary=_("Maak een BESLUIT-INFORMATIEOBJECT relatie aan."),
         description=_(
-            "   Registreer een INFORMATIEOBJECT bij een BESLUIT. "
+            "Registreer een INFORMATIEOBJECT bij een BESLUIT. "
             "Er worden twee types van relaties met andere objecten gerealiseerd:\n"
-            "**Er wordt gevalideerd op**"
+            "\n**Er wordt gevalideerd op**\n"
             " - geldigheid `besluit` URL\n"
             " - geldigheid `informatieobject` URL\n"
             "- de combinatie `informatieobject` en `besluit` moet uniek zijn\n"
             " - `informatieobject.informatieobjecttype` moet in het ZTC gerelateerd zijn"
             " aan `besluit.besluittype`\n"
-            "**Opmerkingen**"
+            "\n**Opmerkingen**\n"
             " - De `registratiedatum` wordt door het systeem op 'NU' gezet. De"
             " `aardRelatie` wordt ook door het systeem gezet.\n"
             " - Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie"

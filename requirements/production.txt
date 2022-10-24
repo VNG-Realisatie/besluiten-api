@@ -332,7 +332,7 @@ urllib3==1.26.12
     #   requests
 uwsgi==2.0.20
     # via -r requirements/production.in
-vng-api-common @ git+https://github.com/VNG-Realisatie/vng-api-common@drf-spectacular-upgrade
+vng-api-common==1.11.0
     # via -r requirements/base.txt
 wrapt==1.14.1
     # via
