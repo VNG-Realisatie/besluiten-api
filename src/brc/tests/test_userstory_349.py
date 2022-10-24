@@ -24,7 +24,7 @@ class US349TestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
         """
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
         BesluitInformatieObjectFactory.create(besluit=besluit)
-        besluit_delete_url = get_operation_url("besluit_delete", uuid=besluit.uuid)
+        besluit_delete_url = get_operation_url("besluit_destroy", uuid=besluit.uuid)
 
         response = self.client.delete(besluit_delete_url)
 

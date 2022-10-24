@@ -340,3 +340,5 @@ NOTIFICATIONS_KANAAL = "besluiten"
 
 # URL for documentation that's shown in API schema
 DOCUMENTATION_URL = "https://vng-realisatie.github.io/gemma-zaken"
+
+TEST_SPEC_DIRS = (os.path.join(DJANGO_PROJECT_DIR, "tests", "schemas"),)

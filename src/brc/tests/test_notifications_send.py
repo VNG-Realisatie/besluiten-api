@@ -2,16 +2,17 @@ from unittest.mock import patch
 
 from django.test import override_settings
 
+import requests_mock
 from django_capture_on_commit_callbacks import capture_on_commit_callbacks
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_operation_url
-from zds_client.tests.mocks import mock_client as _mock_client
 
 from brc.api.tests.mixins import MockSyncMixin
 from brc.datamodel.constants import VervalRedenen
 from brc.datamodel.tests.factories import BesluitFactory, BesluitInformatieObjectFactory
+from brc.tests.utils import get_oas_spec
 
 BESLUITTYPE = "https://ztc.com/besluittypen/1234"
 
@@ -26,7 +27,7 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
 
     @patch("vng_api_common.validators.fetcher")
     @patch("vng_api_common.validators.obj_has_shape", return_value=True)
-    @patch("zds_client.Client.from_url")
+    @patch("notifications_api_common.models.NotificationsConfig.get_client")
     def test_send_notif_create_besluit(self, mock_client, *mocks):
         """
         Check if notifications will be send when Besluit is created
@@ -65,18 +66,31 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
             },
         )
 
-    @patch("zds_client.Client.from_url")
+    @patch("notifications_api_common.models.NotificationsConfig.get_client")
     def test_send_notif_delete_resultaat(self, mock_client):
         """
         Check if notifications will be send when resultaat is deleted
         """
         client = mock_client.return_value
         besluit = BesluitFactory.create(besluittype=BESLUITTYPE)
-        besluit_url = get_operation_url("besluit_read", uuid=besluit.uuid)
+        besluit_url = get_operation_url("besluit_retrieve", uuid=besluit.uuid)
         bio = BesluitInformatieObjectFactory.create(besluit=besluit)
-        bio_url = get_operation_url("besluitinformatieobject_delete", uuid=bio.uuid)
+        bio_url = get_operation_url("besluitinformatieobject_destroy", uuid=bio.uuid)
 
-        with capture_on_commit_callbacks(execute=True):
+        with (
+            capture_on_commit_callbacks(execute=True),
+            requests_mock.Mocker() as requests_mocker,
+        ):
+            requests_mocker.get(
+                f"{bio.informatieobject}schema/openapi.yaml?v=3",
+                content=get_oas_spec("brc"),
+            )
+            requests_mocker.get(
+                bio.informatieobject,
+                json={
+                    "identificatie": "Test identificatie",
+                },
+            )
             response = self.client.delete(bio_url)
 
         self.assertEqual(
