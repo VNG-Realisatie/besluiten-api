@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.test import override_settings
 
+from django_capture_on_commit_callbacks import capture_on_commit_callbacks
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -41,12 +42,13 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
             "vervaldatum": "2018-11-01",
             "vervalreden": VervalRedenen.tijdelijk,
         }
-
-        response = self.client.post(url, data)
+        with capture_on_commit_callbacks(execute=True):
+            response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
 
         data = response.json()
+
         client.create.assert_called_once_with(
             "notificaties",
             {
@@ -74,7 +76,8 @@ class SendNotifTestCase(MockSyncMixin, JWTAuthMixin, APITestCase):
         bio = BesluitInformatieObjectFactory.create(besluit=besluit)
         bio_url = get_operation_url("besluitinformatieobject_delete", uuid=bio.uuid)
 
-        response = self.client.delete(bio_url)
+        with capture_on_commit_callbacks(execute=True):
+            response = self.client.delete(bio_url)
 
         self.assertEqual(
             response.status_code, status.HTTP_204_NO_CONTENT, response.data
