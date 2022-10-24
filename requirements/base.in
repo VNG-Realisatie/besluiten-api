@@ -19,4 +19,4 @@ django_redis
 django_capture_on_commit_callbacks
 
 djangorestframework
-vng-api-common==1.8.0
+git+https://github.com/VNG-Realisatie/vng-api-common@drf-spectacular-upgrade#egg=vng_api_common

@@ -7,26 +7,14 @@ API_VERSION = "1.0.1"
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 REST_FRAMEWORK["PAGE_SIZE"] = 100
 
-SECURITY_DEFINITION_NAME = "JWT-Claims"
+DOCUMENTATION_INFO_MODULE = "brc.api.schema"
 
-SWAGGER_SETTINGS = BASE_SWAGGER_SETTINGS.copy()
-SWAGGER_SETTINGS.update(
+SPECTACULAR_SETTINGS = BASE_SPECTACULAR_SETTINGS.copy()
+SPECTACULAR_SETTINGS.update(
     {
-        "DEFAULT_INFO": "brc.api.schema.info",
-        "SECURITY_DEFINITIONS": {
-            SECURITY_DEFINITION_NAME: {
-                # OAS 3.0
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT",
-                # not official...
-                # 'scopes': {},  # TODO: set up registry that's filled in later...
-                # Swagger 2.0
-                # 'name': 'Authorization',
-                # 'in': 'header'
-                # 'type': 'apiKey',
-            }
-        },
+        "SERVERS": [{"url": "https://besluiten-api.test.vng.cloud/api/v1"}],
+        # todo remove this line below when deploying to production
+        "SORT_OPERATION_PARAMETERS": False,
     }
 )
 

@@ -1,11 +1,18 @@
 from django.conf import settings
 
-from drf_yasg import openapi
-from vng_api_common.notifications.utils import notification_documentation
+from notifications_api_common.utils import notification_documentation
 
 from .kanalen import KANAAL_BESLUITEN
 
-description = f"""Een API om een besluitregistratiecomponent (BRC) te benaderen.
+__all__ = [
+    "TITLE",
+    "DESCRIPTION",
+    "CONTACT",
+    "LICENSE",
+    "VERSION",
+]
+TITLE = f"{settings.PROJECT_NAME} API"
+DESCRIPTION = f"""Een API om een besluitregistratiecomponent (BRC) te benaderen.
 
 Een BESLUIT wordt veelal schriftelijk vastgelegd maar dit is niet
 noodzakelijk. Omgekeerd kan het voorkomen dat in een INFORMATIEOBJECT meerdere
@@ -44,14 +51,9 @@ genereren.
 * [Zaakgericht werken]({settings.DOCUMENTATION_URL})
 """
 
-info = openapi.Info(
-    title=f"{settings.PROJECT_NAME} API",
-    default_version=settings.API_VERSION,
-    description=description,
-    contact=openapi.Contact(
-        email="standaarden.ondersteuning@vng.nl", url=settings.DOCUMENTATION_URL
-    ),
-    license=openapi.License(
-        name="EUPL 1.2", url="https://opensource.org/licenses/EUPL-1.2"
-    ),
-)
+CONTACT = {
+    "email": "standaarden.ondersteuning@vng.nl",
+    "url": settings.DOCUMENTATION_URL,
+}
+LICENSE = {"name": "EUPL 1.2", "url": "https://opensource.org/licenses/EUPL-1.2"}
+VERSION = settings.API_VERSION

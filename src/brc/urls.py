@@ -15,7 +15,7 @@ urlpatterns = [
     # Simply show the index template.
     path("", TemplateView.as_view(template_name="index.html")),
     path("ref/", include("vng_api_common.urls")),
-    path("ref/", include("vng_api_common.notifications.urls")),
+    path("ref/", include("notifications_api_common.urls")),
     path("view-config/", ViewConfigView.as_view(), name="view-config"),
 ]
 
