@@ -63,7 +63,7 @@ class BesluitSyncCreateTests(BesluitSyncMixin, JWTAuthMixin, APITestCase):
         besluit = BesluitFactory.create(
             _zaakbesluit="https://example.com/zrc/zaakbesluittype/abcd"
         )
-        url = get_operation_url("besluit_read", uuid=besluit.uuid)
+        url = get_operation_url("besluit_retrieve", uuid=besluit.uuid)
 
         response = self.client.delete(url)
 

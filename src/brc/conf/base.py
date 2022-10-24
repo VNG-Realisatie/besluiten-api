@@ -58,14 +58,17 @@ INSTALLED_APPS = [
     "axes",
     "django_filters",
     "corsheaders",
-    "vng_api_common",  # before drf_yasg to override the management command
+    "vng_api_common",  # before drf_spectacular to override the management command
     "vng_api_common.notifications",
     "vng_api_common.authorizations",
     "vng_api_common.audittrails",
-    "drf_yasg",
+    "drf_spectacular",
     "rest_framework",
     "django_markup",
     "solo",
+    "simple_certmanager",
+    "zgw_consumers",
+    "notifications_api_common",
     # Project applications.
     "brc.accounts",
     "brc.api",
@@ -86,6 +89,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "vng_api_common.middleware.APIVersionHeaderMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 ROOT_URLCONF = "brc.urls"
@@ -172,6 +176,8 @@ STATICFILES_FINDERS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 FIXTURE_DIRS = (os.path.join(DJANGO_PROJECT_DIR, "fixtures"),)
 
@@ -334,3 +340,5 @@ NOTIFICATIONS_KANAAL = "besluiten"
 
 # URL for documentation that's shown in API schema
 DOCUMENTATION_URL = "https://vng-realisatie.github.io/gemma-zaken"
+
+TEST_SPEC_DIRS = (os.path.join(DJANGO_PROJECT_DIR, "tests", "schemas"),)
