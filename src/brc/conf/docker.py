@@ -113,3 +113,4 @@ if missing_environment_vars:
 # django-axes
 AXES_BEHIND_REVERSE_PROXY = False
 AXES_CACHE = "axes_cache"
+NOTIFICATIONS_DISABLED = getenv("NOTIFICATIONS_DISABLED", False)
