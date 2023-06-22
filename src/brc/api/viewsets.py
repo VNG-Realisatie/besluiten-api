@@ -120,8 +120,6 @@ class BesluitViewSet(
 
 
 class BesluitInformatieObjectViewSet(
-    NotificationCreateMixin,
-    NotificationDestroyMixin,
     AuditTrailCreateMixin,
     AuditTrailDestroyMixin,
     CheckQueryParamsMixin,
