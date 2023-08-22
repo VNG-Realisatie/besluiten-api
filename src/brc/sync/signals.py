@@ -30,9 +30,8 @@ def sync_create_bio(relation: BesluitInformatieObject):
             "uuid": relation.besluit.uuid,
         },
     )
-    domain = Site.objects.get_current().domain
-    protocol = "https" if settings.IS_HTTPS else "http"
-    besluit_url = f"{protocol}://{domain}{path}"
+    domain = settings.BRC_BASE_URL
+    besluit_url = f"{domain}{path}"
 
     logger.info("Besluit: %s", besluit_url)
     logger.info("Informatieobject: %s", relation.informatieobject)
@@ -70,9 +69,8 @@ def sync_delete_bio(relation: BesluitInformatieObject):
             "uuid": relation.besluit.uuid,
         },
     )
-    domain = Site.objects.get_current().domain
-    protocol = "https" if settings.IS_HTTPS else "http"
-    besluit_url = f"{protocol}://{domain}{path}"
+    domain = settings.BRC_BASE_URL
+    besluit_url = f"{domain}{path}"
 
     logger.info("Besluit: %s", besluit_url)
     logger.info("Informatieobject: %s", relation.informatieobject)
@@ -109,9 +107,8 @@ def sync_create_besluit(besluit: Besluit):
             "uuid": besluit.uuid,
         },
     )
-    domain = Site.objects.get_current().domain
-    protocol = "https" if settings.IS_HTTPS else "http"
-    besluit_url = f"{protocol}://{domain}{path}"
+    domain = settings.BRC_BASE_URL
+    besluit_url = f"{domain}{path}"
 
     logger.info("Zaak object: %s", besluit.zaak)
     logger.info("Besluit object: %s", besluit_url)

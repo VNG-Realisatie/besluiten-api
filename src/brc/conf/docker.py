@@ -41,7 +41,7 @@ CACHES = {
     # Cache for BIO removal sync with DRC
     "drc_sync": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{getenv('REDIS_CACHE')}",  # NOTE: watch out for multiple projects using the same cache!
+        "LOCATION": f"redis://{os.getenv('REDIS_CACHE','127.0.0.1:6379')}",  # NOTE: watch out for multiple projects using the same cache!
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "IGNORE_EXCEPTIONS": True,
@@ -113,3 +113,4 @@ if missing_environment_vars:
 # django-axes
 AXES_BEHIND_REVERSE_PROXY = False
 AXES_CACHE = "axes_cache"
+NOTIFICATIONS_DISABLED = getenv("NOTIFICATIONS_DISABLED", False)
