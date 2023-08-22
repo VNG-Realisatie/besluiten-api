@@ -30,6 +30,4 @@ De architectuur van de notificaties staat beschreven op <a href="https://github.
 
 * <code>besluit</code>: create, update, destroy
 
-* <code>besluitinformatieobject</code>: create, destroy
-
 

@@ -2,6 +2,16 @@
 Wijzigingen
 ===========
 
+
+1.0.2 (2023-08-22)
+==================
+
+Implementation changes
+----------------------
+
+* Updated ppyaml version tot ``6.0.1``
+* Changed how rootUrl is fetched
+
 1.0.1 (2019-12-16)
 ==================
 
