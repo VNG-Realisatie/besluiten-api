@@ -94,3 +94,5 @@ try:
     from .local import *  # noqa
 except ImportError:
     pass
+
+NOTIFICATIONS_DISABLED = bool(os.getenv("NOTIFICATIONS_DISABLED", False))
